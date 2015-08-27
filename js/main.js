@@ -7,20 +7,13 @@
                   .rightAlignYAxis(true)      //Let's move the y-axis to the right side.
                   .showControls(false)       //Allow user to choose 'Stacked', 'Stream', 'Expanded' mode.
                   .clipEdge(true);
-
-    //Format x-axis labels with custom function.
-    chart.xAxis
-        .tickFormat(function(d) { 
+                  
+    chart.xAxis.tickFormat(function(d) { 
           return d3.time.format('%x')(new Date(d)) 
     });
 
-    chart.yAxis
-        .tickFormat(d3.format(',.2f'));
-
-    d3.select('#chart svg')
-      .datum(data)
-      .call(chart);
-
+    chart.yAxis.tickFormat(d3.format(',.2f'));
+    d3.select('#chart svg').datum(data).call(chart);
     nv.utils.windowResize(chart.update);
 
     return chart;
