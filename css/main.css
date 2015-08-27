@@ -97,6 +97,10 @@ textarea {
 
 #data-file  {visibility: hidden;}
 
+#chart svg {
+  height: 400px;
+  width: 800px;
+}
 
 
 
