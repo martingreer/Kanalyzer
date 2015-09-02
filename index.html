@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app>
+<html ng-app="test">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -13,18 +13,18 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"><!-- http://getbootstrap.com/css/#grid-example-fluid-->
     <link rel="stylesheet" href="css/main.css">
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.1/angular-strap.min.js"></script>
-    <script type="text/javascript" src="js/todo.js"></script>
+    <script type="text/javascript" src="js/test.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.js"></script>
 </head>
 <body> 
     <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container pull-left center-vertical">
+        <div class="container pull-left">
             <a href="#" class="pull-left"><img src="img/kanalyzer_logo.png" width="60%" height="60%"></a>
             <ul class="nav nav-pills">
-                <li class="active"><a href="#/">Load Data</a></li>
+                <li class="active"><a href="#">Load Data</a></li>
                 <li><a href="#/cfd">CFD</a></li>
                 <li><a href="#/bottlenecks">Bottlenecks</a></li>
                 <li><a href="#/about">About</a></li>
@@ -32,29 +32,18 @@
         </div>
     </nav>
     
-    <div ng-controller="TodoCtrl">
-        {{ totalTodos }}
-    </div>
-    
-    <!--<div>
-        Search: <input type="text"/>
-        <br />
-        <h3>Customers:</h3>
-        <table>
-                <tr>
-                    <td></td>
-                    <td></td>
-                </tr>
-        </table>
-    </div>-->
-    
-    <!--<div class="container-fluid" style="margin-top: 80px;">
-        <div class="row">
-            <div id="chart">
-                <svg></svg>
+    <div ng-controller="AppCtrl">
+        <div class="container-fluid" style="margin-top: 80px;">
+            <div class="row">
+                <div id="chart">
+                    <svg></svg>
+                </div>
             </div>
-        </div>    
-    </div>-->
+            <div class="row">
+                <h2>{{person.name}}</h2>
+            </div>
+        </div>
+    </div>
     
     <!-- Fetch jQuery lib, plugins, main, bootstrap js -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
