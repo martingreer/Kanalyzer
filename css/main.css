@@ -102,9 +102,14 @@ textarea {
   width: 800px;
 }
 
+.navbar-default li a {
+    padding-top:5px !important;
+    padding-bottom:5px !important;
+}
 
-
-
+.navbar {
+    min-height:32px !important;
+}
 
 
 
