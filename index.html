@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="kanApp">
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -23,22 +23,25 @@
     
     <!-- AngularJS -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.js"></script>
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
     
     <!-- Kanalyzer Application script -->
     <script type="text/javascript" src="js/kanapp.js"></script>
 </head>
-<body ng-controller="ldController">
+<body ng-app="kanApp">
     
     <!-- NAVIGATION -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container pull-left">
+            <div class="navbar-header">
+                <a ui-sref="ld"><img src="img/kanalyzer_logo.png" width="60%" height="60%"></a>
+            </div>
             <ul class="nav nav-pills">
-                <a href="#/" class="pull-left"><img src="img/kanalyzer_logo.png" width="60%" height="60%"></a>
-                <li ng-class="{active: $router.current.activetab == 'ld'}"><a href="#/">Load Data</a></li>
-                <li ng-class="{active: $router.current.activetab == 'cfd'}"><a href="#cfd">CFD</a></li>
-                <li ng-class="{active: $router.current.activetab == 'pe'}"><a href="#pe">Process Efficiency</a></li>
-                <li ng-class="{active: $router.current.activetab == 'about'}"><a href="#about">About</a></li>
+                <li><a ui-sref="ld" ui-sref-active="active" class="item active">Load Data</a></li>
+                <li><a ui-sref="cfd" ui-sref-active="cfd">CFD</a></li>
+                <li><a ui-sref="pe" ui-sref-active="ld">Process Efficiency</a></li>
+                <li><a ui-sref="about" ui-sref-active="about">About</a></li>
             </ul>
         </div>
     </nav>
@@ -46,9 +49,10 @@
     <!-- MAIN CONTENT -->
     <div id="main">
         <div class="container-fluid" style="margin-top: 80px; margin-left: 50px;">
-            <div ng-view>
-                <!-- Injected views here -->
-            </div>
+            
+            <!-- INJECT VIEWS HERE -->
+            <div ui-view></div>
+        
         </div>
     </div>
     
@@ -59,9 +63,6 @@
                 <div id="chart">
                     <svg></svg>
                 </div>
-            </div>
-            <div class="row">
-                <h2>{{ message }}</h2>
             </div>
         </div>
     </div>

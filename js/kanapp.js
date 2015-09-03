@@ -1,45 +1,27 @@
-var kanApp = angular.module('kanApp', ['ngRoute']);
+var kanApp = angular.module('kanApp', ['ui.router']);
 
-kanApp.config(function($routeProvider){
-	$routeProvider
+kanApp.config(function($stateProvider, $urlRouterProvider){
+	$urlRouterProvider.otherwise('/ld');
 	
-	.when('/', {
-		templateUrl : 'pages/ld.html',
-		controller : 'ldController',
-        activetab : 'load_data'
-	})
-	
-	.when('/cfd', {
-		templateUrl : 'pages/cfd.html',
-		controller : 'cfdController',
-        activetab : 'cfd'
-	})
-	
-	.when('/pe', {
-		templateUrl : 'pages/pe.html',
-		controller : 'peController',
-        activetab : 'pe'
-	})
-	
-	.when('/about', {
-		templateUrl : 'pages/about.html',
-		controller : 'aboutController',
-        activetab : 'about'
-	});
-});
+	$stateProvider
+        .state('ld', {
+            url: '/ld',
+            templateUrl: 'pages/ld.html'
+            
+        })
 
-kanApp.controller('ldController', function($scope){
-	$scope.message = 'Hello world!';
-});
+        .state('cfd', {
+            url: '/cfd',
+            templateUrl: 'pages/cfd.html'
+        })
 
-kanApp.controller('cfdController', function($scope){
-	$scope.message = 'CFD page';
-});
+        .state('pe', {
+            url: '/pe',
+            templateUrl: 'pages/pe.html'
+        })
 
-kanApp.controller('peController', function($scope){
-	$scope.message = 'Page for measuring Proccess Efficiency';
-});
-
-kanApp.controller('aboutController', function($scope){
-	$scope.message = 'About the app';
+        .state('about', {
+            url: '/about',
+            templateUrl: 'pages/about.html'
+        });
 });
