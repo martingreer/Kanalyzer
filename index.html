@@ -1,38 +1,59 @@
 <!doctype html>
-<html ng-app="test">
+<html ng-app="kanApp">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Kanalyzer</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    
+    <!-- Boilerplate standards -->
     <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"><!-- http://getbootstrap.com/css/#grid-example-fluid-->
     <link rel="stylesheet" href="css/main.css">
+    
+    <!-- CSS Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    
+    <!-- Modernizr -->
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-strap/2.3.1/angular-strap.min.js"></script>
-    <script type="text/javascript" src="js/test.js"></script>
+        
+    <!-- D3 and NVD3 graphs -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.js"></script>
+    
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.js"></script>
+    
+    <!-- Kanalyzer Application script -->
+    <script type="text/javascript" src="js/kanapp.js"></script>
 </head>
-<body> 
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body ng-controller="ldController">
+    
+    <!-- NAVIGATION -->
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container pull-left">
-            <a href="#" class="pull-left"><img src="img/kanalyzer_logo.png" width="60%" height="60%"></a>
             <ul class="nav nav-pills">
-                <li class="active"><a href="#">Load Data</a></li>
-                <li><a href="#/cfd">CFD</a></li>
-                <li><a href="#/bottlenecks">Bottlenecks</a></li>
-                <li><a href="#/about">About</a></li>
+                <a href="#/" class="pull-left"><img src="img/kanalyzer_logo.png" width="60%" height="60%"></a>
+                <li ng-class="{active: $router.current.activetab == 'ld'}"><a href="#/">Load Data</a></li>
+                <li ng-class="{active: $router.current.activetab == 'cfd'}"><a href="#cfd">CFD</a></li>
+                <li ng-class="{active: $router.current.activetab == 'pe'}"><a href="#pe">Process Efficiency</a></li>
+                <li ng-class="{active: $router.current.activetab == 'about'}"><a href="#about">About</a></li>
             </ul>
         </div>
     </nav>
     
-    <div ng-controller="AppCtrl">
+    <!-- MAIN CONTENT -->
+    <div id="main">
+        <div class="container-fluid" style="margin-top: 80px; margin-left: 50px;">
+            <div ng-view>
+                <!-- Injected views here -->
+            </div>
+        </div>
+    </div>
+    
+    <!--
+    <div>
         <div class="container-fluid" style="margin-top: 80px;">
             <div class="row">
                 <div id="chart">
@@ -40,17 +61,20 @@
                 </div>
             </div>
             <div class="row">
-                <h2>{{person.name}}</h2>
+                <h2>{{ message }}</h2>
             </div>
         </div>
     </div>
+    -->
     
-    <!-- Fetch jQuery lib, plugins, main, bootstrap js -->
+    <!-- Fetch jQuery lib, plugins, main, bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')</script>
-    <script src="js/plugins.js"></script>
-    <script src="js/data.js"></script>
-    <script src="js/main.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    
+    <!-- Fetch plugins, main, graph data -->
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/data.js"></script>
 </body>
 </html>
