@@ -1,12 +1,20 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.css">
+<!--<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.css">
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.js"></script>
+        <script src="../js/nvd3app.js"></script>
 
-<div class="row">
-    <div id="chart">
-        <svg></svg>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+        <script type="text/javascript" src="https://rawgit.com/krispo/angular-nvd3/v1.0.0-rc.2/dist/angular-nvd3.js"></script>
+</head>
+<body ng-controller="nvd3Ctrl">-->
+    <div class="row" ng-app="nvd3App" ng-controller="nvd3Ctrl">
+        <div id="chart">
+            <nvd3 options="options" data="data"></nvd3>
+        </div>
     </div>
-</div>
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="js/data.js"></script>
+<!--</body>
+</html>-->

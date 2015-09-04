@@ -1,34 +1,6 @@
-var kanApp = angular.module('kanApp', ['ui.router']);
-
 var nvd3App = angular.module('nvd3App', ['nvd3']);
 
-kanApp.config(function($stateProvider, $urlRouterProvider){
-	$urlRouterProvider.otherwise('/ld');
-	
-	$stateProvider
-        .state('ld', {
-            url: '/ld',
-            templateUrl: 'pages/ld.html'
-        })
-
-        .state('cfd', {
-            url: '/cfd',
-            templateUrl: 'pages/cfd.html'
-        })
-
-        .state('pe', {
-            url: '/pe',
-            templateUrl: 'pages/pe.html'
-        })
-
-        .state('about', {
-            url: '/about',
-            templateUrl: 'pages/about.html'
-        });
-});
-
-
-nvd3App.controller('nvd3Ctrl', function($scope){
+nvd3App.controller('MainCtrl', function($scope){
     $scope.options = {
         chart: {
             type: 'stackedAreaChart',
