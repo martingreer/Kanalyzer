@@ -7,7 +7,6 @@ kanApp.config(function($stateProvider, $urlRouterProvider){
         .state('ld', {
             url: '/ld',
             templateUrl: 'pages/ld.html'
-            
         })
 
         .state('cfd', {

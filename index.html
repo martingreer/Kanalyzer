@@ -1,18 +1,24 @@
 <!doctype html>
 <html>
 <head>
+    
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Kanalyzer</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <!-- Boilerplate standards -->
+    <!-- Normalization between browsers -->
     <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/main.css">
     
     <!-- CSS Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    
+    <!-- Main CSS styles -->
+    <link rel="stylesheet" href="css/main.css">
+    
+    <!-- NVD3 styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.css">
     
     <!-- Modernizr -->
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
@@ -23,11 +29,11 @@
     
     <!-- AngularJS -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
-        <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-route.js"></script> -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
     
     <!-- Kanalyzer Application script -->
     <script type="text/javascript" src="js/kanapp.js"></script>
+    
 </head>
 <body ng-app="kanApp">
     
@@ -38,10 +44,10 @@
                 <a ui-sref="ld"><img src="img/kanalyzer_logo.png" width="60%" height="60%"></a>
             </div>
             <ul class="nav nav-pills">
-                <li><a ui-sref="ld" ui-sref-active="active" class="item active">Load Data</a></li>
-                <li><a ui-sref="cfd" ui-sref-active="cfd">CFD</a></li>
-                <li><a ui-sref="pe" ui-sref-active="ld">Process Efficiency</a></li>
-                <li><a ui-sref="about" ui-sref-active="about">About</a></li>
+                <li ui-sref-active="active"><a ui-sref="ld">Load Data</a></li>
+                <li ui-sref-active="active"><a ui-sref="cfd">CFD</a></li>
+                <li ui-sref-active="active"><a ui-sref="pe">Process Efficiency</a></li>
+                <li ui-sref-active="active"><a ui-sref="about">About</a></li>
             </ul>
         </div>
     </nav>
@@ -52,12 +58,11 @@
             
             <!-- INJECT VIEWS HERE -->
             <div ui-view></div>
-        
+
         </div>
     </div>
     
-    <!--
-    <div>
+    <!--<div>
         <div class="container-fluid" style="margin-top: 80px;">
             <div class="row">
                 <div id="chart">
@@ -65,8 +70,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    -->
+    </div>-->
     
     <!-- Fetch jQuery lib, plugins, main, bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -77,5 +81,6 @@
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
     <script src="js/data.js"></script>
+    
 </body>
 </html>
