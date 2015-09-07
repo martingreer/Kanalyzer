@@ -1,8 +1,8 @@
 /*global angular, d3, get, console*/
 
-var uiApp = angular.module('uiApp', ['ui.router', 'nvd3']);
+var kanApp = angular.module('kanApp', ['ui.router', 'nvd3']);
 
-uiApp.config(function ($stateProvider, $urlRouterProvider) {
+kanApp.config(function ($stateProvider, $urlRouterProvider) {
     "use strict";
     
 	$urlRouterProvider.otherwise('/ld');
@@ -30,7 +30,7 @@ uiApp.config(function ($stateProvider, $urlRouterProvider) {
         });
 });
 
-uiApp.controller('nvd3Controller', function ($scope, $http) {
+kanApp.controller('nvd3Controller', function ($scope, $http) {
     "use strict";
     
     $scope.options = {
@@ -63,10 +63,13 @@ uiApp.controller('nvd3Controller', function ($scope, $http) {
         }
     };
     
-    $scope.data = [];
-    
-    $http.get('../json/cfdData.json').success(function (data) {
-        console.log("JSON import successful!");
-        $scope.data = data;
-    });
+    $http.get('../json/data.json')
+        .success(function (data) {
+            console.log("JSON import successful!");
+            $scope.data = data;
+        })
+        .error(function () {
+            console.log("JSON import failed.");
+            $scope.data = [];
+        });
 });
