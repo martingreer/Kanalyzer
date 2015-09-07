@@ -30,10 +30,13 @@
     <!-- AngularJS -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+        <script type="text/javascript" src="https://rawgit.com/krispo/angular-nvd3/v1.0.0-rc.2/dist/angular-nvd3.js"></script>
+    
+    <!-- JSON -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/json2/20150503/json2.js"></script>
     
     <!-- Angular application scripts -->
     <script type="text/javascript" src="js/uiApp.js"></script>
-    <!--<script type="text/javascript" src="js/nvd3app.js"></script>-->
     
 </head>
 <body ng-app="uiApp">
@@ -55,7 +58,7 @@
     
     <!-- MAIN CONTENT -->
     <div id="main">
-        <div class="container-fluid" style="margin-top: 80px; margin-left: 50px;">
+        <div class="container-fluid" style="margin-top: 70px; margin-left: 50px;">
             
             <!-- INJECT VIEWS HERE -->
             <div ui-view></div>
@@ -81,7 +84,6 @@
     <!-- Fetch plugins, main, graph data -->
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/cfdData.js"></script>
     
 </body>
 </html>

@@ -3,10 +3,9 @@
     <title>Kanalyzer: CFD</title>
 </head>
 <body>
-    {{ name }}<br><br>
     <div class="row">
-        <div id="chart">
-            <svg data="cfdData"></svg>
+        <div class="chart">
+            <nvd3 options="options" data="data"></nvd3>
         </div>
     </div>
 </body>

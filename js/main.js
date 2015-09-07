@@ -1,4 +1,4 @@
-  nv.addGraph(function() {
+  /*nv.addGraph(function() {
     var chart = nv.models.stackedAreaChart()
                   .margin({right: 100})
                   .x(function(d) { return d[0] })   //We can modify the data accessor functions...
@@ -76,6 +76,6 @@
     });
 
     return chart;
-  });
+  });*/
   
   
