@@ -13,7 +13,7 @@
     });
 
     chart.yAxis.tickFormat(d3.format(',.2f'));
-    d3.select('#chart svg').datum(data).call(chart);
+    d3.select('#chart svg').datum(cfdData).call(chart);
     nv.utils.windowResize(chart.update);
 
     function disableAreaClick() {
@@ -49,7 +49,7 @@
        var pointIndex;
        var pointXLocation;
        
-       data.filter(function(series, i) {
+       cfdData.filter(function(series, i) {
             series.seriesIndex = i;
             return !series.disabled;
         }).forEach(function(series,i) {
