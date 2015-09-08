@@ -10,7 +10,8 @@ kanApp.config(function ($stateProvider, $urlRouterProvider) {
 	$stateProvider
         .state('ld', {
             url: '/ld',
-            templateUrl: 'pages/ld.html'
+            templateUrl: 'pages/ld.html',
+            controller: 'dataController'
         })
 
         .state('cfd', {
@@ -30,7 +31,64 @@ kanApp.config(function ($stateProvider, $urlRouterProvider) {
         });
 });
 
-kanApp.controller('nvd3Controller', function ($scope, $http) {
+kanApp.factory('dataService', function ($http) {
+    "use strict";
+    
+    var dataService = {
+        async: function () {
+            // $http returns a promise, which has a then function, which also returns a promise
+            var promise = $http.get('../json/data.json').then(function (response) {
+                // The then function here is an opportunity to modify the response
+                console.log(response);
+                // The return value gets picked up by the then in the controller.
+                return response.data;
+            });
+            // Return the promise to the controller
+            return promise;
+        }
+    };
+    return dataService;
+});
+
+kanApp.controller('dataController', function ($scope, dataService) {
+    "use strict";
+    
+    $scope.clearData = function () {
+        $scope.data = {};
+    };
+    
+    $scope.getData = function () {
+        dataService.async().then(function (d) {
+            $scope.data = d;
+        });
+    };
+    
+    $scope.jsonPrettyPrint = function (jsonData) {
+        /*jslint regexp: true*/
+        if (typeof jsonData !== 'string') {
+            jsonData = JSON.stringify(jsonData, undefined, 2);
+        }
+        jsonData = jsonData.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return jsonData.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            /*jslint regexp: false*/
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    };
+});
+
+kanApp.controller('nvd3Controller', function ($scope, dataService) {
     "use strict";
     
     $scope.options = {
@@ -43,8 +101,8 @@ kanApp.controller('nvd3Controller', function ($scope, $http) {
                 bottom: 60,
                 left: 40
             },
-            x: function (d) {return d[0]; },
-            y: function (d) {return d[1]; },
+            x: function (d) { return d[0]; },
+            y: function (d) { return d[1]; },
             useVoronoi: false,
             clipEdge: true,
             transitionDuration: 500,
@@ -63,7 +121,11 @@ kanApp.controller('nvd3Controller', function ($scope, $http) {
         }
     };
     
-    $http.get('../json/data.json')
+    dataService.async().then(function (d) {
+        $scope.data = d;
+    });
+    
+    /*$http.get('../json/data.json')
         .success(function (data) {
             console.log("JSON import successful!");
             $scope.data = data;
@@ -71,5 +133,5 @@ kanApp.controller('nvd3Controller', function ($scope, $http) {
         .error(function () {
             console.log("JSON import failed.");
             $scope.data = [];
-        });
+        });*/
 });
