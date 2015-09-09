@@ -53,6 +53,8 @@ kanApp.factory('dataService', function ($http) {
 kanApp.controller('dataController', function ($scope, dataService) {
     "use strict";
     
+    $scope.prettyString = null;
+    
     $scope.clearData = function () {
         $scope.data = {};
     };
@@ -63,13 +65,22 @@ kanApp.controller('dataController', function ($scope, dataService) {
         });
     };
     
-    $scope.jsonPrettyPrint = function (jsonData) {
+    $scope.jsonPrint = function () {
+        if ($scope.prettyString === null) {
+            $scope.prettyString = JSON.stringify($scope.data, null, "\t");
+        } else {
+            $scope.prettyString = null;
+        }
+    };
+    
+    $scope.jsonPrettyPrint = function () {
+        var jsonData = $scope.data;
         /*jslint regexp: true*/
         if (typeof jsonData !== 'string') {
             jsonData = JSON.stringify(jsonData, undefined, 2);
         }
         jsonData = jsonData.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        return jsonData.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        $scope.prettyString = jsonData.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
             var cls = 'number';
             if (/^"/.test(match)) {
                 if (/:$/.test(match)) {
@@ -83,7 +94,7 @@ kanApp.controller('dataController', function ($scope, dataService) {
                 cls = 'null';
             }
             /*jslint regexp: false*/
-            return '<span class="' + cls + '">' + match + '</span>';
+            $scope.prettyString = '<span class="' + cls + '">' + match + '</span>';
         });
     };
 });
@@ -124,14 +135,4 @@ kanApp.controller('nvd3Controller', function ($scope, dataService) {
     dataService.async().then(function (d) {
         $scope.data = d;
     });
-    
-    /*$http.get('../json/data.json')
-        .success(function (data) {
-            console.log("JSON import successful!");
-            $scope.data = data;
-        })
-        .error(function () {
-            console.log("JSON import failed.");
-            $scope.data = [];
-        });*/
 });

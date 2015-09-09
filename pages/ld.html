@@ -4,12 +4,12 @@
 </head>
 <body>
     <div>
-        <button ng-click="jsonData = getData()">Load Data</button>
-        <button ng-click="jsonPretty = jsonPrettyPrint(jsonData)">Print Data</button> <!-- TODO -->
+        <button ng-click="getData()">Load Data</button>
+        <button ng-click="jsonPrint()">Show/Hide Data</button>
     </div>
     <br /><br />
     <div>
-        <!-- Pretty print jsonData here, when it works.. -->
+        {{ prettyString }}
     </div>
 </body>
 </html>
