@@ -2,6 +2,7 @@
 /*jslint bitwise: true, plusplus: true, white: true, sub: true*/
 
 var kanApp = angular.module('kanApp', ['ui.router', 'nvd3']);
+var DEBUG = true;
 
 kanApp.config(function ($stateProvider, $urlRouterProvider) {
     "use strict";
@@ -127,7 +128,7 @@ kanApp.factory('dataService', function ($http) {
             // $http returns a promise, which has a .then function, which also returns a promise
             var promise = $http.get('../json/data.json').then(function (response) {
                 // The .then function here is an opportunity to modify the response
-                console.log(response);
+                if(DEBUG){console.log(response);}
                 // The return value gets picked up by the .then in the controller.
                 return response.data;
             });
@@ -164,19 +165,23 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     // LOGIN: AUTH TO JIRA SERVER //
     ////////////////////////////////
     
-    $scope.credentials = { username: '', password: ''};
-    $scope.jiraServer = '';
+    $scope.credentials = { username: 'martin.w.greer', password: ''};
+    $scope.jiraRoot = 'https://kanalyzer.atlassian.net/';
+    $scope.jiraProject = 'KTD';
+    $scope.jiraServer = $scope.jiraRoot + 'projects/' +  $scope.jiraProject;
     var maxResults = 10;
     
     $scope.login = function (credentials) {
-        $http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization"};
+        //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": '*'};
+        if(DEBUG){console.log($scope.jiraServer);}
+        $http.defaults.headers.common = {"Access-Control-Allow-Origin": '*'};
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
         $http({method: 'GET', url: $scope.jiraServer})
             .success(function (data) {
-                console.log("Authentication SUCCESS: " + JSON.stringify(data));
+                if(DEBUG){console.log("Authentication SUCCESS: " + JSON.stringify(data));}
             })
             .error(function (data) {
-                console.log("Authentication ERROR: " + JSON.stringify(data));
+                if(DEBUG){console.log("Authentication ERROR: " + JSON.stringify(data));}
             });
     };
     
@@ -198,20 +203,16 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     $scope.getIssues = function () {
         var request = $http({
             method: "GET",
-            url: $scope.jiraServer + "/rest/api/2/search?jql=project=" + $scope.project + "%20AND%20ORDER%20BY%20createdDate%20DESC&maxResults="+maxResults
+            url: $scope.jiraServer + "/rest/api/2/search?jql=project=" + $scope.jiraProject + "&maxResults="+maxResults
         });
-        request.success(
-            function (data) {
-                $scope.jiraIssues = data.issues;
-                $scope.jiraData.issueList = data.issues;
-                console.log("JIRA response: " + JSON.stringify(data));
-            }
-        );
-        request.error(
-            function (data) {
-                console.log("ERROR! JIRA response: " + JSON.stringify(data));
-            }
-        );
+        request.success(function (data) {
+            $scope.jiraIssues = data.issues;
+            $scope.jiraData.issueList = data.issues;
+            if(DEBUG){console.log("SUCCESS! JIRA response: " + JSON.stringify(data));}
+        });
+        request.error(function (data) {
+            if(DEBUG){console.log("ERROR! JIRA response: " + JSON.stringify(data));}
+        });
     };
 });
 

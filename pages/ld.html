@@ -5,8 +5,12 @@
 <body>
     <form role="form" name="loginForm" ng-submit="login(credentials)" novalidate>
         <div class="form-group">
-            <label for="jiraServer">JIRA server:</label>
-            <input type="text" id="jiraServer" class="form-control" ng-model="jiraServer" style="width:400px">
+            <label for="jiraRoot">JIRA server:</label>
+            <input type="text" id="jiraRoot" class="form-control" ng-model="jiraRoot" style="width:400px">
+        </div>
+        <div class="form-group">
+            <label for="jiraProject">Project key:</label>
+            <input type="text" id="jiraProject" class="form-control" ng-model="jiraProject" style="width:400px">
         </div>
         <div class="form-group">
             <label for="username">Username:</label>
