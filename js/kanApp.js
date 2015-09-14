@@ -203,7 +203,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     $scope.getIssues = function () {
         var request = $http({
             method: "GET",
-            url: $scope.jiraServer + "/rest/api/2/search?jql=project=" + $scope.jiraProject + "&maxResults="+maxResults
+            url: $scope.jiraRoot + "/rest/api/2/search?jql=project=" + $scope.jiraProject + "&maxResults="+maxResults
         });
         request.success(function (data) {
             $scope.jiraIssues = data.issues;
