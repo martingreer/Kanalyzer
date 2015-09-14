@@ -168,7 +168,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     $scope.credentials = { username: 'martin.w.greer', password: ''};
     $scope.jiraRoot = 'https://kanalyzer.atlassian.net/';
     $scope.jiraProject = 'KTD';
-    $scope.jiraServer = $scope.jiraRoot + 'projects/' +  $scope.jiraProject;
+    $scope.jiraServer = $scope.jiraRoot + 'projects/' +  $scope.jiraProject + '/issues';
     var maxResults = 10;
     
     $scope.login = function (credentials) {
@@ -178,10 +178,10 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
         $http({method: 'GET', url: $scope.jiraServer})
             .success(function (data) {
-                if(DEBUG){console.log("Authentication SUCCESS: " + JSON.stringify(data));}
+                if(DEBUG){console.log("Authentication SUCCESS");}
             })
             .error(function (data) {
-                if(DEBUG){console.log("Authentication ERROR: " + JSON.stringify(data));}
+                if(DEBUG){console.log("Authentication ERROR");}
             });
     };
     
