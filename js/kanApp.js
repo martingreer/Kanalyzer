@@ -142,6 +142,10 @@ kanApp.factory('dataService', function ($http) {
 kanApp.controller('dataController', function ($scope, dataService, Base64, $http) {
     "use strict";
     
+    /////////////////////////////////////////////////
+    // GET DATA FROM FILE, AND PRINT DATA FUNCTION //
+    /////////////////////////////////////////////////
+    
     $scope.clearData = function () {
         $scope.data = {};
     };
@@ -169,12 +173,11 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     $scope.jiraRoot = 'https://kanalyzer.atlassian.net/';
     $scope.jiraProject = 'KTD';
     $scope.jiraServer = $scope.jiraRoot + 'projects/' +  $scope.jiraProject + '/issues';
-    var maxResults = 10;
     
     $scope.login = function (credentials) {
-        //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": '*'};
+        //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
+        //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
         if(DEBUG){console.log($scope.jiraServer);}
-        $http.defaults.headers.common = {"Access-Control-Allow-Origin": '*'};
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
         $http({method: 'GET', url: $scope.jiraServer})
             .success(function (data) {
@@ -188,6 +191,8 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     ////////////////////////////
     // GET ISSUES FOR PROJECT //
     ////////////////////////////
+    
+    var maxResults = 10;
     
     $scope.title = "";
     $scope.description = "";
@@ -203,11 +208,12 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     $scope.getIssues = function () {
         var request = $http({
             method: "GET",
-            url: $scope.jiraRoot + "/rest/api/2/search?jql=project=" + $scope.jiraProject + "&maxResults="+maxResults
+            url: $scope.jiraRoot + "rest/api/2/search?jql=project=" + $scope.jiraProject + "&expand=changelog" + "&maxResults=" + maxResults
         });
         request.success(function (data) {
             $scope.jiraIssues = data.issues;
             $scope.jiraData.issueList = data.issues;
+            
             if(DEBUG){console.log("SUCCESS! JIRA response: " + JSON.stringify(data));}
         });
         request.error(function (data) {
