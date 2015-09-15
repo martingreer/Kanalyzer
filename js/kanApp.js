@@ -123,6 +123,9 @@ kanApp.factory('Base64', function () {
 kanApp.factory('dataService', function ($http) {
     "use strict";
     
+    /**
+    * Service for getting all data from a json file.
+    */ 
     var dataService = {
         async: function () {
             // $http returns a promise, which has a .then function, which also returns a promise
@@ -142,20 +145,25 @@ kanApp.factory('dataService', function ($http) {
 kanApp.controller('dataController', function ($scope, dataService, Base64, $http) {
     "use strict";
     
-    /////////////////////////////////////////////////
-    // GET DATA FROM FILE, AND PRINT DATA FUNCTION //
-    /////////////////////////////////////////////////
-    
+    /**
+    * Clear json data.
+    */
     $scope.clearData = function () {
         $scope.data = {};
     };
     
+    /**
+    * Get data from JSON file.
+    */
     $scope.getData = function () {
         dataService.async().then(function (d) {
             $scope.data = d;
         });
     };
     
+    /**
+    * Dump json file content directly in app.
+    */
     $scope.prettyString = null;
     $scope.jsonPrint = function () {
         if ($scope.prettyString === null) {
@@ -165,15 +173,17 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
         }
     };
     
-    ////////////////////////////////
-    // LOGIN: AUTH TO JIRA SERVER //
-    ////////////////////////////////
-    
+    /**
+    * Variables for logging in.
+    */
     $scope.credentials = { username: 'martin.w.greer', password: ''};
     $scope.jiraRoot = 'https://kanalyzer.atlassian.net/';
     $scope.jiraProject = 'KTD';
     $scope.jiraServer = $scope.jiraRoot + 'projects/' +  $scope.jiraProject + '/issues';
     
+    /**
+    * Login: Auth to JIRA server.
+    */ 
     $scope.login = function (credentials) {
         //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
         //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
@@ -188,12 +198,10 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
             });
     };
     
-    ////////////////////////////
-    // GET ISSUES FOR PROJECT //
-    ////////////////////////////
-    
+    /**
+    * Variables for issues.
+    */
     var maxResults = 10;
-    
     $scope.title = "";
     $scope.description = "";
     $scope.jiraData = {
@@ -205,6 +213,9 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
         issueListPage: 1
     };
     
+    /**
+    * Get all issues for the project that was given on login.
+    */
     $scope.getIssues = function () {
         var request = $http({
             method: "GET",
@@ -225,10 +236,9 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
 kanApp.controller('nvd3Controller', function ($scope, dataService) {
     "use strict";
     
-    /////////////////////
-    // GRAPH STRUCTURE //
-    /////////////////////
-    
+    /**
+    * Graph structure.
+    */
     $scope.options = {
         chart: {
             type: 'stackedAreaChart',
@@ -259,6 +269,9 @@ kanApp.controller('nvd3Controller', function ($scope, dataService) {
         }
     };
     
+    /**
+    * Get json data from file when opening CFD page. (REMOVE LATER - WE WANT GLOBAL STORAGE IN VARIABLES)
+    */
     dataService.async().then(function (d) {
         $scope.data = d;
     });
