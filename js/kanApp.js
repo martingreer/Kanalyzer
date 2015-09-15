@@ -33,6 +33,9 @@ kanApp.config(function ($stateProvider, $urlRouterProvider) {
         });
 });
 
+/**
+* Base64 encoding + decoding for use in http requests.
+*/
 kanApp.factory('Base64', function () {
     "use strict";
     /*jslint regexp: true*/
@@ -187,14 +190,14 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     $scope.login = function (credentials) {
         //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
         //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
-        if(DEBUG){console.log($scope.jiraServer);}
+        if(DEBUG){console.log("Attempting to authenticate to server " + $scope.jiraRoot + "...");}
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
         $http({method: 'GET', url: $scope.jiraServer})
             .success(function (data) {
-                if(DEBUG){console.log("Authentication SUCCESS");}
+                if(DEBUG){console.log("Authentication SUCCESS!");}
             })
             .error(function (data) {
-                if(DEBUG){console.log("Authentication ERROR");}
+                if(DEBUG){console.log("Authentication ERROR.");}
             });
     };
     
@@ -216,20 +219,32 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     /**
     * Get all issues for the project that was given on login.
     */
-    $scope.getIssues = function () {
+    $scope.getAllIssues = function () {
         var request = $http({
             method: "GET",
             url: $scope.jiraRoot + "rest/api/2/search?jql=project=" + $scope.jiraProject + "&expand=changelog" + "&maxResults=" + maxResults
         });
+        if(DEBUG){console.log("Attempting to get all issues for project " + $scope.jiraProject + "...");}
         request.success(function (data) {
             $scope.jiraIssues = data.issues;
             $scope.jiraData.issueList = data.issues;
-            
-            if(DEBUG){console.log("SUCCESS! JIRA response: " + JSON.stringify(data));}
+            if(DEBUG){console.log("Get all issues SUCCESS!");}
         });
         request.error(function (data) {
-            if(DEBUG){console.log("ERROR! JIRA response: " + JSON.stringify(data));}
+            if(DEBUG){console.log("Get all issues ERROR. JIRA response: " + JSON.stringify(data));}
         });
+    };
+    
+    /**
+    * Print all issues directly in the application (for debugging).
+    */
+    $scope.allIssuesString = null;
+    $scope.printAllIssues = function () {
+        if ($scope.allIssuesString === null) {
+            $scope.allIssuesString = JSON.stringify($scope.jiraIssues, null, "\t");
+        } else {
+            $scope.allIssuesString = null;
+        }
     };
 });
 
