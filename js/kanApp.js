@@ -132,7 +132,7 @@ kanApp.factory('dataService', function ($http) {
     var dataService = {
         async: function () {
             // $http returns a promise, which has a .then function, which also returns a promise
-            var promise = $http.get('../json/data.json').then(function (response) {
+            var promise = $http.get('../json/graphTestData.json').then(function (response) {
                 // The .then function here is an opportunity to modify the response
                 if(DEBUG){console.log(response);}
                 // The return value gets picked up by the .then in the controller.
@@ -150,6 +150,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     
     /**
     * Clear json data.
+    * TAGS: unused
     */
     $scope.clearData = function () {
         $scope.data = {};
@@ -166,6 +167,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     
     /**
     * Dump json file content directly in app.
+    * TAGS: unused
     */
     $scope.prettyString = null;
     $scope.jsonPrint = function () {
@@ -202,9 +204,9 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     };
     
     /**
-    * Variables for issues.
+    * Variables for storing issues.
     */
-    var maxResults = 10;
+    var maxResults = -1;
     $scope.title = "";
     $scope.description = "";
     $scope.jiraData = {
@@ -228,6 +230,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
         request.success(function (data) {
             $scope.jiraIssues = data.issues;
             $scope.jiraData.issueList = data.issues;
+            localStorage.setItem('jiraIssues', JSON.stringify($scope.jiraIssues));
             if(DEBUG){console.log("Get all issues SUCCESS!");}
         });
         request.error(function (data) {
@@ -241,7 +244,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     $scope.allIssuesString = null;
     $scope.printAllIssues = function () {
         if ($scope.allIssuesString === null) {
-            $scope.allIssuesString = JSON.stringify($scope.jiraIssues, null, "\t");
+            $scope.allIssuesString = localStorage.getItem('jiraIssues');
         } else {
             $scope.allIssuesString = null;
         }
