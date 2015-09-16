@@ -209,6 +209,19 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
             });
     };
     
+    $scope.logout = function (credentials) {
+        if(DEBUG){console.log("Logging out from " + $scope.jiraRoot + "...");}
+        $scope.credentials = { username: 'martin.w.greer', password: '' };
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(' : ');
+        $http({method: 'GET', url: $scope.jiraServer})
+            .success(function (data) {
+                if(DEBUG){console.log("Logout ERROR.");}
+            })
+            .error(function (data) {
+                if(DEBUG){console.log("Logout SUCCESS!");}
+            });
+    };
+    
     /**
     * The max results to be returned from JIRA (-1 is unlimited results).
     */
