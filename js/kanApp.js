@@ -4,6 +4,9 @@
 var kanApp = angular.module('kanApp', ['ui.router', 'nvd3']);
 var DEBUG = true;
 
+/**
+* Definition of angular views and their controllers.
+*/
 kanApp.config(function ($stateProvider, $urlRouterProvider) {
     "use strict";
     
@@ -123,12 +126,12 @@ kanApp.factory('Base64', function () {
     };
 });
 
+/**
+* Service for getting all data from a json file.
+*/ 
 kanApp.factory('dataService', function ($http) {
     "use strict";
     
-    /**
-    * Service for getting all data from a json file.
-    */ 
     var dataService = {
         async: function () {
             // $http returns a promise, which has a .then function, which also returns a promise
@@ -145,6 +148,9 @@ kanApp.factory('dataService', function ($http) {
     return dataService;
 });
 
+/**
+* Controller for the Load Data view.
+*/
 kanApp.controller('dataController', function ($scope, dataService, Base64, $http) {
     "use strict";
     
@@ -204,19 +210,9 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     };
     
     /**
-    * Variables for storing issues.
+    * The max results to be returned from JIRA (-1 is unlimited results).
     */
     var maxResults = -1;
-    $scope.title = "";
-    $scope.description = "";
-    $scope.jiraData = {
-        currentIssue: null,
-        issueList: [],
-        issueListState: 'open',
-        issueListSort: 'created',
-        issueListDirection: 'desc',
-        issueListPage: 1
-    };
     
     /**
     * Get all issues for the project that was given on login.
@@ -228,9 +224,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
         });
         if(DEBUG){console.log("Attempting to get all issues for project " + $scope.jiraProject + "...");}
         request.success(function (data) {
-            $scope.jiraIssues = data.issues;
-            $scope.jiraData.issueList = data.issues;
-            localStorage.setItem('jiraIssues', JSON.stringify($scope.jiraIssues));
+            localStorage.setItem('jiraIssues', JSON.stringify(data.issues));
             if(DEBUG){console.log("Get all issues SUCCESS!");}
         });
         request.error(function (data) {
@@ -251,6 +245,9 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     };
 });
 
+/**
+* Controller for the CFD view.
+*/
 kanApp.controller('nvd3Controller', function ($scope, dataService) {
     "use strict";
     
