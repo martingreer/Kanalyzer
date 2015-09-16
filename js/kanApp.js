@@ -256,6 +256,10 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
             $scope.allIssuesString = null;
         }
     };
+    
+    $scope.getBoardStructure = function () {
+        //https://kanalyzer.atlassian.net/rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=2&selectedProjectKey=KTD
+    };
 });
 
 /**
