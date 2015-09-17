@@ -209,6 +209,9 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
             });
     };
     
+    /**
+    * Log out by sending empty login details and getting rejected (there is no log out support for JIRA).
+    */
     $scope.logout = function (credentials) {
         if(DEBUG){console.log("Logging out from " + $scope.jiraRoot + "...");}
         $scope.credentials = { username: 'martin.w.greer', password: '' };
