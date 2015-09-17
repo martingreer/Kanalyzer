@@ -21,16 +21,27 @@
             <input type="password" id="password" class="form-control" ng-model="credentials.password" style="width:400px">
         </div>
         <div>
-            <button type="submit" class="btn btn-default">Login</button>
+            <button type="submit" class="btn btn-default">Log in</button>
+        </div>
+    </form>
+    <br />
+    <h3>New view after logging in:</h3>
+    <form role="form" name="chooseBoardForm" ng-submit="login(credentials)" novalidate>
+        <div class="form-group">
+                <label for="jiraBoard">Board ID:</label>
+                <input type="text" id="jiraBoard" class="form-control" ng-model="jiraBoard" style="width:400px">
+        </div>
+        <div>
+            <button type="submit" class="btn btn-default">Load board</button>
         </div>
     </form>
     <form role="logout" name="logoutForm" ng-submit="logout(credentials)" novalidate>
-        <button type="submit" class="btn btn-default">Logout</button>
+        <button type="submit" class="btn btn-default">Log out</button>
     </form>
     <br /><br />
     <div>
-        <button ng-click="getAllIssues()">Load Data</button>
-        <button ng-click="printAllIssues()">Show/Hide Data</button>
+        <button ng-click="getAllIssues()">Load all issues</button>
+        <button ng-click="printAllIssues()">Show/hide response</button>
     </div>
     <br /><br />
     <div>
