@@ -1,6 +1,9 @@
 /*jslint bitwise: true, plusplus: true, white: true, sub: true, nomen: true*/
 /*global console, self:true, _, parseHistory*/
 
+/**
+* Current board structure with columns and their underlying statuses.
+*/
 function BoardDesign(apiColumnsData) {
     "use strict";
     
@@ -11,6 +14,7 @@ function BoardDesign(apiColumnsData) {
       _.forEach(self.columns, function(column){
         columnNames.push(column.name);
       });
+        console.log(columnNames);
       return columnNames;
     };
 
@@ -25,9 +29,47 @@ function BoardDesign(apiColumnsData) {
         return columnName;
     };
     
+    /**
+    * Hard-code column category to each column for now. Categories are Delay and Execution. Special category: Done.
+    */
+    self.getColumnCategories = function(column){
+        var columns = [];
+        
+        _.forEach(self.columns, function(column){
+           switch(column.name){
+               case "Ready to Refine":
+                   column.category = "Delay";
+                   break;
+               case "Ready to Analyze":
+                   column.category = "Delay";
+                   break;
+               case "Ready for Development":
+                   column.category = "Delay";
+                   break;
+               case "Ready for Test":
+                   column.category = "Delay";
+                   break;
+               case "Ready to Accept":
+                   column.category = "Delay";
+                   break;
+               case "Ready for Releas":
+                   column.category = "Done";
+                   break;
+               default:
+                   column.category = "Execution";
+           }
+           columns.push({"columnName":column.name, "columnCategory":column.category});
+        });
+        console.log(JSON.stringify(columns));
+        return columns;
+    };
+    
     return self;
-  }
+}
 
+/**
+* Issues containing ID, title, column history.
+*/
 function Issue(apiIssue, boardDesign){
     "use strict";
     
@@ -41,6 +83,9 @@ function Issue(apiIssue, boardDesign){
       return status;
     }
     
+    /**
+    * TODO: Time stamps should be ENTER and EXIT.
+    */
     function parseHistory(histories){
         var moves = [];
         _.forEach(histories, function(event){
@@ -53,9 +98,14 @@ function Issue(apiIssue, boardDesign){
                 }
             });
         });
+        
         counter++;
-        console.log(counter + " " + JSON.stringify(moves));
+        console.log("Issue " + counter + ": " + JSON.stringify(moves));
         return moves;
+    }
+    
+    function getTimeInColumns(){
+        // TODO: Calculate the sum of time spent in each column.
     }
 
     self.id = apiIssue.id;

@@ -5,106 +5,106 @@
 * Temporary data for testing.
 */
 var columnsData = {
-    "rapidViewId": 2,
-    "columns": [
-        {
-            "id": 11,
-            "name": "Ready to Refine",
-            "statusIds": [
-                "10000"
-            ],
-            "statisticsFieldValue": 1.0
-        },
-        {
-            "id": 21,
-            "name": "Refine Backlog",
-            "statusIds": [
-                "10010"
-            ],
-            "statisticsFieldValue": 1.0
-        },
-        {
-            "id": 22,
-            "name": "Ready to Analyze",
-            "statusIds": [
-                "10012"
-            ],
-            "statisticsFieldValue": 2.0
-        },
-        {
-            "id": 12,
-            "name": "Analyze",
-            "statusIds": [
-                "10002"
-            ],
-            "statisticsFieldValue": 0.0
-        },
-        {
-            "id": 13,
-            "name": "Ready for Development",
-            "statusIds": [
-                "10003"
-            ],
-            "statisticsFieldValue": 0.0
-        },
-        {
-            "id": 14,
-            "name": "In Progress",
-            "statusIds": [
-                "3",
-                "10004"
-            ],
-            "statisticsFieldValue": 2.0
-        },
-        {
-            "id": 15,
-            "name": "Under Review",
-            "statusIds": [
-                "10005"
-            ],
-            "statisticsFieldValue": 0.0
-        },
-        {
-            "id": 16,
-            "name": "Ready for Test",
-            "statusIds": [
-                "10006"
-            ],
-            "statisticsFieldValue": 0.0
-        },
-        {
-            "id": 17,
-            "name": "Under Test",
-            "statusIds": [
-                "10007"
-            ],
-            "statisticsFieldValue": 0.0
-        },
-        {
-            "id": 18,
-            "name": "Ready to Accept",
-            "statusIds": [
-                "10008"
-            ],
-            "statisticsFieldValue": 0.0
-        },
-        {
-            "id": 19,
-            "name": "Accept",
-            "statusIds": [
-                "10009"
-            ],
-            "statisticsFieldValue": 1.0
-        },
-        {
-            "id": 20,
-            "name": "Ready for Releas",
-            "statusIds": [
-                "10001"
-            ],
-            "statisticsFieldValue": 6.0
-        }
-    ]
+  "rapidViewId": 2,
+  "columns": [
+    {
+      "id": 11,
+      "name": "Ready to Refine",
+      "statusIds": [
+        "10000"
+      ],
+      "statisticsFieldValue": 1.0
+    },
+    {
+      "id": 21,
+      "name": "Refine Backlog",
+      "statusIds": [
+        "10010"
+      ],
+      "statisticsFieldValue": 1.0
+    },
+    {
+      "id": 22,
+      "name": "Ready to Analyze",
+      "statusIds": [
+        "10012"
+      ],
+      "statisticsFieldValue": 2.0
+    },
+    {
+      "id": 12,
+      "name": "Analyze",
+      "statusIds": [
+        "10002"
+      ],
+      "statisticsFieldValue": 0.0
+    },
+    {
+      "id": 13,
+      "name": "Ready for Development",
+      "statusIds": [
+        "10003"
+      ],
+      "statisticsFieldValue": 0.0
+    },
+    {
+      "id": 14,
+      "name": "In Progress",
+      "statusIds": [
+        "3",
+        "10004"
+      ],
+      "statisticsFieldValue": 2.0
+    },
+    {
+      "id": 15,
+      "name": "Under Review",
+      "statusIds": [
+        "10005"
+      ],
+      "statisticsFieldValue": 0.0
+    },
+    {
+      "id": 16,
+      "name": "Ready for Test",
+      "statusIds": [
+        "10006"
+      ],
+      "statisticsFieldValue": 0.0
+    },
+    {
+      "id": 17,
+      "name": "Under Test",
+      "statusIds": [
+        "10007"
+      ],
+      "statisticsFieldValue": 0.0
+    },
+    {
+      "id": 18,
+      "name": "Ready to Accept",
+      "statusIds": [
+        "10008"
+      ],
+      "statisticsFieldValue": 0.0
+    },
+    {
+      "id": 19,
+      "name": "Accept",
+      "statusIds": [
+        "10009"
+      ],
+      "statisticsFieldValue": 1.0
+    },
+    {
+      "id": 20,
+      "name": "Ready for Releas",
+      "statusIds": [
+        "10001"
+      ],
+      "statisticsFieldValue": 6.0
+    }
+  ]
 };
 
 var apiIssue = {
@@ -462,10 +462,12 @@ var apiIssue = {
 describe("BoardDesign:", function(){
     "use strict";
     
-    var boardDesign;
+    var boardDesign,
+        columnCategories;
     
-    beforeEach(function(){
+    beforeAll(function(){
         boardDesign = new BoardDesign(columnsData);
+        columnCategories =  boardDesign.getColumnCategories();
     });
 
     it("should have columns", function(){
@@ -478,6 +480,10 @@ describe("BoardDesign:", function(){
 
     it("should return null when status id is not matching any column", function(){
         expect(boardDesign.getColumnMatchingStatus("100100")).toBe(null);
+    });
+    
+    approveIt("should have appropriate column categories", function(approvals){
+        approvals.verify(columnCategories);
     });
 });
 
@@ -506,14 +512,6 @@ describe("Issue:", function(){
         expect(issue.currentStatus).toEqual({id:"10009",name:"Accept"});
     });
 
-    /*it("should have started in column x", function(){
-        expect(issue.moves[0].name).toBe("Ready to Refine");
-    });*/
-
-    /*approveIt("testingTesting", function(approvals){
-        approvals.verify({key:"data"});
-    });*/
-
     describe("History parser:", function(){
         var moves;
         
@@ -521,13 +519,16 @@ describe("Issue:", function(){
            moves = issue.moves;
         });
         
-        /*approveIt("should have been moved", function(approvals){
-            var moves = issue.parseHistory(apiIssue.changelog.histories);
-            approvals.verify(moves);
-        });*/
-        
-        it("move should start in column x", function(){
+        it("issue should always start in first column", function(){
             expect(moves[0].fromColumn).toBe("Ready to Refine");
+        });
+        
+        it("event should have a time stamp", function(){
+            expect(moves[0].moveTime).toBe("2015-09-01T14:42:23.667+0200");
+        });
+        
+        approveIt("should have been moved", function(approvals){
+            approvals.verify(moves);
         });
     });
 });
