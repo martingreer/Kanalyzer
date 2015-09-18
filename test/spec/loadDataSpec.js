@@ -1,10 +1,13 @@
 /*global describe, it, expect, beforeEach, module, inject*/
 /*jslint bitwise: true, plusplus: true, white: true, sub: true*/
 
+/**
+* THIS FILE IS NOT USED YET.
+*/
 describe("Load data functionality", function () {
     "use strict";
     
-    var localStorageMock : {
+    var localStorageMock = {
         this.data    : {},
         this.setItem : function(key,content){
             this.data[key] = content;
