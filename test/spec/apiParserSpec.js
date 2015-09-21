@@ -505,7 +505,7 @@ describe("Issue:", function(){
     });
 
     it("should be created", function(){
-        expect(issue.created).toBe("2015-09-01T14:42:01.000+0200");
+        expect(issue.created).toBe("2015-09-01T14:42:01");
     });
 
     it("should have current status", function(){
@@ -520,15 +520,23 @@ describe("Issue:", function(){
         });
         
         it("issue should always start in first column", function(){
-            expect(moves[0].fromColumn).toBe("Ready to Refine");
+            expect(moves[0].columnName).toBe("Ready to Refine");
         });
         
-        it("event should have a time stamp", function(){
-            expect(moves[0].moveTime).toBe("2015-09-01T14:42:23.667+0200");
+        it("issue should have an enter time for a column", function(){
+            expect(moves[0].enterTime).toBe("2015-09-01T14:42:01");
+        });
+        
+        it("issue should have an exit time for a column", function(){
+            expect(moves[0].exitTime).toBe("2015-09-01T14:42:23");
         });
         
         approveIt("should have been moved", function(approvals){
             approvals.verify(moves);
+        });
+        
+        it("should parse a timestamp to milliseconds (epoch)", function(){
+            expect(Date.parse("2015-09-01T14:42:23")).toBe(1441118543000);
         });
     });
 });

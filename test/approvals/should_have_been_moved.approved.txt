@@ -1,1 +1,1 @@
-[{"fromColumn":"Ready to Refine","toColumn":"In Progress","moveTime":"2015-09-01T14:42:23.667+0200"},{"fromColumn":"In Progress","toColumn":"Under Review","moveTime":"2015-09-02T10:40:22.627+0200"},{"fromColumn":"Under Review","toColumn":"Accept","moveTime":"2015-09-09T16:35:12.918+0200"}]
+[{"fromColumn":"Ready to Refine","toColumn":"In Progress","moveTime":"2015-09-01T14:42:23"},{"fromColumn":"In Progress","toColumn":"Under Review","moveTime":"2015-09-02T10:40:22"},{"fromColumn":"Under Review","toColumn":"Accept","moveTime":"2015-09-09T16:35:12"}]

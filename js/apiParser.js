@@ -31,6 +31,7 @@ function BoardDesign(apiColumnsData) {
     
     /**
     * Hard-code column category to each column for now. Categories are Delay and Execution. Special category: Done.
+    * This should later be defined by the user after fetching board data.
     */
     self.getColumnCategories = function(column){
         var columns = [];
@@ -89,7 +90,7 @@ function Issue(apiIssue, boardDesign){
     function parseHistory(histories){
         var moves = [];
         _.forEach(histories, function(event){
-            var moveTime = event.created;
+            var moveTime = event.created.substr(0, event.created.indexOf('.'));
             _.forEach(event.items, function(eventItem){
                 if(eventItem.field === "status"){
                     var fromColumn = boardDesign.getColumnMatchingStatus(eventItem.from),
@@ -104,14 +105,41 @@ function Issue(apiIssue, boardDesign){
         return moves;
     }
     
+    /**
+    * Format the parsed history into [COLUMN, ENTER, EXIT].
+    * Example: [{"Ready to Refine", "2015-09-01T14:42:01", "2015-09-01T14:42:23"}]
+    */
+    function formatMoves(moves){
+        var i,
+            createdTime = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.')),
+            formattedMoves = [],
+            today = new Date(Date.now());
+
+        // First item is a special case because we need to set the time which the issue was created as enter time.
+        formattedMoves.push({"columnName":moves[0].fromColumn, "enterTime":createdTime, "exitTime":moves[0].moveTime});
+        console.log("ITERATION: 0 - " + moves[0].fromColumn + " | " + createdTime + " | " + moves[0].moveTime);
+        
+        // Events in the middle.
+        for(i = 1; i < moves.length; i++){
+            formattedMoves.push({"columnName":moves[i].fromColumn, "enterTime":moves[i-1].moveTime, "exitTime":moves[i].moveTime});
+            console.log("ITERATION: " + i + " - " + moves[i].fromColumn + " | " + moves[i-1].moveTime + " | " + moves[i].moveTime);
+        }
+        
+        // Last item is a special case because toColumn must become its own object and has no real exit time.
+        formattedMoves.push({"columnName":moves[moves.length-1].toColumn, "enterTime":moves[moves.length-1].moveTime, "exitTime":today});
+        console.log("ITERATION: " + moves.length + " - " + moves[moves.length-1].toColumn + " | " + moves[moves.length-1].moveTime + " | " + today);
+        
+        return formattedMoves;
+    }
+    
     function getTimeInColumns(){
         // TODO: Calculate the sum of time spent in each column.
     }
 
     self.id = apiIssue.id;
     self.title = apiIssue.fields.issuetype.description;
-    self.created = apiIssue.fields.created;
+    self.created = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.'));
     self.currentStatus = parseCurrentStatus(apiIssue.fields.status);
-    self.moves = parseHistory(apiIssue.changelog.histories);
+    self.moves = formatMoves(parseHistory(apiIssue.changelog.histories));
     return self;
   }
