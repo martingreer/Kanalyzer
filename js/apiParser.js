@@ -8,7 +8,7 @@ function BoardDesign(apiColumnsData) {
     "use strict";
     
     self = _.cloneDeep(apiColumnsData);
-   
+    
     self.getColumnNames = function(){
       var columnNames = [];
       _.forEach(self.columns, function(column){
@@ -114,7 +114,9 @@ function Issue(apiIssue, boardDesign){
             createdTime = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.')),
             formattedMoves = [],
             today = new Date(Date.now());
-
+        
+        today = today.customFormat("#YYYY#-#MM#-#DD#T#hh#:#mm#:#ss#");
+        
         // First item is a special case because we need to set the time which the issue was created as enter time.
         formattedMoves.push({"columnName":moves[0].fromColumn, "enterTime":createdTime, "exitTime":moves[0].moveTime});
         console.log("ITERATION: 0 - " + moves[0].fromColumn + " | " + createdTime + " | " + moves[0].moveTime);
