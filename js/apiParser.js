@@ -1,6 +1,8 @@
 /*jslint bitwise: true, plusplus: true, white: true, sub: true, nomen: true*/
 /*global timeUtil, console, self:true, _, parseHistory*/
 
+var DEBUG = true;
+
 /**
 * Current board structure with columns and their underlying statuses.
 */
@@ -14,7 +16,7 @@ function BoardDesign(apiColumnsData) {
       _.forEach(self.columns, function(column){
         columnNames.push(column.name);
       });
-        console.log(columnNames);
+        if(DEBUG){console.log(columnNames);}
       return columnNames;
     };
 
@@ -61,7 +63,7 @@ function BoardDesign(apiColumnsData) {
            }
            columns.push({"columnName":column.name, "columnCategory":column.category});
         });
-        console.log(JSON.stringify(columns));
+        if(DEBUG){console.log(JSON.stringify(columns));}
         return columns;
     };
 
@@ -109,8 +111,6 @@ function ColumnHistoryItem(columnName, enterTime, exitTime){
 
 /**
 * Issues containing ID, title, column history.
-*
-* TODO: Handle special case where if issue has no history, check current status and set as first column.
 */
 function Issue(apiIssue, boardDesign){
     "use strict";
@@ -125,8 +125,8 @@ function Issue(apiIssue, boardDesign){
       return status;
     }
 
-    function parseHistory(histories){
-        return new Moves(histories, boardDesign);
+    function parseApiHistories(apiHistories){
+        return new Moves(apiHistories, boardDesign);
     }
 
     function startColumn(apiIssue){
@@ -139,7 +139,7 @@ function Issue(apiIssue, boardDesign){
         if(apiIssue.changelog.histories.length === 0){
             columnHistory.push(startColumn(apiIssue));
         } else {
-            columnHistory = parseMoves(parseHistory(apiIssue.changelog.histories));
+            columnHistory = parseMoves(parseApiHistories(apiIssue.changelog.histories));
         }
 
         return columnHistory;
@@ -152,27 +152,29 @@ function Issue(apiIssue, boardDesign){
     function parseMoves(columnHistory){
         var i,
             createdTime = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.')),
-            formattedColumnHistory = [];
+            columnsWithEnterExit = [];
 
         // First item is a special case because we need to set the time which the issue was created as enter time.
-        formattedColumnHistory.push(new ColumnHistoryItem(columnHistory[0].fromColumn, createdTime, columnHistory[0].moveTime));
-        console.log("ITERATION: 0 - " + columnHistory[0].fromColumn + " | " + createdTime + " | " + columnHistory[0].moveTime);
+        columnsWithEnterExit.push(new ColumnHistoryItem(columnHistory[0].fromColumn, createdTime, columnHistory[0].moveTime));
+        if(DEBUG){console.log("ITERATION: 0 - " + columnHistory[0].fromColumn + " | " + createdTime + " | " + columnHistory[0].moveTime);}
 
         // Events in the middle.
         for(i = 1; i < columnHistory.length; i++){
-            formattedColumnHistory.push(new ColumnHistoryItem(columnHistory[i].fromColumn, columnHistory[i-1].moveTime, columnHistory[i].moveTime));
-            console.log("ITERATION: " + i + " - " + columnHistory[i].fromColumn + " | " + columnHistory[i-1].moveTime + " | " + columnHistory[i].moveTime);
+            columnsWithEnterExit.push(new ColumnHistoryItem(columnHistory[i].fromColumn, columnHistory[i-1].moveTime, columnHistory[i].moveTime));
+            if(DEBUG){console.log("ITERATION: " + i + " - " + columnHistory[i].fromColumn + " | " + columnHistory[i-1].moveTime + " | " + columnHistory[i].moveTime);}
         }
 
         // Last item is a special case because toColumn must become its own object and has no real exit time.
-        formattedColumnHistory.push(new ColumnHistoryItem(columnHistory[columnHistory.length-1].toColumn, columnHistory[columnHistory.length-1].moveTime, timeUtil.getTimestamp()));
-        console.log("ITERATION: " + columnHistory.length + " - " + columnHistory[columnHistory.length-1].toColumn + " | " + columnHistory[columnHistory.length-1].moveTime + " | " + timeUtil.getTimestamp());
+        columnsWithEnterExit.push(new ColumnHistoryItem(columnHistory[columnHistory.length-1].toColumn, columnHistory[columnHistory.length-1].moveTime, timeUtil.getTimestamp()));
+        if(DEBUG){console.log("ITERATION: " + columnHistory.length + " - " + columnHistory[columnHistory.length-1].toColumn + " | " + columnHistory[columnHistory.length-1].moveTime + " | " + timeUtil.getTimestamp());}
 
-        return formattedColumnHistory;
+        return columnsWithEnterExit;
     }
 
-    function getTimeInColumns(){
+    function getTimeInColumns(columnsWithEnterExit){
         // TODO: Calculate the sum of time spent in each column and relate them to column category.
+
+
     }
 
     self.id = apiIssue.id;
