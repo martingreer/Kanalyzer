@@ -1,3 +1,7 @@
+/**
+ * Test for apiParser.js
+ */
+
 /*global describe, it, expect, beforeEach, beforeAll, module, inject, BoardDesign, approveIt, Issue*/
 /*jslint bitwise: true, plusplus: true, white: true, sub: true*/
 
@@ -458,8 +462,8 @@ var apiIssueWithHistory = {
             ]
         }
     };
-    
- var apiIssueWithoutHistory =    
+
+ var apiIssueWithoutHistory =
     {
         "expand": "operations,versionedRepresentations,editmeta,changelog,transitions,renderedFields",
         "id": "10303",
@@ -627,10 +631,10 @@ var apiIssueWithHistory = {
 
 describe("BoardDesign", function(){
     "use strict";
-    
+
     var boardDesign,
         columnCategories;
-    
+
     beforeAll(function(){
         boardDesign = new BoardDesign(columnsData);
         columnCategories =  boardDesign.getColumnCategories();
@@ -647,15 +651,15 @@ describe("BoardDesign", function(){
     it("should return null when status id is not matching any column", function(){
         expect(boardDesign.getColumnMatchingStatus("100100")).toBe(null);
     });
-    
+
     approveIt("should have appropriate column categories", function(approvals){
         approvals.verify(columnCategories);
     });
 });
 
 describe("Issue", function(){
-    "use strict";    
-    
+    "use strict";
+
     describe("With history", function(){
         var issue;
 
