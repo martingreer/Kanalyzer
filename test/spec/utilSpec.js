@@ -29,5 +29,9 @@ describe("Utils", function(){
         it("should be a correct format", function(){
             expect(timeUtilTest.getTimestamp(dateTestAM)).toBe("2015-09-23T04:52:21");
         });
+
+        it("should parse a timestamp to milliseconds (epoch)", function(){
+            expect(Date.parse("2015-09-01T14:42:23")).toBe(1441118543000);
+        });
     });
 });

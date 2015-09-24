@@ -63,7 +63,7 @@ function BoardDesign(apiColumnsData) {
            }
            columns.push({"columnName":column.name, "columnCategory":column.category});
         });
-        if(DEBUG){console.log(JSON.stringify(columns));}
+        //if(DEBUG){console.log(JSON.stringify(columns));}
         return columns;
     };
 
@@ -125,8 +125,8 @@ function Issue(apiIssue, boardDesign){
       return status;
     }
 
-    function parseApiHistories(apiHistories){
-        return new Moves(apiHistories, boardDesign);
+    function parseApiIssueHistories(apiIssueHistories){
+        return new Moves(apiIssueHistories, boardDesign);
     }
 
     function startColumn(apiIssue){
@@ -139,7 +139,7 @@ function Issue(apiIssue, boardDesign){
         if(apiIssue.changelog.histories.length === 0){
             columnHistory.push(startColumn(apiIssue));
         } else {
-            columnHistory = parseMoves(parseApiHistories(apiIssue.changelog.histories));
+            columnHistory = parseMoves(parseApiIssueHistories(apiIssue.changelog.histories));
         }
 
         return columnHistory;
@@ -173,8 +173,26 @@ function Issue(apiIssue, boardDesign){
 
     function getTimeInColumns(columnsWithEnterExit){
         // TODO: Calculate the sum of time spent in each column and relate them to column category.
+        var i,
+            j,
+            columnsWithTimeSpent = [],
+            columnCategories = boardDesign.getColumnCategories();
 
+        for(i = 0; i < 4; i++) {
+            var columnName = columnsWithEnterExit[i].columnName,
+                columnCategory,
+                timeSpent = Date.parse(columnsWithEnterExit[i].exitTime) - Date.parse(columnsWithEnterExit[i].enterTime);
+            for(j = 0; j < columnCategories.length; j++){
+                if(columnCategories[j].columnName === columnsWithEnterExit[i].columnName){
+                    columnCategory = columnCategories[j].columnCategory;
+                }
+            }
+            columnsWithTimeSpent.push({"columnName": columnName, "columnCategory": columnCategory, "timeSpent": timeSpent});
+        }
 
+        if(DEBUG){console.log(JSON.stringify(columnsWithTimeSpent));}
+
+        return columnsWithTimeSpent;
     }
 
     self.id = apiIssue.id;
@@ -182,5 +200,6 @@ function Issue(apiIssue, boardDesign){
     self.created = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.'));
     self.currentStatus = parseCurrentStatus(apiIssue.fields.status);
     self.columnHistory = createColumnHistory(apiIssue);
+    self.columnsWithTimeSpent = getTimeInColumns(self.columnHistory);
     return self;
   }

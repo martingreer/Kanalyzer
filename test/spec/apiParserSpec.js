@@ -706,9 +706,17 @@ describe("Issue", function(){
             /*approveIt("should have been moved", function(approvals){
                 approvals.verify(columnHistory);
             });*/
+        });
 
-            it("should parse a timestamp to milliseconds (epoch)", function(){
-                expect(Date.parse("2015-09-01T14:42:23")).toBe(1441118543000);
+        describe("Cycle time calculations", function(){
+            var columnsWithTimeSpent;
+
+            beforeAll(function(){
+                columnsWithTimeSpent = issue.columnsWithTimeSpent;
+            });
+
+            it("should calculate time spent in first column", function(){
+                expect(columnsWithTimeSpent[0].timeSpent).toBe(1441114943000-1441114921000);
             });
         });
     });
