@@ -67,6 +67,24 @@ function BoardDesign(apiColumnsData) {
         return columns;
     };
 
+    self.columnIsExecution = function(){
+        //TODO
+    };
+
+    self.columnIsDelay = function(){
+        //TODO
+    };
+
+    self.columnIsDone = function(columnName){
+        console.log(columnName);
+
+        _.forEach(self.getColumnCategories, function(column){
+            if(column.columnName === columnName){
+                return column.columnCategory === "Done";
+            }
+        });
+    };
+
     return self;
 }
 
@@ -106,6 +124,11 @@ function ColumnHistoryItem(columnName, enterTime, exitTime){
     self.columnName = columnName;
     self.enterTime = enterTime;
     self.exitTime = exitTime;
+
+    self.timeSpentInColumn = function(){
+        return Date.parse(self.exitTime) - Date.parse(self.enterTime);
+    };
+
     return self;
 }
 
@@ -174,18 +197,18 @@ function Issue(apiIssue, boardDesign){
     /**
      *  Calculates the sum of time spent in each column and relates them to a matching column category.
      */
-    function getTimeInColumns(columnsWithEnterExit){
+    function getTimeInColumns(){
         var i,
             j,
             columnsWithTimeSpent = [],
             columnCategories = boardDesign.getColumnCategories();
 
-        for(i = 0; i < columnsWithEnterExit.length; i++){
-            var columnName = columnsWithEnterExit[i].columnName,
+        for(i = 0; i < self.columnHistory.length; i++){
+            var columnName = self.columnHistory[i].columnName,
                 columnCategory,
-                timeSpent = Date.parse(columnsWithEnterExit[i].exitTime) - Date.parse(columnsWithEnterExit[i].enterTime);
+                timeSpent = self.columnHistory[i].timeSpentInColumn();
             for(j = 0; j < columnCategories.length; j++){
-                if(columnCategories[j].columnName === columnsWithEnterExit[i].columnName){
+                if(columnCategories[j].columnName === self.columnHistory[i].columnName){
                     columnCategory = columnCategories[j].columnCategory;
                 }
             }
@@ -197,11 +220,36 @@ function Issue(apiIssue, boardDesign){
         return columnsWithTimeSpent;
     }
 
+    self.isDone = function(columnName){
+        console.log(BoardDesign.columnIsDone(columnName));
+        return BoardDesign.columnIsDone(columnName);
+        /*console.log(_.last(self.columnHistory).columnCategory.equals("Done"));
+        return _.last(self.columnHistory).columnCategory.equals("Done");*/
+    };
+
+    self.getCycleTime = function (){
+        var cycleTime = 0;
+        var columnHistory = _.cloneDeep(self.columnHistory);
+
+        if(self.isDone(self.columnName)){
+            console.log("BEFORE POP " + columnHistory);
+            columnHistory.pop();
+            console.log("AFTER POP " + columnHistory);
+            _.forEach(columnHistory, function(column){
+                cycleTime += column.timeSpentInColumn();
+            });
+            return cycleTime;
+        } else {
+            return null;
+        }
+    };
+
     self.id = apiIssue.id;
     self.title = apiIssue.fields.issuetype.description;
     self.created = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.'));
     self.currentStatus = parseCurrentStatus(apiIssue.fields.status);
     self.columnHistory = createColumnHistory(apiIssue);
-    self.columnsWithTimeSpent = getTimeInColumns(self.columnHistory);
+    self.columnsWithTimeSpent = getTimeInColumns();
+    //self.cycleTime = getCycleTime();
     return self;
   }
