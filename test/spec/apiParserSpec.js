@@ -732,6 +732,9 @@ describe("Issue", function(){
 
         it("should be in first column", function(){
             expect(columnHistory[0].columnName).toBe("Ready to Refine");
+        });
+
+        it("should have only one history record", function(){
             expect(columnHistory.length).toBe(1);
         });
     });

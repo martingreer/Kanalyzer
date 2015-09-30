@@ -171,14 +171,16 @@ function Issue(apiIssue, boardDesign){
         return columnsWithEnterExit;
     }
 
+    /**
+     *  Calculates the sum of time spent in each column and relates them to a matching column category.
+     */
     function getTimeInColumns(columnsWithEnterExit){
-        // TODO: Calculate the sum of time spent in each column and relate them to column category.
         var i,
             j,
             columnsWithTimeSpent = [],
             columnCategories = boardDesign.getColumnCategories();
 
-        for(i = 0; i < 4; i++) {
+        for(i = 0; i < columnsWithEnterExit.length; i++){
             var columnName = columnsWithEnterExit[i].columnName,
                 columnCategory,
                 timeSpent = Date.parse(columnsWithEnterExit[i].exitTime) - Date.parse(columnsWithEnterExit[i].enterTime);
