@@ -200,6 +200,8 @@ function Issue(apiIssue, boardDesign){
 
     /**
      *  Calculates the sum of time spent in each column and relates them to a matching column category.
+     *
+     *  <<DEPRECATED>>
      */
     function getTimeInColumns(){
         var i,

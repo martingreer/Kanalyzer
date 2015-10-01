@@ -33,5 +33,9 @@ describe("Utils", function(){
         it("should parse a timestamp to milliseconds (epoch)", function(){
             expect(Date.parse("2015-09-01T14:42:23")).toBe(1441118543000);
         });
+
+        it("should convert time in ms to DD HH MM format", function(){
+            expect(timeUtilTest.convertMillisecondsToDaysHoursMinutes(1122653000)).toBe("12:23:51");
+        });
     });
 });

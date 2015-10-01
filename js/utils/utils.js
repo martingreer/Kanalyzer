@@ -56,6 +56,27 @@ function TimeUtil() {
         return today;
     };
 
+    self.convertMillisecondsToDaysHoursMinutes = function (ms) {
+        var dayFactor = 24 * 60 * 60 * 1000,
+            hourFactor = 60 * 60 * 1000,
+            day = Math.floor(ms / dayFactor),
+            hour = Math.floor( (ms - day * dayFactor) / hourFactor),
+            minute = Math.round( (ms - day * dayFactor - hour * hourFactor) / 60000),
+            pad = function(n){ return n < 10 ? '0' + n : n; };
+
+        if( minute === 60 ){
+            hour++;
+            minute = 0;
+        }
+
+        if( hour === 24 ){
+            day++;
+            hour = 0;
+        }
+
+        return [day, pad(hour), pad(minute)].join(':');
+    };
+
     return self;
 }
 

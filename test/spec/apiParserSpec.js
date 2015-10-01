@@ -1192,14 +1192,10 @@ describe("Issue", function(){
     });
 
     describe("Cycle time calculations", function(){
-        var columnHistoryDoneIssue,
-            columnHistoryNotDoneIssue,
-            cycleTimeDoneIssue,
+        var cycleTimeDoneIssue,
             cycleTimeNotDoneIssue;
 
         beforeAll(function(){
-            columnHistoryDoneIssue = issueIsDone.columnsWithTimeSpent;
-            columnHistoryNotDoneIssue = issueWithHistoryAndNotDone.columnsWithTimeSpent;
             cycleTimeDoneIssue = issueIsDone.getCycleTime();
             cycleTimeNotDoneIssue = issueWithoutHistory.getCycleTime();
         });
