@@ -16,7 +16,7 @@ function BoardDesign(apiColumnsData) {
       _.forEach(self.columns, function(column){
         columnNames.push(column.name);
       });
-        if(DEBUG){console.log(columnNames);}
+      if(DEBUG){console.log(columnNames);}
       return columnNames;
     };
 
@@ -35,9 +35,7 @@ function BoardDesign(apiColumnsData) {
     * Hard-code column category to each column for now. Categories are Delay and Execution. Special category: Done.
     * This should later be defined by the user after fetching board data.
     */
-    self.getColumnCategories = function(column){
-        var columns = [];
-
+    self.columnCategories = function(){
         _.forEach(self.columns, function(column){
            switch(column.name){
                case "Ready to Refine":
@@ -55,35 +53,41 @@ function BoardDesign(apiColumnsData) {
                case "Ready to Accept":
                    column.category = "Delay";
                    break;
-               case "Ready for Releas":
+               case "Ready for Release":
                    column.category = "Done";
                    break;
                default:
                    column.category = "Execution";
            }
-           columns.push({"columnName":column.name, "columnCategory":column.category});
         });
-        //if(DEBUG){console.log(JSON.stringify(columns));}
-        return columns;
+
+        return self.columns;
     };
 
+    self.getColumnCategory = function(columnName){
+        var category = "";
+        _.forEach(self.columns, function(column){
+           if(column.name === columnName){
+               category = column.category;
+               return false;
+           }
+        });
+        return category;
+    };
+
+    /* TODO
     self.columnIsExecution = function(){
-        //TODO
     };
 
     self.columnIsDelay = function(){
-        //TODO
+    };
+    */
+
+    self.isDoneColumn = function(columnName){
+        return self.getColumnCategory(columnName) === "Done";
     };
 
-    self.columnIsDone = function(columnName){
-        console.log(columnName);
-
-        _.forEach(self.getColumnCategories, function(column){
-            if(column.columnName === columnName){
-                return column.columnCategory === "Done";
-            }
-        });
-    };
+    self.columnCategories();
 
     return self;
 }
@@ -201,7 +205,7 @@ function Issue(apiIssue, boardDesign){
         var i,
             j,
             columnsWithTimeSpent = [],
-            columnCategories = boardDesign.getColumnCategories();
+            columnCategories = boardDesign.columnCategories();
 
         for(i = 0; i < self.columnHistory.length; i++){
             var columnName = self.columnHistory[i].columnName,
@@ -220,21 +224,23 @@ function Issue(apiIssue, boardDesign){
         return columnsWithTimeSpent;
     }
 
-    self.isDone = function(columnName){
-        console.log(BoardDesign.columnIsDone(columnName));
-        return BoardDesign.columnIsDone(columnName);
-        /*console.log(_.last(self.columnHistory).columnCategory.equals("Done"));
-        return _.last(self.columnHistory).columnCategory.equals("Done");*/
+    /**
+     * Check if column is in Done category.
+     */
+    self.isDone = function(){
+        var columnName = _.last(self.columnHistory).columnName;
+        return boardDesign.isDoneColumn(columnName);
     };
 
+    /**
+     * Calculate Cycle Time for one issue.
+     */
     self.getCycleTime = function (){
         var cycleTime = 0;
         var columnHistory = _.cloneDeep(self.columnHistory);
 
-        if(self.isDone(self.columnName)){
-            console.log("BEFORE POP " + columnHistory);
+        if(self.isDone()){
             columnHistory.pop();
-            console.log("AFTER POP " + columnHistory);
             _.forEach(columnHistory, function(column){
                 cycleTime += column.timeSpentInColumn();
             });
@@ -249,7 +255,6 @@ function Issue(apiIssue, boardDesign){
     self.created = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.'));
     self.currentStatus = parseCurrentStatus(apiIssue.fields.status);
     self.columnHistory = createColumnHistory(apiIssue);
-    self.columnsWithTimeSpent = getTimeInColumns();
     //self.cycleTime = getCycleTime();
     return self;
   }

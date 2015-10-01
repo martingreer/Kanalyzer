@@ -106,7 +106,7 @@ var columnsData = {
     },
     {
       "id": 20,
-      "name": "Ready for Releas",
+      "name": "Ready for Release",
       "statusIds": [
         "10001"
       ],
@@ -1097,11 +1097,11 @@ describe("BoardDesign", function(){
 
     beforeAll(function(){
         boardDesign = new BoardDesign(columnsData);
-        columnCategories =  boardDesign.getColumnCategories();
+        columnCategories =  boardDesign.columnCategories();
     });
 
     it("should have columns", function(){
-        expect(boardDesign.getColumnNames()).toEqual(['Ready to Refine', 'Refine Backlog', 'Ready to Analyze', 'Analyze', 'Ready for Development', 'In Progress', 'Under Review', 'Ready for Test', 'Under Test', 'Ready to Accept', 'Accept', 'Ready for Releas']);
+        expect(boardDesign.getColumnNames()).toEqual(['Ready to Refine', 'Refine Backlog', 'Ready to Analyze', 'Analyze', 'Ready for Development', 'In Progress', 'Under Review', 'Ready for Test', 'Under Test', 'Ready to Accept', 'Accept', 'Ready for Release']);
     });
 
     it("should return column name when status id is matching", function(){
@@ -1114,6 +1114,14 @@ describe("BoardDesign", function(){
 
     approveIt("should have appropriate column categories", function(approvals){
         approvals.verify(columnCategories);
+    });
+
+    it("should return done category", function(){
+       expect(boardDesign.getColumnCategory("Ready for Release")).toEqual("Done");
+    });
+
+    it("should return execution category", function(){
+        expect(boardDesign.getColumnCategory("In Progress")).toEqual("Execution");
     });
 });
 
@@ -1135,6 +1143,10 @@ describe("Issue", function(){
 
         it("should have current status", function(){
             expect(issueWithHistoryAndNotDone.currentStatus).toEqual({id:"10009",name:"Accept"});
+        });
+
+        it("should be done", function(){
+            expect(issueIsDone.isDone()).toBe(true);
         });
 
         describe("History parser", function(){
@@ -1193,15 +1205,11 @@ describe("Issue", function(){
         });
 
         it("should calculate time spent in first column", function(){
-            expect(columnHistoryNotDoneIssue[0].timeSpent).toBe(1441114943000-1441114921000);
-        });
-
-        it("should be done", function(){
-            expect(columnHistoryDoneIssue.isDone()).toBe(true);
+            expect(issueWithHistoryAndNotDone.columnHistory[0].timeSpentInColumn()).toBe(1441114943000-1441114921000);
         });
 
         it("should calculate the cycle time for the issue", function(){
-            expect(cycleTimeDoneIssue).toBe("");
+            expect(cycleTimeDoneIssue).toBe(1122653000);
         });
 
         it("should not have cycle time if not done", function(){
