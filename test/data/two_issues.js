@@ -1,4 +1,4 @@
-[
+var two_issues = [
   {
     "expand": "operations,versionedRepresentations,editmeta,changelog,transitions,renderedFields",
     "id": "10100",
@@ -27,7 +27,7 @@
         }
       },
       "fixVersions": [
-        
+
       ],
       "aggregatetimespent": null,
       "resolution": {
@@ -57,7 +57,7 @@
       "customfield_10023": "Not Started",
       "customfield_10024": null,
       "labels": [
-        
+
       ],
       "customfield_10016": null,
       "customfield_10017": null,
@@ -66,10 +66,10 @@
       "timeestimate": null,
       "aggregatetimeoriginalestimate": null,
       "versions": [
-        
+
       ],
       "issuelinks": [
-        
+
       ],
       "assignee": {
         "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
@@ -102,7 +102,7 @@
         }
       },
       "components": [
-        
+
       ],
       "timeoriginalestimate": null,
       "description": null,
@@ -433,7 +433,7 @@
         }
       },
       "fixVersions": [
-        
+
       ],
       "aggregatetimespent": null,
       "resolution": null,
@@ -458,7 +458,7 @@
       "customfield_10023": "Not Started",
       "customfield_10024": null,
       "labels": [
-        
+
       ],
       "customfield_10016": null,
       "customfield_10017": null,
@@ -467,10 +467,10 @@
       "timeestimate": null,
       "aggregatetimeoriginalestimate": null,
       "versions": [
-        
+
       ],
       "issuelinks": [
-        
+
       ],
       "assignee": {
         "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
@@ -503,7 +503,7 @@
         }
       },
       "components": [
-        
+
       ],
       "timeoriginalestimate": null,
       "description": "Write and hand in planning report.",
@@ -531,7 +531,7 @@
         "timeZone": "Europe/Berlin"
       },
       "subtasks": [
-        
+
       ],
       "reporter": {
         "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",

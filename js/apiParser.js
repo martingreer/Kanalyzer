@@ -142,8 +142,7 @@ function ColumnHistoryItem(columnName, enterTime, exitTime){
 function Issue(apiIssue, boardDesign){
     "use strict";
 
-    var self = {},
-        counter = 0;
+    var self = {};
 
     function parseCurrentStatus(currentStatus){
       var status = {};
