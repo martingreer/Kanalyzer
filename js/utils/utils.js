@@ -62,7 +62,8 @@ function TimeUtil() {
             day = Math.floor(ms / dayFactor),
             hour = Math.floor( (ms - day * dayFactor) / hourFactor),
             minute = Math.round( (ms - day * dayFactor - hour * hourFactor) / 60000),
-            pad = function(n){ return n < 10 ? '0' + n : n; };
+            pad = function(n){ return n < 10 ? '0' + n : n;},
+            answer = "";
 
         if( minute === 60 ){
             hour++;
@@ -74,7 +75,9 @@ function TimeUtil() {
             hour = 0;
         }
 
-        return [day, pad(hour), pad(minute)].join(':');
+        answer = "Cycle Time: " + day + " days, " + pad(hour) + " hours, " + pad(minute) + " minutes.";
+        return answer;
+        //return [day, pad(hour), pad(minute)].join(':');
     };
 
     return self;

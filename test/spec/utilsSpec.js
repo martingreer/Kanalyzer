@@ -35,7 +35,7 @@ describe("Utils", function(){
         });
 
         it("should convert time in ms to DD HH MM format", function(){
-            expect(timeUtilTest.convertMillisecondsToDaysHoursMinutes(1122653000)).toBe("12:23:51");
+            expect(timeUtilTest.convertMillisecondsToDaysHoursMinutes(1122653000)).toBe("Cycle Time: 12 days, 23 hours, 51 minutes.");
         });
     });
 });
