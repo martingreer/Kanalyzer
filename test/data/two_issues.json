@@ -1,4 +1,4 @@
-var two_issues = [
+[
   {
     "expand": "operations,versionedRepresentations,editmeta,changelog,transitions,renderedFields",
     "id": "10100",

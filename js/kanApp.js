@@ -9,9 +9,9 @@ var DEBUG = true;
 */
 kanApp.config(function ($stateProvider, $urlRouterProvider) {
     "use strict";
-    
+
 	$urlRouterProvider.otherwise('/ld');
-	
+
 	$stateProvider
         .state('ld', {
             url: '/ld',
@@ -27,7 +27,8 @@ kanApp.config(function ($stateProvider, $urlRouterProvider) {
 
         .state('pe', {
             url: '/pe',
-            templateUrl: 'pages/pe.html'
+            templateUrl: 'pages/pe.html',
+            controller: 'peController'
         })
 
         .state('about', {
@@ -42,7 +43,7 @@ kanApp.config(function ($stateProvider, $urlRouterProvider) {
 kanApp.factory('Base64', function () {
     "use strict";
     /*jslint regexp: true*/
-    
+
     var keyStr = 'ABCDEFGHIJKLMNOP' +
         'QRSTUVWXYZabcdef' +
         'ghijklmnopqrstuv' +
@@ -54,17 +55,17 @@ kanApp.factory('Base64', function () {
                 chr1, chr2, chr3 = "",
                 enc1, enc2, enc3, enc4 = "",
                 i = 0;
- 
+
             do {
                 chr1 = input.charCodeAt(i++);
                 chr2 = input.charCodeAt(i++);
                 chr3 = input.charCodeAt(i++);
- 
+
                 enc1 = chr1 >> 2;
                 enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
                 enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
                 enc4 = chr3 & 63;
- 
+
                 if (isNaN(chr2)) {
                     enc3 = enc4 = 64;
                 } else if (isNaN(chr3)) {
@@ -78,10 +79,10 @@ kanApp.factory('Base64', function () {
                 chr1 = chr2 = chr3 = "";
                 enc1 = enc2 = enc3 = enc4 = "";
             } while (i < input.length);
- 
+
             return output;
         },
- 
+
         decode: function (input) {
             var output = "",
                 chr1, chr2, chr3 = "",
@@ -89,36 +90,36 @@ kanApp.factory('Base64', function () {
                 i = 0,
                 base64test = /[^A-Za-z0-9\+\/\=]/g,
                 alert;
- 
+
             if (base64test.exec(input)) {
                 alert("There were invalid base64 characters in the input text.\n" +
                     "Valid base64 characters are A-Z, a-z, 0-9, '+', '/',and '='\n" +
                     "Expect errors in decoding.");
             }
             input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
- 
+
             do {
                 enc1 = keyStr.indexOf(input.charAt(i++));
                 enc2 = keyStr.indexOf(input.charAt(i++));
                 enc3 = keyStr.indexOf(input.charAt(i++));
                 enc4 = keyStr.indexOf(input.charAt(i++));
- 
+
                 chr1 = (enc1 << 2) | (enc2 >> 4);
                 chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
                 chr3 = ((enc3 & 3) << 6) | enc4;
- 
+
                 output = output + String.fromCharCode(chr1);
- 
+
                 if (enc3 !== 64) {
                     output = output + String.fromCharCode(chr2);
                 }
                 if (enc4 !== 64) {
                     output = output + String.fromCharCode(chr3);
                 }
- 
+
                 chr1 = chr2 = chr3 = "";
                 enc1 = enc2 = enc3 = enc4 = "";
- 
+
             } while (i < input.length);
             /*jslint regexp: false*/
             return output;
@@ -128,10 +129,10 @@ kanApp.factory('Base64', function () {
 
 /**
 * Service for getting all data from a json file.
-*/ 
+*/
 kanApp.factory('dataService', function ($http) {
     "use strict";
-    
+
     var dataService = {
         async: function () {
             // $http returns a promise, which has a .then function, which also returns a promise
@@ -149,11 +150,21 @@ kanApp.factory('dataService', function ($http) {
 });
 
 /**
+ * Factory for getting calculation data.
+ */
+kanApp.factory('calcDataService', function () {
+    "use strict";
+
+    var data = "x days y hours z minutes";
+    return data;
+});
+
+/**
 * Controller for the Load Data view.
 */
 kanApp.controller('dataController', function ($scope, dataService, Base64, $http) {
     "use strict";
-    
+
     /**
     * Clear json data.
     * TAGS: unused
@@ -161,7 +172,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     $scope.clearData = function () {
         $scope.data = {};
     };
-    
+
     /**
     * Get data from JSON file.
     */
@@ -170,7 +181,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
             $scope.data = d;
         });
     };
-    
+
     /**
     * Dump json file content directly in app.
     * TAGS: unused
@@ -183,7 +194,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
             $scope.prettyString = null;
         }
     };
-    
+
     /**
     * Variables for logging in.
     */
@@ -191,10 +202,10 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     $scope.jiraRoot = 'https://kanalyzer.atlassian.net/';
     $scope.jiraProject = 'KTD';
     $scope.jiraServer = $scope.jiraRoot + 'projects/' +  $scope.jiraProject + '/issues';
-    
+
     /**
     * Login: Auth to JIRA server.
-    */ 
+    */
     $scope.login = function (credentials) {
         //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
         //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
@@ -208,7 +219,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
                 if(DEBUG){console.log("Authentication ERROR.");}
             });
     };
-    
+
     /**
     * Log out by sending empty login details and getting rejected (there is no log out support for JIRA).
     */
@@ -224,12 +235,12 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
                 if(DEBUG){console.log("Logout SUCCESS!");}
             });
     };
-    
+
     /**
     * The max results to be returned from JIRA (-1 is unlimited results).
     */
     var maxResults = -1;
-    
+
     /**
     * Get all issues for the project that was given on login.
     */
@@ -247,7 +258,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
             if(DEBUG){console.log("Get all issues ERROR. JIRA response: " + JSON.stringify(data));}
         });
     };
-    
+
     /**
     * Print all issues directly in the application (for debugging).
     */
@@ -259,7 +270,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
             $scope.allIssuesString = null;
         }
     };
-    
+
     $scope.getBoardStructure = function () {
         //https://kanalyzer.atlassian.net/rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=2&selectedProjectKey=KTD
     };
@@ -270,7 +281,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
 */
 kanApp.controller('nvd3Controller', function ($scope, dataService) {
     "use strict";
-    
+
     /**
     * Graph structure.
     */
@@ -303,11 +314,32 @@ kanApp.controller('nvd3Controller', function ($scope, dataService) {
             }
         }
     };
-    
+
     /**
     * Get json data from file when opening CFD page. (REMOVE LATER - WE WANT GLOBAL STORAGE IN VARIABLES)
     */
     dataService.async().then(function (d) {
         $scope.data = d;
     });
+});
+
+kanApp.controller('peController', function ($scope, calcDataService) {
+
+
+    $scope.placeholder = function () {
+        var request = $http({
+            method: "GET",
+            url: "test/data/one_done_issue.json"
+        });
+        if(DEBUG){console.log("Attempting to get all issues for project " + $scope.jiraProject + "...");}
+        request.success(function (data) {
+            localStorage.setItem('jiraIssues', JSON.stringify(data.issues));
+            if(DEBUG){console.log("Get all issues SUCCESS!");}
+        });
+        request.error(function (data) {
+            if(DEBUG){console.log("Get all issues ERROR. JIRA response: " + JSON.stringify(data));}
+        });
+    };
+
+    $scope.cycleTime = "x days y hours z minutes";
 });

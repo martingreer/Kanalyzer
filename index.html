@@ -1,51 +1,51 @@
 <!doctype html>
 <html>
 <head>
-    
+
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Kanalyzer</title>
     <meta name="description" content="A web application for visualizing and measuring Kanban project data">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <!-- Web page icon -->
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-    
+
     <!-- Normalization between browsers -->
     <link rel="stylesheet" href="css/normalize.css">
-    
+
     <!-- CSS Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    
+
     <!-- Main CSS styles -->
     <link rel="stylesheet" href="css/main.css">
-    
+
     <!-- NVD3 styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.css">
-    
+
     <!-- Modernizr -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
-        
+
     <!-- D3 and NVD3 graph libs -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.js"></script>
-    
+
     <!-- AngularJS -->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
         <script type="text/javascript" src="https://rawgit.com/krispo/angular-nvd3/v1.0.0-rc.2/dist/angular-nvd3.js"></script>
         <script type="text/javascript" src="/bower_components/angular-postman/js/postman.min.js"></script>
-    
+
     <!-- JSON -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/json2/20150503/json2.js"></script>
-    
+
     <!-- Angular application scripts -->
     <script type="text/javascript" src="js/kanApp.js"></script>
-    
+
 </head>
 <body ng-app="kanApp">
-    
+
     <!-- NAVIGATION -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container pull-left">
@@ -60,24 +60,27 @@
             </ul>
         </div>
     </nav>
-    
+
     <!-- MAIN CONTENT -->
     <div id="main">
         <div class="container-fluid" style="margin-top: 70px; margin-left: 50px;">
-            
+
             <!-- INJECT VIEWS HERE -->
             <div ui-view></div>
 
         </div>
     </div>
-    
+
     <!-- Fetch jQuery lib, plugins, main, bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    
+
     <!-- Fetch various functions -->
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
-    
+
+    <!-- Data for testing GUI functions -->
+    <script src="test/data/apiParserTestData.js"></script>
+
 </body>
 </html>
