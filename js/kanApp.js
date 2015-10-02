@@ -313,15 +313,25 @@ kanApp.controller('nvd3Controller', function ($scope, dataService) {
     });
 });
 
-kanApp.controller('peController', function ($scope, dataService) {
+kanApp.controller('peController', function ($scope, $q, dataService) {
 
-    dataService.async('../test/data/board_design.json').then(function (d) {
-        $scope.boardDesign = d;
+    var boardDesign,
+        issue,
+        deferred = $q.defer();
+
+    dataService.async('../test/data/board_design.json').then(function (apiBoardDesign) {
+        $scope.apiBoardDesign = apiBoardDesign;
+        boardDesign = new BoardDesign($scope.apiBoardDesign);
+        deferred.resolve(boardDesign);
+        //localStorage.setItem('boardDesign', JSON.stringify(boardDesign));
     });
 
-    dataService.async('../test/data/one_done_issue.json').then(function (d) {
-        $scope.issue = d;
+    dataService.async('../test/data/one_done_issue.json').then(function (apiIssue) {
+        deferred.promise.then(function(apiBoard){
+            $scope.apiIssue = apiIssue;
+            issue = new Issue($scope.apiIssue, boardDesign);
+            $scope.cycleTime = timeUtil.convertMillisecondsToDaysHoursMinutes(issue.getCycleTime());
+        });
+        //localStorage.setItem('issue', JSON.stringify(issue));
     });
-
-    $scope.cycleTime = $scope.boardDesign;
 });
