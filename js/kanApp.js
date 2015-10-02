@@ -134,9 +134,9 @@ kanApp.factory('dataService', function ($http) {
     "use strict";
 
     var dataService = {
-        async: function () {
+        async: function (path) {
             // $http returns a promise, which has a .then function, which also returns a promise
-            var promise = $http.get('../json/graphTestData.json').then(function (response) {
+            var promise = $http.get(path).then(function (response) {
                 // The .then function here is an opportunity to modify the response
                 if(DEBUG){console.log(response);}
                 // The return value gets picked up by the .then in the controller.
@@ -147,16 +147,6 @@ kanApp.factory('dataService', function ($http) {
         }
     };
     return dataService;
-});
-
-/**
- * Factory for getting calculation data.
- */
-kanApp.factory('calcDataService', function () {
-    "use strict";
-
-    var data = "x days y hours z minutes";
-    return data;
 });
 
 /**
@@ -318,28 +308,20 @@ kanApp.controller('nvd3Controller', function ($scope, dataService) {
     /**
     * Get json data from file when opening CFD page. (REMOVE LATER - WE WANT GLOBAL STORAGE IN VARIABLES)
     */
-    dataService.async().then(function (d) {
+    dataService.async('../json/graphTestData.json').then(function (d) {
         $scope.data = d;
     });
 });
 
-kanApp.controller('peController', function ($scope, calcDataService) {
+kanApp.controller('peController', function ($scope, dataService) {
 
+    dataService.async('../test/data/board_design.json').then(function (d) {
+        $scope.boardDesign = d;
+    });
 
-    $scope.placeholder = function () {
-        var request = $http({
-            method: "GET",
-            url: "test/data/one_done_issue.json"
-        });
-        if(DEBUG){console.log("Attempting to get all issues for project " + $scope.jiraProject + "...");}
-        request.success(function (data) {
-            localStorage.setItem('jiraIssues', JSON.stringify(data.issues));
-            if(DEBUG){console.log("Get all issues SUCCESS!");}
-        });
-        request.error(function (data) {
-            if(DEBUG){console.log("Get all issues ERROR. JIRA response: " + JSON.stringify(data));}
-        });
-    };
+    dataService.async('../test/data/one_done_issue.json').then(function (d) {
+        $scope.issue = d;
+    });
 
-    $scope.cycleTime = "x days y hours z minutes";
+    $scope.cycleTime = $scope.boardDesign;
 });
