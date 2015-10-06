@@ -102,11 +102,6 @@ describe("Issue", function(){
             it("issue should have an exit time for a column", function(){
                 expect(columnHistory[0].exitTime).toBe("2015-09-01T14:42:23");
             });
-
-            // This fails every test since the "now" date will change every time.
-            /*approveIt("should have been moved", function(approvals){
-                approvals.verify(columnHistory);
-            });*/
         });
     });
 

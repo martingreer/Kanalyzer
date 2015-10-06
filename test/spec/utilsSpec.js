@@ -17,17 +17,17 @@ describe("Utils", function(){
 
     describe("Epoch to date converter", function(){
         it("should be a correct format for PM time", function(){
-            expect(dateTestPM.customFormat("#YYYY#-#MM#-#DD#T#hh#:#mm#:#ss#")).toBe("2015-09-23T14:52:21");
+            expect(dateTestPM.customFormat("#YYYY#-#MM#-#DD#T#hh#:#mm#:#ss#")).toBe("2015-09-23T15:52:21");
         });
 
         it("should be a correct format for AM time", function(){
-            expect(dateTestAM.customFormat("#YYYY#-#MM#-#DD#T#hh#:#mm#:#ss#")).toBe("2015-09-23T04:52:21");
+            expect(dateTestAM.customFormat("#YYYY#-#MM#-#DD#T#hh#:#mm#:#ss#")).toBe("2015-09-23T05:52:21");
         });
     });
 
     describe("TimeUtil", function(){
         it("should be a correct format", function(){
-            expect(timeUtilTest.getTimestamp(dateTestAM)).toBe("2015-09-23T04:52:21");
+            expect(timeUtilTest.getTimestamp(dateTestAM)).toBe("2015-09-23T05:52:21");
         });
 
         it("should parse a timestamp to milliseconds (epoch)", function(){

@@ -313,7 +313,40 @@ kanApp.controller('nvd3Controller', function ($scope, dataService) {
     });
 });
 
-kanApp.controller('peController', function ($scope, $q, dataService) {
+kanApp.controller('peController', function ($scope, $http, $q, dataService) {
+
+    /*var boardDesign,
+        issue,
+        deferred = $q.defer();
+
+    $scope.apiBoardDesign = function () {
+        $http({method: 'GET', url: '../test/data/board_design.json'})
+            .success(function (data) {
+                if(DEBUG){console.log("Get board design SUCCESS!");}
+            })
+            .error(function (data) {
+                if(DEBUG){console.log("Get board design ERROR.");}
+            });
+    };
+
+    $scope.apiIssue = function () {
+        $http({method: 'GET', url: '../test/data/one_done_issue.json'})
+            .success(function (data) {
+                if(DEBUG){console.log("Get issue SUCCESS!");}
+            })
+            .error(function (data) {
+                if(DEBUG){console.log("Get issue ERROR.");}
+            });
+    };
+
+    boardDesign = new BoardDesign($scope.apiBoardDesign);
+    deferred.resolve(boardDesign);
+
+    deferred.promise.then(function(apiBoardDesign){
+        issue = new Issue($scope.apiIssue, boardDesign);
+    });
+
+    $scope.cycleTime = timeUtil.convertMillisecondsToDaysHoursMinutes(issue.getCycleTime());*/
 
     var boardDesign,
         issue,

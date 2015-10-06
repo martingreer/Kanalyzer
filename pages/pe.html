@@ -15,5 +15,25 @@
     <div>
         {{ cycleTime }}
     </div>
+
+    <div class="container">
+        <h3>Cycle Time</h3>
+        <table class="table table-condensed table-hover">
+            <thead>
+            <tr>
+                <th>Issue</th>
+                <th>Description</th>
+                <th style="width:200px">Cycle Time</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="issue in issues">
+                <td>{{ issue.key }}</td>
+                <td>{{ issue.description }}</td>
+                <td>{{ issue.cycleTime }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
