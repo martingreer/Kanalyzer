@@ -350,21 +350,31 @@ kanApp.controller('peController', function ($scope, $http, $q, dataService) {
 
     var boardDesign,
         issue,
-        deferred = $q.defer();
+        syncDataFetchOrder = $q.defer(),
+        syncFetchesWithOperations = $q.defer();
 
-    dataService.async('../test/data/board_design.json').then(function (apiBoardDesign) {
-        $scope.apiBoardDesign = apiBoardDesign;
-        boardDesign = new BoardDesign($scope.apiBoardDesign);
-        deferred.resolve(boardDesign);
-        //localStorage.setItem('boardDesign', JSON.stringify(boardDesign));
-    });
-
-    dataService.async('../test/data/one_done_issue.json').then(function (apiIssue) {
-        deferred.promise.then(function(apiBoard){
-            $scope.apiIssue = apiIssue;
-            issue = new Issue($scope.apiIssue, boardDesign);
-            $scope.cycleTime = timeUtil.convertMillisecondsToDaysHoursMinutes(issue.getCycleTime());
+    function getData() {
+        dataService.async('../test/data/board_design.json').then(function (apiBoardDesign) {
+            console.log("One");
+            $scope.apiBoardDesign = apiBoardDesign;
+            boardDesign = new BoardDesign($scope.apiBoardDesign);
+            syncDataFetchOrder.resolve();
         });
-        //localStorage.setItem('issue', JSON.stringify(issue));
+
+        dataService.async('../test/data/one_done_issue.json').then(function (apiIssue) {
+            syncDataFetchOrder.promise.then(function () {
+                console.log("Two");
+                $scope.apiIssue = apiIssue;
+                issue = new Issue($scope.apiIssue, boardDesign);
+                syncFetchesWithOperations.resolve();
+            });
+        });
+    }
+
+    getData();
+
+    syncFetchesWithOperations.promise.then(function (){
+        console.log("Three");
+        $scope.averageCycleTime = timeUtil.convertMillisecondsToDaysHoursMinutes(issue.getCycleTime());
     });
 });

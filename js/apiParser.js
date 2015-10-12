@@ -137,6 +137,31 @@ function ColumnHistoryItem(columnName, enterTime, exitTime){
 }
 
 /**
+ * Narrows down raw api issues data to only the issues as objects in a json array.
+ */
+function parseMultipleApiIssues(apiIssuesRaw){
+    "use strict";
+
+    var issues = [],
+        counter = 0;
+
+    _.forEach(apiIssuesRaw.issues, function(issue){
+        issues[counter] = issue;
+        counter++;
+        console.log(issue.key);
+    });
+
+    return issues;
+}
+
+/**
+ * TODO: Split parsed api issues to their own variables.
+ */
+function splitIssuesArray(){
+
+}
+
+/**
 * Issues containing ID, title, column history.
 */
 function Issue(apiIssue, boardDesign){
@@ -256,6 +281,5 @@ function Issue(apiIssue, boardDesign){
     self.created = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.'));
     self.currentStatus = parseCurrentStatus(apiIssue.fields.status);
     self.columnHistory = createColumnHistory(apiIssue);
-    //self.cycleTime = getCycleTime();
     return self;
   }

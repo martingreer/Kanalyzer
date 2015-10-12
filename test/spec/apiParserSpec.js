@@ -63,6 +63,8 @@ describe("BoardDesign", function(){
 describe("Issue", function(){
     "use strict";
 
+    var twoIssues = parseMultipleApiIssues(apiTwoIssues);
+
     describe("With history", function(){
         it("should have id", function(){
             expect(issueWithHistoryAndNotDone.id).toBe("10000");
@@ -82,6 +84,10 @@ describe("Issue", function(){
 
         it("should be done", function(){
             expect(issueIsDone.isDone()).toBe(true);
+        });
+
+        approveIt("should parse raw api data to array of only the issues", function(approvals) {
+            approvals.verify(twoIssues);
         });
 
         describe("History parser", function(){
