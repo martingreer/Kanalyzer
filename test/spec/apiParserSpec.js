@@ -23,6 +23,7 @@
 var issueWithoutHistory = new Issue(apiIssueWithoutHistory, new BoardDesign(columnsData));
 var issueWithHistoryAndNotDone = new Issue(apiIssueWithHistory, new BoardDesign(columnsData));
 var issueIsDone = new Issue(apiIssueIsDone, new BoardDesign(columnsData));
+var twoIssues = parseMultipleApiIssues(apiTwoIssues);
 
 describe("BoardDesign", function(){
     "use strict";
@@ -63,15 +64,17 @@ describe("BoardDesign", function(){
 describe("Issue", function(){
     "use strict";
 
-    var twoIssues = parseMultipleApiIssues(apiTwoIssues);
-
     describe("With history", function(){
         it("should have id", function(){
             expect(issueWithHistoryAndNotDone.id).toBe("10000");
         });
 
-        it("should have title", function(){
-            expect(issueWithHistoryAndNotDone.title).toBe("A task that needs to be done.");
+        it("should have a key", function(){
+            expect(issueWithHistoryAndNotDone.key).toBe("KTD-1");
+        });
+
+        it("should have summary", function(){
+            expect(issueWithHistoryAndNotDone.summary).toBe("Write planning report");
         });
 
         it("should be created", function(){
@@ -88,6 +91,16 @@ describe("Issue", function(){
 
         approveIt("should parse raw api data to array of only the issues", function(approvals) {
             approvals.verify(twoIssues);
+        });
+
+        it("should create first separate issue object from issues array", function() {
+            var firstIssue = new Issue(twoIssues[0], new BoardDesign(columnsData));
+            expect(firstIssue.id).toBe("10409");
+        });
+
+        it("should create second separate issue object from issues array", function() {
+            var secondIssue = new Issue(twoIssues[1], new BoardDesign(columnsData));
+            expect(secondIssue.id).toBe("10408");
         });
 
         describe("History parser", function(){

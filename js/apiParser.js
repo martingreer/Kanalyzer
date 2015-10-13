@@ -142,27 +142,20 @@ function ColumnHistoryItem(columnName, enterTime, exitTime){
 function parseMultipleApiIssues(apiIssuesRaw){
     "use strict";
 
-    var issues = [],
+    var apiIssuesArray = [],
         counter = 0;
 
     _.forEach(apiIssuesRaw.issues, function(issue){
-        issues[counter] = issue;
+        apiIssuesArray[counter] = issue;
         counter++;
         console.log(issue.key);
     });
 
-    return issues;
+    return apiIssuesArray;
 }
 
 /**
- * TODO: Split parsed api issues to their own variables.
- */
-function splitIssuesArray(){
-
-}
-
-/**
-* Issues containing ID, title, column history.
+* Create new issue object containing ID, summary, key, column history.
 */
 function Issue(apiIssue, boardDesign){
     "use strict";
@@ -277,7 +270,8 @@ function Issue(apiIssue, boardDesign){
     };
 
     self.id = apiIssue.id;
-    self.title = apiIssue.fields.issuetype.description;
+    self.key = apiIssue.key;
+    self.summary = apiIssue.fields.summary;
     self.created = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.'));
     self.currentStatus = parseCurrentStatus(apiIssue.fields.status);
     self.columnHistory = createColumnHistory(apiIssue);
