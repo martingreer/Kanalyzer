@@ -226,16 +226,20 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     * Get all issues for the project that was given on login.
     */
     $scope.getAllIssues = function () {
+        var boardDesign = [],
+            issues = [];
+
         getBoardDesignBeforeIssues = $q.defer();
 
-        if(DEBUG){console.log("Attempting to get all issues for project " + $scope.apiProject + "...");}
+        if(DEBUG){console.log("Attempting to get board design for project " + $scope.apiProject + "...");}
 
         var requestBoardDesign = $http({
             method: "GET",
             url: $scope.apiRoot + "rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=" + $scope.boardId + "&selectedProjectKey=" + $scope.apiProject
         });
         requestBoardDesign.success(function (data) {
-            localStorage.setItem('apiBoardDesign', JSON.stringify(data));
+            boardDesign = new BoardDesign(parseBoardDesign(data));
+            localStorage.setItem('boardDesign', boardDesign);
             getBoardDesignBeforeIssues.resolve();
             if(DEBUG){console.log("Get board design SUCCESS!");}
         });
@@ -245,12 +249,17 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
         });
 
         getBoardDesignBeforeIssues.promise.then(function() {
+            if(DEBUG){console.log("Attempting to get all issues for project " + $scope.apiProject + "...");}
             var requestIssues = $http({
                 method: "GET",
                 url: $scope.apiRoot + "rest/api/2/search?jql=project=" + $scope.apiProject + "&expand=changelog" + "&maxResults=" + $scope.maxResults
             });
             requestIssues.success(function (data) {
-                localStorage.setItem('apiIssues', JSON.stringify(data));
+                issues = parseMultipleApiIssues(data);
+                for(var i = 0; i < issues.length; i++){
+                    issues[i] = new Issue(issues[i], localStorage.getItem('boardDesign'));
+                    localStorage.setItem('issue['+i+']', issues[i]);
+                }
                 if (DEBUG) {console.log("Get all issues SUCCESS!");}
             });
             requestIssues.error(function (data) {
@@ -260,26 +269,26 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     };
 
     /**
-    * Print all issues directly in the application (for debugging).
-    */
-    $scope.allIssuesString = null;
-    $scope.printAllIssues = function () {
-        if ($scope.allIssuesString === null) {
-            $scope.allIssuesString = localStorage.getItem('apiIssues');
-        } else {
-            $scope.allIssuesString = null;
-        }
-    };
-
-    /**
      * Print board design directly in the application (for debugging).
      */
     $scope.boardDesignString = null;
     $scope.printBoardDesign = function () {
         if ($scope.boardDesignString === null) {
-            $scope.boardDesignString = localStorage.getItem('apiBoardDesign');
+            $scope.boardDesignString = localStorage.getItem('boardDesign');
         } else {
             $scope.boardDesignString = null;
+        }
+    };
+
+    /**
+    * Print all issues directly in the application (for debugging).
+    */
+    $scope.allIssuesString = null;
+    $scope.printAllIssues = function () {
+        if ($scope.allIssuesString === null) {
+            $scope.allIssuesString = localStorage.getItem('issues');
+        } else {
+            $scope.allIssuesString = null;
         }
     };
 

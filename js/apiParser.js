@@ -4,6 +4,23 @@
 var DEBUG = true;
 
 /**
+ * Narrows down raw api board design data.
+ */
+function parseBoardDesign(apiBoardDesignRaw){
+    "use strict";
+
+    var apiColumnsData = [],
+        counter = 0;
+
+    _.forEach(apiBoardDesignRaw.columns, function(column){
+        apiColumnsData[counter] = column;
+        counter++;
+    });
+
+    return apiColumnsData;
+}
+
+/**
 * Current board structure with columns and their underlying statuses.
 */
 function BoardDesign(apiColumnsData) {
