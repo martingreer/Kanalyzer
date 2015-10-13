@@ -152,7 +152,7 @@ kanApp.factory('dataService', function ($http) {
 /**
 * Controller for the Load Data view.
 */
-kanApp.controller('dataController', function ($scope, dataService, Base64, $http) {
+kanApp.controller('dataController', function ($scope, dataService, Base64, $http, $q) {
     "use strict";
 
     /**
@@ -173,35 +173,22 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     };
 
     /**
-    * Dump json file content directly in app.
-    * TAGS: unused
-    */
-    $scope.prettyString = null;
-    $scope.jsonPrint = function () {
-        if ($scope.prettyString === null) {
-            $scope.prettyString = JSON.stringify($scope.data, null, "\t");
-        } else {
-            $scope.prettyString = null;
-        }
-    };
-
-    /**
     * Variables for logging in.
     */
     $scope.credentials = { username: 'martin.w.greer', password: ''};
-    $scope.jiraRoot = 'https://kanalyzer.atlassian.net/';
-    $scope.jiraProject = 'KTD';
-    $scope.jiraServer = $scope.jiraRoot + 'projects/' +  $scope.jiraProject + '/issues';
+    $scope.apiRoot = 'https://softhousegbg.atlassian.net/';
+    $scope.apiProject = 'KTD';
+    $scope.apiServer = $scope.apiRoot + 'projects/' +  $scope.apiProject + '/issues';
 
     /**
-    * Login: Auth to JIRA server.
+    * Login: Auth to API server.
     */
     $scope.login = function (credentials) {
         //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
         //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
-        if(DEBUG){console.log("Attempting to authenticate to server " + $scope.jiraRoot + "...");}
+        if(DEBUG){console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");}
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
-        $http({method: 'GET', url: $scope.jiraServer})
+        $http({method: 'GET', url: $scope.apiServer})
             .success(function (data) {
                 if(DEBUG){console.log("Authentication SUCCESS!");}
             })
@@ -211,13 +198,13 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     };
 
     /**
-    * Log out by sending empty login details and getting rejected (there is no log out support for JIRA).
+    * Log out by sending empty login details and getting rejected (there is no log out support for API).
     */
     $scope.logout = function (credentials) {
-        if(DEBUG){console.log("Logging out from " + $scope.jiraRoot + "...");}
+        if(DEBUG){console.log("Logging out from " + $scope.apiRoot + "...");}
         $scope.credentials = { username: 'martin.w.greer', password: '' };
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(' : ');
-        $http({method: 'GET', url: $scope.jiraServer})
+        $http({method: 'GET', url: $scope.apiServer})
             .success(function (data) {
                 if(DEBUG){console.log("Logout ERROR.");}
             })
@@ -226,26 +213,49 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
             });
     };
 
-    /**
-    * The max results to be returned from JIRA (-1 is unlimited results).
-    */
-    var maxResults = -1;
+    // The max results to be returned from API (-1 is unlimited results).
+    $scope.maxResults = -1;
+
+    // Board ID to get column & status structure from.
+    $scope.boardId = '12';
+
+    // Synchronization variable to make sure http requests are done in the correct order.
+    var getBoardDesignBeforeIssues = $q.defer();
 
     /**
     * Get all issues for the project that was given on login.
     */
     $scope.getAllIssues = function () {
-        var request = $http({
+        getBoardDesignBeforeIssues = $q.defer();
+
+        if(DEBUG){console.log("Attempting to get all issues for project " + $scope.apiProject + "...");}
+
+        var requestBoardDesign = $http({
             method: "GET",
-            url: $scope.jiraRoot + "rest/api/2/search?jql=project=" + $scope.jiraProject + "&expand=changelog" + "&maxResults=" + maxResults
+            url: $scope.apiRoot + "rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=" + $scope.boardId + "&selectedProjectKey=" + $scope.apiProject
         });
-        if(DEBUG){console.log("Attempting to get all issues for project " + $scope.jiraProject + "...");}
-        request.success(function (data) {
-            localStorage.setItem('jiraIssues', JSON.stringify(data.issues));
-            if(DEBUG){console.log("Get all issues SUCCESS!");}
+        requestBoardDesign.success(function (data) {
+            localStorage.setItem('apiBoardDesign', JSON.stringify(data));
+            getBoardDesignBeforeIssues.resolve();
+            if(DEBUG){console.log("Get board design SUCCESS!");}
         });
-        request.error(function (data) {
-            if(DEBUG){console.log("Get all issues ERROR. JIRA response: " + JSON.stringify(data));}
+        requestBoardDesign.error(function (data) {
+            getBoardDesignBeforeIssues.reject();
+            if(DEBUG){console.log("Get board design ERROR. API response: " + JSON.stringify(data));}
+        });
+
+        getBoardDesignBeforeIssues.promise.then(function() {
+            var requestIssues = $http({
+                method: "GET",
+                url: $scope.apiRoot + "rest/api/2/search?jql=project=" + $scope.apiProject + "&expand=changelog" + "&maxResults=" + $scope.maxResults
+            });
+            requestIssues.success(function (data) {
+                localStorage.setItem('apiIssues', JSON.stringify(data));
+                if (DEBUG) {console.log("Get all issues SUCCESS!");}
+            });
+            requestIssues.error(function (data) {
+                if (DEBUG) {console.log("Get all issues ERROR. API response: " + JSON.stringify(data));}
+            });
         });
     };
 
@@ -255,9 +265,21 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     $scope.allIssuesString = null;
     $scope.printAllIssues = function () {
         if ($scope.allIssuesString === null) {
-            $scope.allIssuesString = localStorage.getItem('jiraIssues');
+            $scope.allIssuesString = localStorage.getItem('apiIssues');
         } else {
             $scope.allIssuesString = null;
+        }
+    };
+
+    /**
+     * Print board design directly in the application (for debugging).
+     */
+    $scope.boardDesignString = null;
+    $scope.printBoardDesign = function () {
+        if ($scope.boardDesignString === null) {
+            $scope.boardDesignString = localStorage.getItem('apiBoardDesign');
+        } else {
+            $scope.boardDesignString = null;
         }
     };
 
@@ -313,6 +335,9 @@ kanApp.controller('nvd3Controller', function ($scope, dataService) {
     });
 });
 
+/**
+ * TODO: Use local storage created by load data.
+ */
 kanApp.controller('peController', function ($scope, $http, $q, dataService) {
 
     /*var boardDesign,
