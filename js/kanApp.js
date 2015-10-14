@@ -214,7 +214,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     };
 
     // The max results to be returned from API (-1 is unlimited results).
-    $scope.maxResults = -1;
+    $scope.maxResults = 3;
 
     // Board ID to get column & status structure from.
     $scope.boardId = '12';
@@ -226,7 +226,8 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     * Get all issues for the project that was given on login.
     */
     $scope.getAllIssues = function () {
-        var boardDesign = [],
+        var boardColumnsDesign,
+            apiIssuesMinimal,
             issues = [];
 
         getBoardDesignBeforeIssues = $q.defer();
@@ -238,8 +239,8 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
             url: $scope.apiRoot + "rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=" + $scope.boardId + "&selectedProjectKey=" + $scope.apiProject
         });
         requestBoardDesign.success(function (data) {
-            boardDesign = new BoardDesign(parseBoardDesign(data));
-            localStorage.setItem('boardDesign', boardDesign);
+            boardColumnsDesign = new BoardDesign(parseBoardDesign(data));
+            localStorage.setItem('boardColumnsDesign', JSON.stringify(boardColumnsDesign));
             getBoardDesignBeforeIssues.resolve();
             if(DEBUG){console.log("Get board design SUCCESS!");}
         });
@@ -255,11 +256,11 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
                 url: $scope.apiRoot + "rest/api/2/search?jql=project=" + $scope.apiProject + "&expand=changelog" + "&maxResults=" + $scope.maxResults
             });
             requestIssues.success(function (data) {
-                issues = parseMultipleApiIssues(data);
-                for(var i = 0; i < issues.length; i++){
-                    issues[i] = new Issue(issues[i], localStorage.getItem('boardDesign'));
-                    localStorage.setItem('issue['+i+']', issues[i]);
-                }
+                apiIssuesMinimal = parseMultipleApiIssues(data);
+                _.forEach(apiIssuesMinimal, function(issue){
+                    issues.push(new Issue(issue, boardColumnsDesign));
+                });
+                localStorage.setItem('issues', JSON.stringify(issues));
                 if (DEBUG) {console.log("Get all issues SUCCESS!");}
             });
             requestIssues.error(function (data) {
@@ -274,7 +275,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     $scope.boardDesignString = null;
     $scope.printBoardDesign = function () {
         if ($scope.boardDesignString === null) {
-            $scope.boardDesignString = localStorage.getItem('boardDesign');
+            $scope.boardDesignString = localStorage.getItem('boardColumnsDesign');
         } else {
             $scope.boardDesignString = null;
         }
@@ -290,10 +291,6 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
         } else {
             $scope.allIssuesString = null;
         }
-    };
-
-    $scope.getBoardStructure = function () {
-        //https://kanalyzer.atlassian.net/rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=2&selectedProjectKey=KTD
     };
 });
 
@@ -382,7 +379,7 @@ kanApp.controller('peController', function ($scope, $http, $q, dataService) {
 
     $scope.cycleTime = timeUtil.convertMillisecondsToDaysHoursMinutes(issue.getCycleTime());*/
 
-    var boardDesign,
+    /*var boardDesign,
         issue,
         syncDataFetchOrder = $q.defer(),
         syncFetchesWithOperations = $q.defer();
@@ -410,5 +407,5 @@ kanApp.controller('peController', function ($scope, $http, $q, dataService) {
     syncFetchesWithOperations.promise.then(function (){
         console.log("Three");
         $scope.averageCycleTime = timeUtil.convertMillisecondsToDaysHoursMinutes(issue.getCycleTime());
-    });
+    });*/
 });

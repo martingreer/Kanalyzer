@@ -2,6 +2,7 @@
 /*global timeUtil, console, self:true, _, parseHistory*/
 
 var DEBUG = true;
+var DEBUG_COLUMNHISTORY = false;
 
 /**
  * Narrows down raw api board design data.
@@ -9,15 +10,7 @@ var DEBUG = true;
 function parseBoardDesign(apiBoardDesignRaw){
     "use strict";
 
-    var apiColumnsData = [],
-        counter = 0;
-
-    _.forEach(apiBoardDesignRaw.columns, function(column){
-        apiColumnsData[counter] = column;
-        counter++;
-    });
-
-    return apiColumnsData;
+    return apiBoardDesignRaw.columnsData;
 }
 
 /**
@@ -159,16 +152,7 @@ function ColumnHistoryItem(columnName, enterTime, exitTime){
 function parseMultipleApiIssues(apiIssuesRaw){
     "use strict";
 
-    var apiIssuesArray = [],
-        counter = 0;
-
-    _.forEach(apiIssuesRaw.issues, function(issue){
-        apiIssuesArray[counter] = issue;
-        counter++;
-        console.log(issue.key);
-    });
-
-    return apiIssuesArray;
+    return apiIssuesRaw.issues;
 }
 
 /**
@@ -217,17 +201,17 @@ function Issue(apiIssue, boardDesign){
 
         // First item is a special case because we need to set the time which the issue was created as enter time.
         columnsWithEnterExit.push(new ColumnHistoryItem(columnHistory[0].fromColumn, createdTime, columnHistory[0].moveTime));
-        if(DEBUG){console.log("ITERATION: 0 - " + columnHistory[0].fromColumn + " | " + createdTime + " | " + columnHistory[0].moveTime);}
+        if(DEBUG_COLUMNHISTORY){console.log("ITERATION: 0 - " + columnHistory[0].fromColumn + " | " + createdTime + " | " + columnHistory[0].moveTime);}
 
         // Events in the middle.
         for(i = 1; i < columnHistory.length; i++){
             columnsWithEnterExit.push(new ColumnHistoryItem(columnHistory[i].fromColumn, columnHistory[i-1].moveTime, columnHistory[i].moveTime));
-            if(DEBUG){console.log("ITERATION: " + i + " - " + columnHistory[i].fromColumn + " | " + columnHistory[i-1].moveTime + " | " + columnHistory[i].moveTime);}
+            if(DEBUG_COLUMNHISTORY){console.log("ITERATION: " + i + " - " + columnHistory[i].fromColumn + " | " + columnHistory[i-1].moveTime + " | " + columnHistory[i].moveTime);}
         }
 
         // Last item is a special case because toColumn must become its own object and has no real exit time.
         columnsWithEnterExit.push(new ColumnHistoryItem(columnHistory[columnHistory.length-1].toColumn, columnHistory[columnHistory.length-1].moveTime, timeUtil.getTimestamp()));
-        if(DEBUG){console.log("ITERATION: " + columnHistory.length + " - " + columnHistory[columnHistory.length-1].toColumn + " | " + columnHistory[columnHistory.length-1].moveTime + " | " + timeUtil.getTimestamp());}
+        if(DEBUG_COLUMNHISTORY){console.log("ITERATION: " + columnHistory.length + " - " + columnHistory[columnHistory.length-1].toColumn + " | " + columnHistory[columnHistory.length-1].moveTime + " | " + timeUtil.getTimestamp());}
 
         return columnsWithEnterExit;
     }
