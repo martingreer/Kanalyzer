@@ -189,10 +189,10 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
         if(DEBUG){console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");}
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
         $http({method: 'GET', url: $scope.apiServer})
-            .success(function (data) {
+            .success(function () {
                 if(DEBUG){console.log("Authentication SUCCESS!");}
             })
-            .error(function (data) {
+            .error(function () {
                 if(DEBUG){console.log("Authentication ERROR.");}
             });
     };
@@ -214,7 +214,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     };
 
     // The max results to be returned from API (-1 is unlimited results).
-    $scope.maxResults = 3;
+    $scope.maxResults = -1;
 
     // Board ID to get column & status structure from.
     $scope.boardId = '12';
@@ -240,7 +240,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
         });
         requestBoardDesign.success(function (data) {
             boardColumnsDesign = new BoardDesign(parseBoardDesign(data));
-            localStorage.setItem('boardColumnsDesign', JSON.stringify(boardColumnsDesign));
+            localStorage.setItem('boardDesign', JSON.stringify(boardColumnsDesign));
             getBoardDesignBeforeIssues.resolve();
             if(DEBUG){console.log("Get board design SUCCESS!");}
         });
@@ -275,7 +275,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     $scope.boardDesignString = null;
     $scope.printBoardDesign = function () {
         if ($scope.boardDesignString === null) {
-            $scope.boardDesignString = localStorage.getItem('boardColumnsDesign');
+            $scope.boardDesignString = localStorage.getItem('boardDesign');
         } else {
             $scope.boardDesignString = null;
         }
@@ -342,70 +342,20 @@ kanApp.controller('nvd3Controller', function ($scope, dataService) {
 });
 
 /**
- * TODO: Use local storage created by load data.
+ * Controller for the Process Efficiency tab.
  */
-kanApp.controller('peController', function ($scope, $http, $q, dataService) {
+kanApp.controller('peController', function ($scope) {
+    var issues = JSON.parse(localStorage.getItem('issues')),
+        boardDesign = new BoardDesign(JSON.parse(localStorage.getItem('boardDesign'))),
+        cumulativeCycleTime = 0,
+        amountOfCycleTimes = 0;
 
-    /*var boardDesign,
-        issue,
-        deferred = $q.defer();
-
-    $scope.apiBoardDesign = function () {
-        $http({method: 'GET', url: '../test/data/board_design.json'})
-            .success(function (data) {
-                if(DEBUG){console.log("Get board design SUCCESS!");}
-            })
-            .error(function (data) {
-                if(DEBUG){console.log("Get board design ERROR.");}
-            });
-    };
-
-    $scope.apiIssue = function () {
-        $http({method: 'GET', url: '../test/data/one_done_issue.json'})
-            .success(function (data) {
-                if(DEBUG){console.log("Get issue SUCCESS!");}
-            })
-            .error(function (data) {
-                if(DEBUG){console.log("Get issue ERROR.");}
-            });
-    };
-
-    boardDesign = new BoardDesign($scope.apiBoardDesign);
-    deferred.resolve(boardDesign);
-
-    deferred.promise.then(function(apiBoardDesign){
-        issue = new Issue($scope.apiIssue, boardDesign);
+    _.forEach(issues, function(issue) {
+        if(issue.cycleTime != null){
+            cumulativeCycleTime += issue.cycleTime;
+            amountOfCycleTimes++;
+        }
     });
 
-    $scope.cycleTime = timeUtil.convertMillisecondsToDaysHoursMinutes(issue.getCycleTime());*/
-
-    /*var boardDesign,
-        issue,
-        syncDataFetchOrder = $q.defer(),
-        syncFetchesWithOperations = $q.defer();
-
-    function getData() {
-        dataService.async('../test/data/board_design.json').then(function (apiBoardDesign) {
-            console.log("One");
-            $scope.apiBoardDesign = apiBoardDesign;
-            boardDesign = new BoardDesign($scope.apiBoardDesign);
-            syncDataFetchOrder.resolve();
-        });
-
-        dataService.async('../test/data/one_done_issue.json').then(function (apiIssue) {
-            syncDataFetchOrder.promise.then(function () {
-                console.log("Two");
-                $scope.apiIssue = apiIssue;
-                issue = new Issue($scope.apiIssue, boardDesign);
-                syncFetchesWithOperations.resolve();
-            });
-        });
-    }
-
-    getData();
-
-    syncFetchesWithOperations.promise.then(function (){
-        console.log("Three");
-        $scope.averageCycleTime = timeUtil.convertMillisecondsToDaysHoursMinutes(issue.getCycleTime());
-    });*/
+    $scope.averageCycleTime = timeUtil.convertMillisecondsToDaysHoursMinutes(cumulativeCycleTime/amountOfCycleTimes);
 });

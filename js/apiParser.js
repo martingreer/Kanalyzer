@@ -253,9 +253,9 @@ function Issue(apiIssue, boardDesign){
     };
 
     /**
-     * Calculate Cycle Time for one issue.
+     * Calculate Cycle Time for the issue.
      */
-    self.getCycleTime = function (){
+    function getCycleTime(){
         var cycleTime = 0;
         var columnHistory = _.cloneDeep(self.columnHistory);
 
@@ -276,5 +276,6 @@ function Issue(apiIssue, boardDesign){
     self.created = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.'));
     self.currentStatus = parseCurrentStatus(apiIssue.fields.status);
     self.columnHistory = createColumnHistory(apiIssue);
+    self.cycleTime = getCycleTime();
     return self;
   }

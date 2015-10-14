@@ -75,7 +75,7 @@ function TimeUtil() {
             hour = 0;
         }
 
-        answer = "Cycle Time: " + day + " days, " + pad(hour) + " hours, " + pad(minute) + " minutes.";
+        answer = day + " days, " + pad(hour) + " hours, " + pad(minute) + " minutes.";
         return answer;
         //return [day, pad(hour), pad(minute)].join(':');
     };

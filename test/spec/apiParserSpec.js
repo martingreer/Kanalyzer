@@ -145,8 +145,8 @@ describe("Issue", function(){
             cycleTimeNotDoneIssue;
 
         beforeAll(function(){
-            cycleTimeDoneIssue = issueIsDone.getCycleTime();
-            cycleTimeNotDoneIssue = issueWithoutHistory.getCycleTime();
+            cycleTimeDoneIssue = issueIsDone.cycleTime;
+            cycleTimeNotDoneIssue = issueWithoutHistory.cycleTime;
         });
 
         it("should calculate time spent in first column", function(){
