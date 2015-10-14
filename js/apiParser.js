@@ -268,7 +268,7 @@ function Issue(apiIssue, boardDesign){
         } else {
             return null;
         }
-    };
+    }
 
     self.id = apiIssue.id;
     self.key = apiIssue.key;

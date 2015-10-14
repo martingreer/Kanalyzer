@@ -345,13 +345,15 @@ kanApp.controller('nvd3Controller', function ($scope, dataService) {
  * Controller for the Process Efficiency tab.
  */
 kanApp.controller('peController', function ($scope) {
-    var issues = JSON.parse(localStorage.getItem('issues')),
-        boardDesign = new BoardDesign(JSON.parse(localStorage.getItem('boardDesign'))),
+    var boardDesign = new BoardDesign(JSON.parse(localStorage.getItem('boardDesign'))),
         cumulativeCycleTime = 0,
         amountOfCycleTimes = 0;
 
-    _.forEach(issues, function(issue) {
+    $scope.issues = JSON.parse(localStorage.getItem('issues'));
+
+    _.forEach($scope.issues, function(issue) {
         if(issue.cycleTime != null){
+            issue.cycleTimeConverted = timeUtil.convertMillisecondsToDaysHoursMinutes(issue.cycleTime);
             cumulativeCycleTime += issue.cycleTime;
             amountOfCycleTimes++;
         }
