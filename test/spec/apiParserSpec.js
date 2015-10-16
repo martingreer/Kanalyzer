@@ -127,7 +127,7 @@ describe("Issue", function(){
 
     describe("Cycle time calculations", function(){
         it("should calculate time spent in first column", function(){
-            expect(issueWithHistoryAndNotDone.columnHistory[0].timeSpentInColumn()).toBe(1441114943000-1441114921000);
+            expect(issueWithHistoryAndNotDone.columnHistory[0].timeSpentInColumn()).toBe(22000);
         });
 
         it("should calculate the cycle time for the issue", function(){
@@ -160,6 +160,16 @@ describe("Issue", function(){
 
         it("should calculate delay time for an issue that is done", function(){
             expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueIsDone.delayTime)).toBe(timeUtil.convertMillisecondsToDaysHoursMinutes(65207000));
+        });
+    });
+
+    describe("Process Efficiency", function(){
+        it("should calculate process efficiency for an issue that is not done", function(){
+            expect(issueWithHistoryAndNotDone.processEfficiency).toBe(0);
+        });
+
+        it("should calculate process efficiency for an issue that is done", function(){
+            expect(issueIsDone.delayTime).toBe(65207000);
         });
     });
 });

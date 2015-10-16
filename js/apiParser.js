@@ -310,6 +310,14 @@ function Issue(apiIssue, boardDesign){
         return delayTime;
     }
 
+    function getProcessEfficiency(executionTime, cycleTime){
+        if(cycleTime) {
+            return executionTime / cycleTime;
+        } else {
+            return 0;
+        }
+    }
+
     self.id = apiIssue.id;
     self.key = apiIssue.key;
     self.summary = apiIssue.fields.summary;
@@ -319,5 +327,6 @@ function Issue(apiIssue, boardDesign){
     self.cycleTime = getCycleTime();
     self.executionTime = getExecutionTime();
     self.delayTime = getDelayTime();
+    self.processEfficiency = getProcessEfficiency(self.executionTime, self.cycleTime);
     return self;
   }

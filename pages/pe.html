@@ -10,6 +10,7 @@
         Delay Time = &Sigma; issue time spent in Delay columns<br /><br />
         Cycle Time = Execution Time + Delay Time<br />
         Process Efficiency = Execution Time / Cycle Time<br />
+        A transactional process is considered Lean when the execution time is less than one third of the delay time, or about 25 percent of the cycle time.<br />
     </div>
     <br /><br />
     <div>
@@ -18,12 +19,13 @@
 
     <div class="container">
         <h3>Cycle Times</h3>
-        <table class="table table-condensed table-hover" style="width:900px">
+        <table class="table table-condensed table-hover" style="width:1140px">
             <thead>
             <tr>
                 <th style="width:100px">Issue</th>
                 <th style="width:580px">Summary</th>
                 <th style="width:220px">Cycle Time</th>
+                <th style="width:160px">Process Efficiency</th>
             </tr>
             </thead>
             <tbody>
@@ -31,6 +33,7 @@
                 <td>{{ issue.key }}</td>
                 <td>{{ issue.summary }}</td>
                 <td>{{ issue.cycleTimeConverted }}</td>
+                <td>{{ issue.processEfficiencyConverted }}</td>
             </tr>
             </tbody>
         </table>

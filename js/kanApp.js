@@ -205,10 +205,10 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
         $scope.credentials = { username: 'martin.w.greer', password: '' };
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(' : ');
         $http({method: 'GET', url: $scope.apiServer})
-            .success(function (data) {
+            .success(function () {
                 if(DEBUG){console.log("Logout ERROR.");}
             })
-            .error(function (data) {
+            .error(function () {
                 if(DEBUG){console.log("Logout SUCCESS!");}
             });
     };
@@ -356,6 +356,9 @@ kanApp.controller('peController', function ($scope) {
             issue.cycleTimeConverted = timeUtil.convertMillisecondsToDaysHoursMinutes(issue.cycleTime);
             cumulativeCycleTime += issue.cycleTime;
             amountOfCycleTimes++;
+        }
+        if(issue.processEfficiency != 0){
+            issue.processEfficiencyConverted = (Math.round(issue.processEfficiency*100) + "%");
         }
     });
 
