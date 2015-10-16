@@ -26,7 +26,7 @@ function BoardDesign(apiColumnsData) {
       _.forEach(self.columns, function(column){
         columnNames.push(column.name);
       });
-      if(DEBUG){console.log(columnNames);}
+      //if(DEBUG){console.log(columnNames);}
       return columnNames;
     };
 
@@ -45,7 +45,7 @@ function BoardDesign(apiColumnsData) {
     * Hard-code column category to each column for now. Categories are Delay and Execution. Special category: Done.
     * This should later be defined by the user after fetching board data.
     */
-    self.columnCategories = function(){
+    self.setColumnCategories = function(){
         _.forEach(self.columns, function(column){
            switch(column.name){
                case "Ready to Refine":
@@ -85,19 +85,19 @@ function BoardDesign(apiColumnsData) {
         return category;
     };
 
-    /* TODO
-    self.columnIsExecution = function(){
+    self.isExecutionColumn = function(columnName){
+        return self.getColumnCategory(columnName) === "Execution";
     };
 
-    self.columnIsDelay = function(){
+    self.isDelayColumn = function(columnName){
+        return self.getColumnCategory(columnName) === "Delay";
     };
-    */
 
     self.isDoneColumn = function(columnName){
         return self.getColumnCategory(columnName) === "Done";
     };
 
-    self.columnCategories();
+    self.setColumnCategories();
 
     return self;
 }
@@ -225,7 +225,7 @@ function Issue(apiIssue, boardDesign){
         var i,
             j,
             columnsWithTimeSpent = [],
-            columnCategories = boardDesign.columnCategories();
+            columnCategories = boardDesign.setColumnCategories();
 
         for(i = 0; i < self.columnHistory.length; i++){
             var columnName = self.columnHistory[i].columnName,
@@ -244,8 +244,16 @@ function Issue(apiIssue, boardDesign){
         return columnsWithTimeSpent;
     }
 
+    function isExecutionColumn (columnName) {
+        return boardDesign.isExecutionColumn(columnName);
+    }
+
+    function isDelayColumn (columnName) {
+        return boardDesign.isDelayColumn(columnName);
+    }
+
     /**
-     * Check if column is in Done category.
+     * Check if issue is in a column which is Done category.
      */
     self.isDone = function(){
         var columnName = _.last(self.columnHistory).columnName;
@@ -256,18 +264,50 @@ function Issue(apiIssue, boardDesign){
      * Calculate Cycle Time for the issue.
      */
     function getCycleTime(){
-        var cycleTime = 0;
-        var columnHistory = _.cloneDeep(self.columnHistory);
+        var cycleTime = 0,
+            columnHistory = _.cloneDeep(self.columnHistory);
 
         if(self.isDone()){
             columnHistory.pop();
-            _.forEach(columnHistory, function(column){
-                cycleTime += column.timeSpentInColumn();
+            _.forEach(columnHistory, function(item){
+                cycleTime += item.timeSpentInColumn();
             });
             return cycleTime;
         } else {
             return null;
         }
+    }
+
+    function getExecutionTime(){
+        var executionTime = 0,
+            columnHistory = _.cloneDeep(self.columnHistory);
+
+        if(self.isDone()) {
+            columnHistory.pop();
+        }
+
+        _.forEach(columnHistory, function(item){
+            if(isExecutionColumn(item.columnName)) {
+                executionTime += item.timeSpentInColumn();
+            }
+        });
+        return executionTime;
+    }
+
+    function getDelayTime(){
+        var delayTime = 0,
+            columnHistory = _.cloneDeep(self.columnHistory);
+
+        if(self.isDone()) {
+            columnHistory.pop();
+        }
+
+        _.forEach(columnHistory, function(item){
+            if(isDelayColumn(item.columnName)) {
+                delayTime += item.timeSpentInColumn();
+            }
+        });
+        return delayTime;
     }
 
     self.id = apiIssue.id;
@@ -277,5 +317,7 @@ function Issue(apiIssue, boardDesign){
     self.currentStatus = parseCurrentStatus(apiIssue.fields.status);
     self.columnHistory = createColumnHistory(apiIssue);
     self.cycleTime = getCycleTime();
+    self.executionTime = getExecutionTime();
+    self.delayTime = getDelayTime();
     return self;
   }

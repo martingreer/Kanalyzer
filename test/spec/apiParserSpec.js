@@ -1,27 +1,12 @@
 /**
- * Test for apiParser.js
+ * Tests for apiParser.js
  */
 
 /*global describe, it, expect, beforeEach, beforeAll, module, inject, BoardDesign, approveIt, Issue*/
 /*jslint bitwise: true, plusplus: true, white: true, sub: true*/
 
-(function(){
-    "use strict";
-}());
-
-/**
-* Temporary data for testing.
-*/
-
-
-
-
-/**
-* Test specs below.
-*/
-
 var issueWithoutHistory = new Issue(apiIssueWithoutHistory, new BoardDesign(columnsData));
-var issueWithHistoryAndNotDone = new Issue(apiIssueWithHistory, new BoardDesign(columnsData));
+var issueWithHistoryAndNotDone = new Issue(apiIssueWithHistoryAndNotDone, new BoardDesign(columnsData));
 var issueIsDone = new Issue(apiIssueIsDone, new BoardDesign(columnsData));
 var twoIssues = parseMultipleApiIssues(apiTwoIssues);
 
@@ -31,9 +16,9 @@ describe("BoardDesign", function(){
     var boardDesign,
         columnCategories;
 
-    beforeAll(function(){
+    beforeEach(function(){
         boardDesign = new BoardDesign(columnsData);
-        columnCategories =  boardDesign.columnCategories();
+        columnCategories =  boardDesign.setColumnCategories();
     });
 
     it("should have columns", function(){
@@ -106,7 +91,7 @@ describe("Issue", function(){
         describe("History parser", function(){
             var columnHistory;
 
-            beforeAll(function(){
+            beforeEach(function(){
                columnHistory = issueWithHistoryAndNotDone.columnHistory;
             });
 
@@ -127,7 +112,7 @@ describe("Issue", function(){
     describe("Without history", function(){
         var columnHistory;
 
-        beforeAll(function(){
+        beforeEach(function(){
             columnHistory = issueWithoutHistory.columnHistory;
         });
 
@@ -141,24 +126,40 @@ describe("Issue", function(){
     });
 
     describe("Cycle time calculations", function(){
-        var cycleTimeDoneIssue,
-            cycleTimeNotDoneIssue;
-
-        beforeAll(function(){
-            cycleTimeDoneIssue = issueIsDone.cycleTime;
-            cycleTimeNotDoneIssue = issueWithoutHistory.cycleTime;
-        });
-
         it("should calculate time spent in first column", function(){
             expect(issueWithHistoryAndNotDone.columnHistory[0].timeSpentInColumn()).toBe(1441114943000-1441114921000);
         });
 
         it("should calculate the cycle time for the issue", function(){
-            expect(cycleTimeDoneIssue).toBe(1122653000);
+            expect(issueIsDone.cycleTime).toBe(1122653000);
         });
 
         it("should not have cycle time if not done", function(){
-            expect(cycleTimeNotDoneIssue).toBe(null);
+            expect(issueWithoutHistory.cycleTime).toBe(null);
+        });
+    });
+
+    describe("Execution Time calculations", function(){
+        it("should calculate execution time for an issue that is not done", function(){
+            expect(issueWithHistoryAndNotDone.executionTime).toBeGreaterThan(3891323000);
+        });
+
+        it("an issue without history should have no execution time", function(){
+            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueWithoutHistory.executionTime)).toBe(timeUtil.convertMillisecondsToDaysHoursMinutes(0));
+        });
+
+        it("should calculate execution time for an issue that is done", function(){
+            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueIsDone.executionTime)).toBe(timeUtil.convertMillisecondsToDaysHoursMinutes(1057446000));
+        });
+    });
+
+    describe("Delay Time calculations", function(){
+        it("should calculate delay time for an issue that is not done", function(){
+            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueWithHistoryAndNotDone.delayTime)).toBe(timeUtil.convertMillisecondsToDaysHoursMinutes(22000));
+        });
+
+        it("should calculate delay time for an issue that is done", function(){
+            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueIsDone.delayTime)).toBe(timeUtil.convertMillisecondsToDaysHoursMinutes(65207000));
         });
     });
 });

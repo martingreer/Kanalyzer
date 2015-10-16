@@ -101,7 +101,7 @@ var columnsData = {
     ]
 };
 
-var apiIssueWithHistory = {
+var apiIssueWithHistoryAndNotDone = {
     "expand": "operations,versionedRepresentations,editmeta,changelog,transitions,renderedFields",
     "id": "10000",
     "self": "https://kanalyzer.atlassian.net/rest/api/2/issue/10000",
