@@ -313,16 +313,10 @@ kanApp.controller('cfdController', function ($scope, dataService) {
         chart: {
             type: 'stackedAreaChart',
             height: 450,
-            margin: {
-                top: 20,
-                right: 1150,
-                bottom: 60,
-                left: 40
-            },
+            width: 800,
             x: function (d) { return d[0]; },
             y: function (d) { return d[1]; },
             useVoronoi: false,
-            clipEdge: true,
             transitionDuration: 500,
             useInteractiveGuideline: true,
             xAxis: {
@@ -336,6 +330,10 @@ kanApp.controller('cfdController', function ($scope, dataService) {
                     return d3.format(',.2f')(d);
                 }
             }
+        },
+        title: {
+            enable: true,
+            text: 'Cumulative Flow Diagram'
         }
     };
 
@@ -347,8 +345,12 @@ kanApp.controller('cfdController', function ($scope, dataService) {
     });
 });
 
-kanApp.controller('etdtController', function ($scope, dataService) {
+kanApp.controller('etdtController', function ($scope) {
     "use strict";
+
+    var issues = JSON.parse(localStorage.getItem('issues'));
+
+    $scope.data = createEtDtData("All issues", issues);
 
     /**
      * Graph structure.
@@ -358,63 +360,35 @@ kanApp.controller('etdtController', function ($scope, dataService) {
             type: 'scatterChart',
             height: 450,
             width: 800,
-            color: d3.scale.category10().range(),
+            interactive: true,
             scatter: {
                 onlyCircles: true
             },
             showDistX: true,
             showDistY: true,
+            useInteractiveGuideline: true,
             transitionDuration: 350,
             xAxis: {
                 axisLabel: 'Delay Time',
-                tickFormat: function(d){
-                    return d3.format('.02f')(d);
-                }
+                axisLabelDistance: '0'
             },
             yAxis: {
-                axisLabel: 'Execution Time',
-                tickFormat: function(d){
-                    return d3.format('.02f')(d);
-                },
-                axisLabelDistance: 30
+                axisLabel: 'Execution Time (minutes)',
+                axisLabelDistance: '10'
             }
+        },
+        title: {
+            enable: true,
+            text: 'Execution Time vs Delay Time (minutes)'
         }
     };
-
-    dataService.async('../json/etdtTestData.json').then(function (d) {
-        $scope.data = d;
-    });
-
-    /* Random Data Generator */
-    function generateData(groups, points) {
-        var data = [],
-            shapes = ['circle'],
-            random = d3.random.normal();
-
-        for (var i = 0; i < groups; i++) {
-            data.push({
-                key: 'Group ' + i,
-                values: []
-            });
-
-            for (var j = 0; j < points; j++) {
-                data[i].values.push({
-                    x: random(),
-                    y: random(),
-                    size: Math.random()
-                });
-            }
-        }
-        return data;
-    }
 });
 
 /**
  * Controller for the Process Efficiency tab.
  */
 kanApp.controller('peController', function ($scope) {
-    var boardDesign = new BoardDesign(JSON.parse(localStorage.getItem('boardDesign'))),
-        cumulativeCycleTime = 0,
+    var cumulativeCycleTime = 0,
         amountOfCycleTimes = 0;
 
     $scope.issues = JSON.parse(localStorage.getItem('issues'));
