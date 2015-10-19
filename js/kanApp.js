@@ -16,7 +16,7 @@ kanApp.config(function ($stateProvider, $urlRouterProvider) {
         .state('ld', {
             url: '/ld',
             templateUrl: 'pages/ld.html',
-            controller: 'dataController'
+            controller: 'ldController'
         })
 
         .state('cfd', {
@@ -158,25 +158,8 @@ kanApp.factory('dataService', function ($http) {
 /**
 * Controller for the Load Data view.
 */
-kanApp.controller('dataController', function ($scope, dataService, Base64, $http, $q) {
+kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
     "use strict";
-
-    /**
-    * Clear json data.
-    * TAGS: unused
-    */
-    $scope.clearData = function () {
-        $scope.data = {};
-    };
-
-    /**
-    * Get data from JSON file.
-    */
-    $scope.getData = function () {
-        dataService.async().then(function (d) {
-            $scope.data = d;
-        });
-    };
 
     /**
     * Variables for logging in.
@@ -189,7 +172,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     /**
     * Login: Auth to API server.
     */
-    $scope.login = function (credentials) {
+    $scope.login = function () {
         //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
         //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
         if(DEBUG){console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");}
@@ -206,7 +189,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
     /**
     * Log out by sending empty login details and getting rejected (there is no log out support for API).
     */
-    $scope.logout = function (credentials) {
+    $scope.logout = function () {
         if(DEBUG){console.log("Logging out from " + $scope.apiRoot + "...");}
         $scope.credentials = { username: 'martin.w.greer', password: '' };
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(' : ');
@@ -224,6 +207,14 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
 
     // Board ID to get column & status structure from.
     $scope.boardId = '12';
+
+    // The pre-defined column categories used in all calculations.
+    $scope.columnCategories = [
+        {name: "Ignore"},
+        {name: "Execution"},
+        {name: "Delay"},
+        {name: "Done"}
+    ];
 
     // Synchronization variable to make sure http requests are done in the correct order.
     var getBoardDesignBeforeIssues = $q.defer();
@@ -273,7 +264,11 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
                 if (DEBUG) {console.log("Get all issues ERROR. API response: " + JSON.stringify(data));}
             });
         });
+
+        $scope.columns = JSON.parse(localStorage.getItem('boardDesign')).columns;
     };
+
+    $scope.columns = JSON.parse(localStorage.getItem('boardDesign')).columns;
 
     /**
      * Print board design directly in the application (for debugging).

@@ -24,7 +24,7 @@
         <button type="submit" class="btn btn-default">Log in</button>
     </div>
 </form>
-<br />
+<br /> -------------------------------------------------------------------------------------------------
 <h3>New view after logging in:</h3>
 <form role="form" name="loadIssuesForm" novalidate>
     <div class="form-group">
@@ -42,8 +42,35 @@
     </div>
 </form>
 <br />
-<form role="logout" name="logoutForm" ng-submit="logout(credentials)" novalidate>
+<form role="logout" name="logoutForm" ng-submit="logout(credentials)">
     <button class="btn btn-default">Log out</button>
+</form>
+<br /><br />
+<form role="form" name="columnCategoriesForm">
+    <div class="container">
+        <h4>Define Column Categories</h4>
+        <table class="table table-condensed table-hover" style="width:610px">
+            <thead>
+            <tr>
+                <th style="width:300px">Column</th>
+                <th style="width:310px">Choose Category</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="column in columns">
+                <td>{{ column.name }}</td>
+                <td>
+                    <label class="radio-inline"><input type="radio" ng-model="columnCategories.name" name="categoryOption" required>Ignore</label>
+                    <label class="radio-inline"><input type="radio" ng-model="columnCategories.name" name="categoryOption">Execution</label>
+                    <label class="radio-inline"><input type="radio" ng-model="columnCategories.name" name="categoryOption">Delay</label>
+                    <label class="radio-inline"><input type="radio" ng-model="columnCategories.name" name="categoryOption">Done</label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p>myForm.$invalid: {{columnCategoriesForm.$invalid}}</p>
+        <button ng-disabled="columnCategoriesForm.$invalid">Submit</button>
+    </div>
 </form>
 <br /><br />
 <div>

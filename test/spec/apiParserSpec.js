@@ -149,7 +149,7 @@ describe("Issue", function(){
         });
 
         it("should calculate execution time for an issue that is done", function(){
-            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueIsDone.executionTime)).toBe(timeUtil.convertMillisecondsToDaysHoursMinutes(1057446000));
+            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueIsDone.executionTime)).toBe("0 days, 00 hours, 01 minutes.");
         });
     });
 
@@ -159,7 +159,7 @@ describe("Issue", function(){
         });
 
         it("should calculate delay time for an issue that is done", function(){
-            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueIsDone.delayTime)).toBe(timeUtil.convertMillisecondsToDaysHoursMinutes(65207000));
+            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueIsDone.delayTime)).toBe("0 days, 18 hours, 01 minutes.");
         });
     });
 
@@ -169,7 +169,7 @@ describe("Issue", function(){
         });
 
         it("should calculate process efficiency for an issue that is done", function(){
-            expect(issueIsDone.delayTime).toBe(65207000);
+            expect(issueIsDone.delayTime).toBe(64843000);
         });
     });
 });
