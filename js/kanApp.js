@@ -369,17 +369,17 @@ kanApp.controller('etdtController', function ($scope) {
             useInteractiveGuideline: true,
             transitionDuration: 350,
             xAxis: {
-                axisLabel: 'Delay Time',
+                axisLabel: 'Delay Time (hours)',
                 axisLabelDistance: '0'
             },
             yAxis: {
-                axisLabel: 'Execution Time (minutes)',
+                axisLabel: 'Execution Time (hours)',
                 axisLabelDistance: '10'
             }
         },
         title: {
             enable: true,
-            text: 'Execution Time vs Delay Time (minutes)'
+            text: 'Execution Time vs Delay Time'
         }
     };
 });

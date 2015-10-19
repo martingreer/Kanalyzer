@@ -26,7 +26,6 @@ function BoardDesign(apiColumnsData) {
       _.forEach(self.columns, function(column){
         columnNames.push(column.name);
       });
-      //if(DEBUG){console.log(columnNames);}
       return columnNames;
     };
 
@@ -49,7 +48,10 @@ function BoardDesign(apiColumnsData) {
         _.forEach(self.columns, function(column){
            switch(column.name){
                case "Ready to Refine":
-                   column.category = "Delay";
+                   column.category = "Ignore";
+                   break;
+               case "Refine Backlog":
+                   column.category = "Ignore";
                    break;
                case "Ready to Analyze":
                    column.category = "Delay";

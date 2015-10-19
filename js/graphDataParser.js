@@ -7,12 +7,13 @@ function EtDtGraphData(key){
     return self;
 }
 
-function EtDtValueItem(delayTime, executionTime, cycleTime){
+function EtDtValueItem(issueKey, delayTime, executionTime, cycleTime){
     var self = this;
 
-    self.x = (delayTime/1000)/60;
-    self.y = (executionTime/1000)/60;
-    self.size = cycleTime;
+    self.key = issueKey;
+    self.x = Math.round(((delayTime/1000)/60)/60);
+    self.y = Math.round(((executionTime/1000)/60)/60);
+    self.size = Math.round(cycleTime);
 
     return self;
 }
@@ -22,10 +23,11 @@ function createEtDtData(key, issues){
         graphData = new EtDtGraphData(key);
 
     _.forEach(issues, function(issue){
-        graphData.values.push(new EtDtValueItem(issue.delayTime, issue.executionTime, 1));
+        graphData.values.push(new EtDtValueItem(issue.key, issue.delayTime, issue.executionTime, issue.cycleTime));
     });
 
     graphArray.push(graphData);
+    console.log(JSON.stringify(graphArray));
 
     return graphArray;
 }
