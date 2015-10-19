@@ -22,7 +22,13 @@ kanApp.config(function ($stateProvider, $urlRouterProvider) {
         .state('cfd', {
             url: '/cfd',
             templateUrl: 'pages/cfd.html',
-            controller: 'nvd3Controller'
+            controller: 'cfdController'
+        })
+
+        .state('etdt', {
+            url: '/etdt',
+            templateUrl: 'pages/etdt.html',
+            controller: 'etdtController'
         })
 
         .state('pe', {
@@ -297,7 +303,7 @@ kanApp.controller('dataController', function ($scope, dataService, Base64, $http
 /**
 * Controller for the CFD view.
 */
-kanApp.controller('nvd3Controller', function ($scope, dataService) {
+kanApp.controller('cfdController', function ($scope, dataService) {
     "use strict";
 
     /**
@@ -339,6 +345,68 @@ kanApp.controller('nvd3Controller', function ($scope, dataService) {
     dataService.async('../json/graphTestData.json').then(function (d) {
         $scope.data = d;
     });
+});
+
+kanApp.controller('etdtController', function ($scope, dataService) {
+    "use strict";
+
+    /**
+     * Graph structure.
+     */
+    $scope.options = {
+        chart: {
+            type: 'scatterChart',
+            height: 450,
+            width: 800,
+            color: d3.scale.category10().range(),
+            scatter: {
+                onlyCircles: true
+            },
+            showDistX: true,
+            showDistY: true,
+            transitionDuration: 350,
+            xAxis: {
+                axisLabel: 'Delay Time',
+                tickFormat: function(d){
+                    return d3.format('.02f')(d);
+                }
+            },
+            yAxis: {
+                axisLabel: 'Execution Time',
+                tickFormat: function(d){
+                    return d3.format('.02f')(d);
+                },
+                axisLabelDistance: 30
+            }
+        }
+    };
+
+    dataService.async('../json/etdtTestData.json').then(function (d) {
+        $scope.data = d;
+    });
+
+    /* Random Data Generator */
+    function generateData(groups, points) {
+        var data = [],
+            shapes = ['circle'],
+            random = d3.random.normal();
+
+        for (var i = 0; i < groups; i++) {
+            data.push({
+                key: 'Group ' + i,
+                values: []
+            });
+
+            for (var j = 0; j < points; j++) {
+                data[i].values.push({
+                    x: random(),
+                    y: random(),
+                    size: Math.random()
+                });
+            }
+        }
+        return data;
+    }
 });
 
 /**
