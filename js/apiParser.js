@@ -41,37 +41,24 @@ function BoardDesign(apiColumnsData) {
     };
 
     /**
-    * Hard-code column category to each column for now. Categories are Delay and Execution. Special category: Done.
-    * This should later be defined by the user after fetching board data.
+    * Try to guess initial values of the column categories based on the column name.
     */
-    self.setColumnCategories = function(){
+    self.initColumnCategories = function(){
         _.forEach(self.columns, function(column){
-           switch(column.name){
-               case "Ready to Refine":
-                   column.category = "Ignore";
-                   break;
-               case "Refine Backlog":
-                   column.category = "Ignore";
-                   break;
-               case "Ready to Analyze":
-                   column.category = "Delay";
-                   break;
-               case "Ready for Development":
-                   column.category = "Delay";
-                   break;
-               case "Ready for Test":
-                   column.category = "Delay";
-                   break;
-               case "Ready to Accept":
-                   column.category = "Delay";
-                   break;
-               case "Ready for Release":
-                   column.category = "Done";
-                   break;
-               default:
-                   column.category = "Execution";
-           }
+            if(column.name.toLowerCase().indexOf("ready") >= 0){
+                column.category = "Delay";
+            }else if(column.name.toLowerCase().indexOf("backlog") >= 0){
+                column.category = "Delay";
+            }else if(column.name.toLowerCase().indexOf("to do") >= 0){
+                column.category = "Delay";
+            }else if(column.name.toLowerCase().indexOf("todo") >= 0){
+                column.category = "Delay";
+            }else{
+                column.category = "Execution";
+            }
         });
+
+        _.last(self.columns).category = "Done";
 
         return self.columns;
     };
@@ -99,7 +86,7 @@ function BoardDesign(apiColumnsData) {
         return self.getColumnCategory(columnName) === "Done";
     };
 
-    self.setColumnCategories();
+    self.initColumnCategories();
 
     return self;
 }
@@ -227,7 +214,7 @@ function Issue(apiIssue, boardDesign){
         var i,
             j,
             columnsWithTimeSpent = [],
-            columnCategories = boardDesign.setColumnCategories();
+            columnCategories = boardDesign.initColumnCategories();
 
         for(i = 0; i < self.columnHistory.length; i++){
             var columnName = self.columnHistory[i].columnName,

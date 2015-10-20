@@ -208,24 +208,19 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
     // Board ID to get column & status structure from.
     $scope.boardId = '12';
 
-    // The pre-defined column categories used in all calculations.
-    $scope.columnCategories = [
-        {name: "Ignore"},
-        {name: "Execution"},
-        {name: "Delay"},
-        {name: "Done"}
-    ];
-
     // Synchronization variable to make sure http requests are done in the correct order.
-    var getBoardDesignBeforeIssues = $q.defer();
+    var getBoardDesignBeforeIssues = $q.defer(),
+        boardColumnsDesign,
+        apiIssuesMinimal,
+        issues;
 
     /**
     * Get all issues for the project that was given on login.
     */
     $scope.getAllIssues = function () {
-        var boardColumnsDesign,
-            apiIssuesMinimal,
-            issues = [];
+        boardColumnsDesign = {};
+        apiIssuesMinimal = {};
+        issues = [];
 
         getBoardDesignBeforeIssues = $q.defer();
 
@@ -269,6 +264,78 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
     };
 
     $scope.columns = JSON.parse(localStorage.getItem('boardDesign')).columns;
+    $scope.userConfigs = JSON.parse(localStorage.getItem('userConfigs'));
+
+    /**
+     * Update the column categories to the user defined values.
+     */
+    $scope.updateColumnCategories = function (columnCategories) {
+        var boardDesign = JSON.parse(localStorage.getItem('boardDesign'));
+        _.forEach(boardDesign.columns, function (columnOutput) {
+            _.forEach(columnCategories, function (columnInput) {
+                if(columnInput.name === columnOutput.name){
+                    columnOutput.category = columnInput.category;
+                }
+            });
+        });
+        localStorage.setItem('boardDesign', JSON.stringify(boardDesign));
+        console.log(localStorage.getItem('boardDesign'));
+    };
+
+    /**
+     * Save the user choices for a set of columns for quick re-use.
+     */
+    $scope.saveConfig = function (name, columnCategories) {
+        var userConfigs,
+            isNameUnique = true;
+
+        if(localStorage.getItem('userConfigs') === null){
+            console.log("No previous configs! Creating new.");
+            userConfigs = [];
+        } else {
+            console.log("Previous config exists! Adding this config to it.");
+            userConfigs = JSON.parse(localStorage.getItem('userConfigs'));
+            _.forEach(userConfigs, function (config) {
+                if(config.name.toLowerCase() === name.toLowerCase()){
+                    isNameUnique = false;
+                    return false;
+                }
+            });
+        }
+
+        if(!isNameUnique){
+            console.log("Didn't save new config. Please choose a unique name.");
+        } else {
+            var newConfig = {"name": name, "columnCategories": columnCategories};
+
+            userConfigs.push(newConfig);
+
+            localStorage.setItem('userConfigs', JSON.stringify(userConfigs));
+            console.log(localStorage.getItem('userConfigs'));
+        }
+    };
+
+    /**
+     * Loads a chosen user config.
+     */
+    $scope.loadConfig = function (name) {
+        var userConfigs = JSON.parse(localStorage.getItem('userConfigs'));
+
+        _.forEach(userConfigs, function (config) {
+            if(config.name === name){
+                console.log(config.name + " = " + name + " is true");
+                $scope.columns = config.columnCategories;
+                return false;
+            }
+        });
+    };
+
+    /**
+     * Clears all configs.
+     */
+    $scope.clearConfigs = function () {
+        localStorage.removeItem('userConfigs');
+    };
 
     /**
      * Print board design directly in the application (for debugging).

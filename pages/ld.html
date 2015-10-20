@@ -46,32 +46,51 @@
     <button class="btn btn-default">Log out</button>
 </form>
 <br /><br />
-<form role="form" name="columnCategoriesForm">
-    <div class="container">
-        <h4>Define Column Categories</h4>
-        <table class="table table-condensed table-hover" style="width:610px">
-            <thead>
-            <tr>
-                <th style="width:300px">Column</th>
-                <th style="width:310px">Choose Category</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="column in columns">
-                <td>{{ column.name }}</td>
-                <td>
-                    <label class="radio-inline"><input type="radio" ng-model="columnCategories.name" name="categoryOption" required>Ignore</label>
-                    <label class="radio-inline"><input type="radio" ng-model="columnCategories.name" name="categoryOption">Execution</label>
-                    <label class="radio-inline"><input type="radio" ng-model="columnCategories.name" name="categoryOption">Delay</label>
-                    <label class="radio-inline"><input type="radio" ng-model="columnCategories.name" name="categoryOption">Done</label>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <p>myForm.$invalid: {{columnCategoriesForm.$invalid}}</p>
-        <button ng-disabled="columnCategoriesForm.$invalid">Submit</button>
-    </div>
-</form>
+<div>
+    <h4>Define Column Categories</h4>
+    <table class="table table-condensed table-hover" style="width:610px">
+        <thead>
+        <tr>
+            <th style="width:300px">Column</th>
+            <th style="width:310px">Choose Category</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="column in columns">
+            <td>{{ column.name }}</td>
+            <td>
+                <form role="form" name="columnCategoriesForm" novalidate>
+                    <label class="radio-inline"><input type="radio" ng-model="column.category" name="categoryOption" value="Ignore">Ignore</label>
+                    <label class="radio-inline"><input type="radio" ng-model="column.category" name="categoryOption" value="Execution">Execution</label>
+                    <label class="radio-inline"><input type="radio" ng-model="column.category" name="categoryOption" value="Delay">Delay</label>
+                    <label class="radio-inline"><input type="radio" ng-model="column.category" name="categoryOption" value="Done">Done</label>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-default" ng-click="updateColumnCategories(columns)">Update columns</button>
+    <!--<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Load config <span class="caret"></span></button>
+    <ul class="dropdown-menu" ng-repeat="config in userConfigs">
+        <li ng-click="loadConfig(config.name)">{{ config.name }}</li>
+    </ul>-->
+    <br /><br />
+    <form role="form" name="loadConfigForm">
+        <label for="loadConfigSelect">Load config:</label>
+        <select name="loadConfigSelect" id="loadConfigSelect" ng-model="selectedConfig" ng-change="loadConfig(selectedConfig)">
+            <option ng-repeat="config in userConfigs" value="{{ config.name }}">{{ config.name }}</option>
+        </select>
+    </form>
+    Loaded config: {{ selectedConfig }}
+    <br /><br />
+    <form role="form" name="userConfigForm" novalidate>
+        <label for="configName">Config Name:</label>
+        <input type="text" class="form-control" id="configName" ng-model="configName" style="width:250px">
+        <button type="submit" class="btn btn-default" ng-click="saveConfig(configName, columns)">Save this config</button>
+    </form>
+    <br />
+    <button class="btn btn-default" ng-click="clearConfigs()">Clear all configs</button>
+</div>
 <br /><br />
 <div>
     <h4>BOARD DESIGN:</h4>
