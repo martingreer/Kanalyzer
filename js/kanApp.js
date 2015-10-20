@@ -161,6 +161,12 @@ kanApp.factory('dataService', function ($http) {
 kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
     "use strict";
 
+    // Synchronization variable to make sure http requests are done in the correct order.
+    var getBoardDesignBeforeIssues = $q.defer(),
+        boardColumnsDesign,
+        apiIssuesMinimal,
+        issues;
+
     /**
     * Variables for logging in.
     */
@@ -168,6 +174,24 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
     $scope.apiRoot = 'https://softhousegbg.atlassian.net/';
     $scope.apiProject = 'KTD';
     $scope.apiServer = $scope.apiRoot + 'projects/' +  $scope.apiProject + '/issues';
+
+    if(localStorage.getItem('boardDesign')){
+        $scope.columns = JSON.parse(localStorage.getItem('boardDesign')).columns;
+    } else {
+        $scope.columns = [];
+    }
+
+    if(localStorage.getItem('userConfigs')){
+        $scope.userConfigs = JSON.parse(localStorage.getItem('userConfigs'));
+    } else {
+        $scope.userConfigs = [];
+    }
+
+    // The max results to be returned from API (-1 is unlimited results).
+    $scope.maxResults = -1;
+
+    // Board ID to get column & status structure from.
+    $scope.boardId = '12';
 
     /**
     * Login: Auth to API server.
@@ -201,18 +225,6 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
                 if(DEBUG){console.log("Logout SUCCESS!");}
             });
     };
-
-    // The max results to be returned from API (-1 is unlimited results).
-    $scope.maxResults = -1;
-
-    // Board ID to get column & status structure from.
-    $scope.boardId = '12';
-
-    // Synchronization variable to make sure http requests are done in the correct order.
-    var getBoardDesignBeforeIssues = $q.defer(),
-        boardColumnsDesign,
-        apiIssuesMinimal,
-        issues;
 
     /**
     * Get all issues for the project that was given on login.
@@ -260,11 +272,12 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
             });
         });
 
-        $scope.columns = JSON.parse(localStorage.getItem('boardDesign')).columns;
+        if(localStorage.getItem('boardDesign')){
+            $scope.columns = JSON.parse(localStorage.getItem('boardDesign')).columns;
+        } else {
+            $scope.columns = [];
+        }
     };
-
-    $scope.columns = JSON.parse(localStorage.getItem('boardDesign')).columns;
-    $scope.userConfigs = JSON.parse(localStorage.getItem('userConfigs'));
 
     /**
      * Update the column categories to the user defined values.
@@ -454,6 +467,7 @@ kanApp.controller('peController', function ($scope) {
         amountOfCycleTimes = 0;
 
     $scope.issues = JSON.parse(localStorage.getItem('issues'));
+    console.log($scope.issues);
 
     _.forEach($scope.issues, function(issue) {
         if(issue.cycleTime != null){
