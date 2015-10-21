@@ -423,9 +423,12 @@ kanApp.controller('cfdController', function ($scope, dataService) {
 kanApp.controller('etdtController', function ($scope) {
     "use strict";
 
-    var issues = JSON.parse(localStorage.getItem('issues'));
-
-    $scope.data = createEtDtData("All issues", issues);
+    if(localStorage.getItem('issues')){
+        var issues = JSON.parse(localStorage.getItem('issues'));
+        $scope.data = createEtDtData("All issues", issues);
+    } else {
+        $scope.data = [];
+    }
 
     /**
      * Graph structure.
@@ -466,8 +469,12 @@ kanApp.controller('peController', function ($scope) {
     var cumulativeCycleTime = 0,
         amountOfCycleTimes = 0;
 
-    $scope.issues = JSON.parse(localStorage.getItem('issues'));
-    console.log($scope.issues);
+    if(localStorage.getItem('issues')) {
+        $scope.issues = JSON.parse(localStorage.getItem('issues'));
+    } else {
+        $scope.issues = [];
+    }
+    //console.log($scope.issues);
 
     _.forEach($scope.issues, function(issue) {
         if(issue.cycleTime != null){
