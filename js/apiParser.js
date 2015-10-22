@@ -62,17 +62,18 @@ function BoardDesign(apiColumnsData) {
                 if (column.name.toLowerCase().indexOf("ready") >= 0) {
                     column.category = "Delay";
                 } else if (column.name.toLowerCase().indexOf("backlog") >= 0) {
-                    column.category = "Delay";
+                    column.category = "Ignore";
                 } else if (column.name.toLowerCase().indexOf("to do") >= 0) {
-                    column.category = "Delay";
+                    column.category = "Ignore";
                 } else if (column.name.toLowerCase().indexOf("todo") >= 0) {
-                    column.category = "Delay";
+                    column.category = "Ignore";
                 } else {
                     column.category = "Execution";
                 }
             }
         });
 
+        _.first(self.columns).category = "Ignore";
         _.last(self.columns).category = "Done";
 
         return self.columns;
@@ -87,6 +88,10 @@ function BoardDesign(apiColumnsData) {
             }
         });
         return category;
+    };
+
+    self.isIgnoreColumm = function (columnName) {
+        return self.getColumnCategory(columnName) === "Ignore";
     };
 
     self.isExecutionColumn = function (columnName) {
@@ -289,6 +294,13 @@ function Issue(apiIssue, boardDesign){
     };
 
     /**
+     * Check if issue is in a column which should be ignored in calculations.
+     */
+    self.isIgnored = function(columnName){
+        return boardDesign.isIgnoreColumm(columnName);
+    };
+
+    /**
      * Calculate Cycle Time for the issue.
      */
     function getCycleTime(){
@@ -298,7 +310,9 @@ function Issue(apiIssue, boardDesign){
         if(self.isDone()){
             columnHistory.pop();
             _.forEach(columnHistory, function(item){
-                cycleTime += item.timeSpentInColumn();
+                if(!self.isIgnored(item.columnName)){
+                    cycleTime += item.timeSpentInColumn();
+                }
             });
             return cycleTime;
         } else {

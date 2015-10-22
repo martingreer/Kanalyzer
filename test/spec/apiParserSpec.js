@@ -131,7 +131,7 @@ describe("Issue", function(){
         });
 
         it("should calculate the cycle time for the issue", function(){
-            expect(issueIsDone.cycleTime).toBe(1122653000);
+            expect(issueIsDone.cycleTime).toBe(64873000);
         });
 
         it("should not have cycle time if not done", function(){
@@ -159,7 +159,7 @@ describe("Issue", function(){
         });
 
         it("should calculate delay time for an issue that is done", function(){
-            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueIsDone.delayTime)).toBe("12 days, 23 hours, 50 minutes.");
+            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueIsDone.delayTime)).toBe("0 days, 18 hours, 01 minutes.");
         });
     });
 
@@ -169,7 +169,7 @@ describe("Issue", function(){
         });
 
         it("should calculate process efficiency for an issue that is done", function(){
-            expect(issueIsDone.processEfficiency).toBe(0.000026722415563847422);
+            expect(issueIsDone.processEfficiency).toBe(0.0004624420020655743);
         });
     });
 });
