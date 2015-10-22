@@ -1,7 +1,6 @@
 /*jslint bitwise: true, plusplus: true, white: true, sub: true, nomen: true*/
 /*global timeUtil, console, self:true, _, parseHistory*/
 
-var DEBUG = true;
 var DEBUG_COLUMNHISTORY = false;
 
 /**
@@ -10,6 +9,7 @@ var DEBUG_COLUMNHISTORY = false;
 function parseBoardDesign(apiBoardDesignRaw){
     "use strict";
 
+    /** @namespace apiBoardDesignRaw.columnsData */
     return apiBoardDesignRaw.columnsData;
 }
 
@@ -30,9 +30,7 @@ function createBoardDesign(apiBoardDesign){
 function BoardDesign(apiColumnsData) {
     "use strict";
 
-    if(apiColumnsData.category)boardDesignHasCategories
-
-    self = _.cloneDeep(apiColumnsData);
+    var self = _.cloneDeep(apiColumnsData);
 
     self.getColumnNames = function () {
         var columnNames = [];
@@ -247,34 +245,6 @@ function Issue(apiIssue, boardDesign){
         if(DEBUG_COLUMNHISTORY){console.log("ITERATION: " + columnHistory.length + " - " + columnHistory[columnHistory.length-1].toColumn + " | " + columnHistory[columnHistory.length-1].moveTime + " | " + timeUtil.getTimestamp());}
 
         return columnsWithEnterExit;
-    }
-
-    /**
-     *  Calculates the sum of time spent in each column and relates them to a matching column category.
-     *
-     *  <<DEPRECATED>>
-     */
-    function getTimeInColumns(){
-        var i,
-            j,
-            columnsWithTimeSpent = [],
-            columnCategories = boardDesign.createColumnCategories();
-
-        for(i = 0; i < self.columnHistory.length; i++){
-            var columnName = self.columnHistory[i].columnName,
-                columnCategory,
-                timeSpent = self.columnHistory[i].timeSpentInColumn();
-            for(j = 0; j < columnCategories.length; j++){
-                if(columnCategories[j].columnName === self.columnHistory[i].columnName){
-                    columnCategory = columnCategories[j].columnCategory;
-                }
-            }
-            columnsWithTimeSpent.push({"columnName": columnName, "columnCategory": columnCategory, "timeSpent": timeSpent});
-        }
-
-        if(DEBUG){console.log(JSON.stringify(columnsWithTimeSpent));}
-
-        return columnsWithTimeSpent;
     }
 
     function isExecutionColumn (columnName) {
