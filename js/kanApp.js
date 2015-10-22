@@ -139,28 +139,6 @@ kanApp.factory('Base64', function () {
     };
 });
 
-/**
-* Service for getting all data from a json file.
-*/
-kanApp.factory('dataService', function ($http) {
-    "use strict";
-
-    var dataService = {
-        async: function (path) {
-            // $http returns a promise, which has a .then function, which also returns a promise
-            var promise = $http.get(path).then(function (response) {
-                // The .then function here is an opportunity to modify the response
-                if(DEBUG){console.log(response);}
-                // The return value gets picked up by the .then in the controller.
-                return response.data;
-            });
-            // Return the promise to the controller
-            return promise;
-        }
-    };
-    return dataService;
-});
-
 kanApp.factory('apiServerData', function(){
     var data = {
         apiRoot: '',
@@ -428,8 +406,10 @@ kanApp.controller('ldController', function ($scope, $http, $q, apiServerData) {
 /**
 * Controller for the CFD view.
 */
-kanApp.controller('cfdController', function ($scope, dataService) {
+kanApp.controller('cfdController', function ($scope, $http) {
     "use strict";
+
+    var requestCfdData;
 
     /**
     * Graph structure.
@@ -462,11 +442,16 @@ kanApp.controller('cfdController', function ($scope, dataService) {
         }
     };
 
-    /**
-    * Get json data from file when opening CFD page. (REMOVE LATER - WE WANT GLOBAL STORAGE IN VARIABLES)
-    */
-    dataService.async('../json/graphTestData.json').then(function (d) {
-        $scope.data = d;
+    requestCfdData = $http({
+        method: "GET",
+        url: '../json/graphTestData.json'
+    });
+    requestCfdData.success(function (data) {
+        $scope.data = data;
+        if(DEBUG){console.log("Get graph data SUCCESS!");}
+    });
+    requestCfdData.error(function (data) {
+        if(DEBUG){console.log("Get graph data ERROR.");}
     });
 });
 
@@ -492,8 +477,8 @@ kanApp.controller('etdtController', function ($scope) {
             scatter: {
                 onlyCircles: true
             },
-            showDistX: true,
-            showDistY: true,
+            showDistX: false,
+            showDistY: false,
             useInteractiveGuideline: true,
             transitionDuration: 350,
             xAxis: {
