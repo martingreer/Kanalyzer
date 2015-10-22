@@ -162,25 +162,27 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
     "use strict";
 
     // Synchronization variable to make sure http requests are done in the correct order.
-    var getBoardDesignBeforeIssues = $q.defer(),
-        boardColumnsDesign,
+    var getBoardDesignBeforeIssues = $q.defer();
+
+    // Variables that need to be visible in the entire controller.
+    var boardColumnsDesign,
         apiIssuesMinimal,
         issues;
 
-    /**
-    * Variables for logging in.
-    */
+    // Variables for logging in to API server.
     $scope.credentials = { username: 'martin.w.greer', password: ''};
     $scope.apiRoot = 'https://softhousegbg.atlassian.net/';
     $scope.apiProject = 'KTD';
     $scope.apiServer = $scope.apiRoot + 'projects/' +  $scope.apiProject + '/issues';
 
+    // Assign columns to scope if local storage already exists.
     if(localStorage.getItem('boardDesign')){
         $scope.columns = JSON.parse(localStorage.getItem('boardDesign')).columns;
     } else {
         $scope.columns = [];
     }
 
+    // Assign user configs to scope if local storage already exists.
     if(localStorage.getItem('userConfigs')){
         $scope.userConfigs = JSON.parse(localStorage.getItem('userConfigs'));
     } else {
@@ -192,6 +194,7 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
 
     // Board ID to get column & status structure from.
     $scope.boardId = '12';
+
 
     /**
     * Login: Auth to API server.
@@ -243,7 +246,7 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
             url: $scope.apiRoot + "rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=" + $scope.boardId + "&selectedProjectKey=" + $scope.apiProject
         });
         requestBoardDesign.success(function (data) {
-            boardColumnsDesign = new BoardDesign(parseBoardDesign(data));
+            boardColumnsDesign = createBoardDesign(parseBoardDesign(data));
             localStorage.setItem('boardDesign', JSON.stringify(boardColumnsDesign));
             getBoardDesignBeforeIssues.resolve();
             if(DEBUG){console.log("Get board design SUCCESS!");}
@@ -261,9 +264,11 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
             });
             requestIssues.success(function (data) {
                 apiIssuesMinimal = parseMultipleApiIssues(data);
-                _.forEach(apiIssuesMinimal, function(issue){
-                    issues.push(new Issue(issue, boardColumnsDesign));
-                });
+                console.log(JSON.stringify(apiIssuesMinimal));
+                issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
+                //_.forEach(apiIssuesMinimal, function(issue){
+                 //   issues.push(new Issue(issue, boardColumnsDesign));
+                //});
                 localStorage.setItem('issues', JSON.stringify(issues));
                 if (DEBUG) {console.log("Get all issues SUCCESS!");}
             });
@@ -283,16 +288,29 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
      * Update the column categories to the user defined values.
      */
     $scope.updateColumnCategories = function (columnCategories) {
-        var boardDesign = JSON.parse(localStorage.getItem('boardDesign'));
-        _.forEach(boardDesign.columns, function (columnOutput) {
+        var updatedBoardDesign,
+            updatedIssues;
+
+        console.log(localStorage.getItem('issues'));
+
+        boardColumnsDesign = createBoardDesign(JSON.parse(localStorage.getItem('boardDesign')));
+        issues = createIssuesFromArray(JSON.parse(localStorage.getItem('issues')), boardColumnsDesign);
+
+        _.forEach(boardColumnsDesign.columns, function (columnOutput) {
             _.forEach(columnCategories, function (columnInput) {
                 if(columnInput.name === columnOutput.name){
                     columnOutput.category = columnInput.category;
                 }
             });
         });
-        localStorage.setItem('boardDesign', JSON.stringify(boardDesign));
+
+        updatedBoardDesign = createBoardDesign(boardColumnsDesign);
+        updatedIssues = createIssuesFromArray(issues, updatedBoardDesign);
+
+        localStorage.setItem('boardDesign', JSON.stringify(updatedBoardDesign));
+        localStorage.setItem('issues', JSON.stringify(updatedIssues));
         console.log(localStorage.getItem('boardDesign'));
+        console.log(localStorage.getItem('issues'));
     };
 
     /**

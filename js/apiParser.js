@@ -14,6 +14,17 @@ function parseBoardDesign(apiBoardDesignRaw){
 }
 
 /**
+ * Create a new board design.
+ */
+function createBoardDesign(apiBoardDesign){
+    var boardDesign;
+
+    boardDesign = new BoardDesign(apiBoardDesign);
+
+    return boardDesign;
+}
+
+/**
 * Current board structure with columns and their underlying statuses.
 */
 function BoardDesign(apiColumnsData) {
@@ -145,12 +156,26 @@ function parseMultipleApiIssues(apiIssuesRaw){
 }
 
 /**
+ * Constructs new issues from an array of issue data.
+ */
+function createIssuesFromArray(apiIssues, boardDesign){
+    var issues = [];
+
+    _.forEach(apiIssues, function(issue){
+        issues.push(new Issue(issue, boardDesign));
+    });
+
+    return issues;
+}
+
+/**
 * Create new issue object containing ID, summary, key, column history.
 */
 function Issue(apiIssue, boardDesign){
     "use strict";
 
-    var self = {};
+    var self = {},
+        isAlreadyParsed = apiIssue.changelog == null;
 
     function parseCurrentStatus(currentStatus){
       var status = {};
@@ -309,10 +334,19 @@ function Issue(apiIssue, boardDesign){
 
     self.id = apiIssue.id;
     self.key = apiIssue.key;
-    self.summary = apiIssue.fields.summary;
-    self.created = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.'));
-    self.currentStatus = parseCurrentStatus(apiIssue.fields.status);
-    self.columnHistory = createColumnHistory(apiIssue);
+
+    if(!isAlreadyParsed){
+        self.summary = apiIssue.fields.summary;
+        self.created = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.'));
+        self.currentStatus = parseCurrentStatus(apiIssue.fields.status);
+        self.columnHistory = createColumnHistory(apiIssue);
+    } else {
+        self.summary = apiIssue.summary;
+        self.created = apiIssue.created;
+        self.currentStatus = apiIssue.currentStatus;
+        self.columnHistory = 0; //TODO: Create new object.
+    }
+
     self.cycleTime = getCycleTime();
     self.executionTime = getExecutionTime();
     self.delayTime = getDelayTime();

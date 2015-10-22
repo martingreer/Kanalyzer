@@ -159,7 +159,7 @@ describe("Issue", function(){
         });
 
         it("should calculate delay time for an issue that is done", function(){
-            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueIsDone.delayTime)).toBe("0 days, 18 hours, 01 minutes.");
+            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueIsDone.delayTime)).toBe("12 days, 23 hours, 50 minutes.");
         });
     });
 
@@ -169,7 +169,7 @@ describe("Issue", function(){
         });
 
         it("should calculate process efficiency for an issue that is done", function(){
-            expect(issueIsDone.delayTime).toBe(64843000);
+            expect(issueIsDone.processEfficiency).toBe(0.000026722415563847422);
         });
     });
 });
