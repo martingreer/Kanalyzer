@@ -1,0 +1,28 @@
+<html>
+<head>
+    <title>Kanalyzer: Log in</title>
+</head>
+<body>
+<form role="form" name="loginForm" ng-submit="login(credentials)" novalidate>
+    <div class="form-group">
+        <label for="apiRoot">API server:</label>
+        <input type="text" id="apiRoot" class="form-control" ng-model="apiRoot" style="width:400px">
+    </div>
+    <div class="form-group">
+        <label for="apiProject">Project key:</label>
+        <input type="text" id="apiProject" class="form-control" ng-model="apiProject" style="width:400px">
+    </div>
+    <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" class="form-control" ng-model="credentials.username" style="width:400px">
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" class="form-control" ng-model="credentials.password" style="width:400px">
+    </div>
+    <div>
+        <button type="submit" class="btn btn-default">Log in</button>
+    </div>
+</form>
+</body>
+</html>

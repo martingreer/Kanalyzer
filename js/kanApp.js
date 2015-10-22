@@ -10,9 +10,15 @@ var DEBUG = true;
 kanApp.config(function ($stateProvider, $urlRouterProvider) {
     "use strict";
 
-	$urlRouterProvider.otherwise('/ld');
+	$urlRouterProvider.otherwise('/login');
 
 	$stateProvider
+        .state('login', {
+            url: '/login',
+            templateUrl: 'pages/login.html',
+            controller: 'loginController'
+        })
+
         .state('ld', {
             url: '/ld',
             templateUrl: 'pages/ld.html',
@@ -155,10 +161,80 @@ kanApp.factory('dataService', function ($http) {
     return dataService;
 });
 
+kanApp.factory('apiServerData', function(){
+    var data = {
+        apiRoot: '',
+        apiProject: ''
+    };
+
+    return {
+        getApiRoot: function () {
+            return data.apiRoot;
+        },
+        setApiRoot: function (apiRoot) {
+            data.apiRoot = apiRoot;
+        },
+        getApiProject: function () {
+            return data.apiProject;
+        },
+        setApiProject: function (apiProject) {
+            data.apiProject = apiProject;
+        }
+    }
+});
+
+kanApp.controller('loginController', function($scope, Base64, $http, apiServerData){
+    "use strict";
+
+    // Variables for logging in to API server.
+    $scope.credentials = { username: 'martin.w.greer', password: ''};
+    $scope.apiRoot = 'https://softhousegbg.atlassian.net/';
+    $scope.apiProject = 'KTD';
+    $scope.apiServer = $scope.apiRoot + 'projects/' +  $scope.apiProject + '/issues';
+
+    apiServerData.setApiRoot($scope.apiRoot);
+    apiServerData.setApiProject($scope.apiProject);
+
+    /**
+     * Login: Auth to API server.
+     */
+    $scope.login = function () {
+        //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
+        //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
+        apiServerData.setApiRoot($scope.apiRoot);
+        apiServerData.setApiProject($scope.apiProject);
+        if(DEBUG){console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");}
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
+        $http({method: 'GET', url: $scope.apiServer})
+            .success(function () {
+                if(DEBUG){console.log("Authentication SUCCESS!");}
+            })
+            .error(function () {
+                if(DEBUG){console.log("Authentication ERROR.");}
+            });
+    };
+
+    /**
+     * Log out by sending empty login details and getting rejected (there is no log out support for API).
+     */
+    $scope.logout = function () {
+        if(DEBUG){console.log("Logging out from " + $scope.apiRoot + "...");}
+        $scope.credentials = { username: 'martin.w.greer', password: '' };
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(' : ');
+        $http({method: 'GET', url: $scope.apiServer})
+            .success(function () {
+                if(DEBUG){console.log("Logout ERROR.");}
+            })
+            .error(function () {
+                if(DEBUG){console.log("Logout SUCCESS!");}
+            });
+    };
+});
+
 /**
 * Controller for the Load Data view.
 */
-kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
+kanApp.controller('ldController', function ($scope, $http, $q, apiServerData) {
     "use strict";
 
     // Synchronization variable to make sure http requests are done in the correct order.
@@ -169,11 +245,8 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
         apiIssuesMinimal,
         issues;
 
-    // Variables for logging in to API server.
-    $scope.credentials = { username: 'martin.w.greer', password: ''};
-    $scope.apiRoot = 'https://softhousegbg.atlassian.net/';
-    $scope.apiProject = 'KTD';
-    $scope.apiServer = $scope.apiRoot + 'projects/' +  $scope.apiProject + '/issues';
+    $scope.apiRoot = apiServerData.getApiRoot();
+    $scope.apiProject = apiServerData.getApiProject();
 
     // Assign columns to scope if local storage already exists.
     if(localStorage.getItem('boardDesign')){
@@ -194,40 +267,6 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
 
     // Board ID to get column & status structure from.
     $scope.boardId = '12';
-
-
-    /**
-    * Login: Auth to API server.
-    */
-    $scope.login = function () {
-        //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
-        //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
-        if(DEBUG){console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");}
-        $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
-        $http({method: 'GET', url: $scope.apiServer})
-            .success(function () {
-                if(DEBUG){console.log("Authentication SUCCESS!");}
-            })
-            .error(function () {
-                if(DEBUG){console.log("Authentication ERROR.");}
-            });
-    };
-
-    /**
-    * Log out by sending empty login details and getting rejected (there is no log out support for API).
-    */
-    $scope.logout = function () {
-        if(DEBUG){console.log("Logging out from " + $scope.apiRoot + "...");}
-        $scope.credentials = { username: 'martin.w.greer', password: '' };
-        $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(' : ');
-        $http({method: 'GET', url: $scope.apiServer})
-            .success(function () {
-                if(DEBUG){console.log("Logout ERROR.");}
-            })
-            .error(function () {
-                if(DEBUG){console.log("Logout SUCCESS!");}
-            });
-    };
 
     /**
     * Get all issues for the project that was given on login.
