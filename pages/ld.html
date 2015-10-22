@@ -3,10 +3,31 @@
     <title>Kanalyzer: Load Data</title>
 </head>
 <body>
+
+
+<!--<span class="col-md-2 control-label">Metadata</span>
+<div class="col-md-6">
+    <div class="form-group row">
+        <label for="inputKey" class="col-md-1 control-label">Key</label>
+        <div class="col-md-2">
+            <input type="text" class="form-control" id="inputKey" placeholder="Key">
+        </div>
+        <label for="inputValue" class="col-md-1 control-label">Value</label>
+        <div class="col-md-2">
+            <input type="text" class="form-control" id="inputValue" placeholder="Value">
+        </div>
+    </div>
+</div>-->
+
+
 <form role="form" name="loadIssuesForm" novalidate>
     <div class="form-group">
         <label for="apiBoard">Board ID:</label>
         <input type="text" id="apiBoard" class="form-control" ng-model="boardId" style="width:60px">
+    </div>
+    <div class="form-group">
+        <label for="apiProject">Project key:</label>
+        <input type="text" id="apiProject" class="form-control" ng-model="apiProject" style="width:60px">
     </div>
     <div class="form-group">
         <label for="maxResults">Max results:</label>
@@ -17,10 +38,6 @@
         <button class="btn btn-default" ng-click="printBoardDesign()">Show/hide board design</button>
         <button class="btn btn-default" ng-click="printAllIssues()">Show/hide issues</button>
     </div>
-</form>
-<br />
-<form role="logout" name="logoutForm" ng-submit="logout(credentials)">
-    <button class="btn btn-default">Log out</button>
 </form>
 <br /><br />
 <div>

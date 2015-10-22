@@ -173,12 +173,6 @@ kanApp.factory('apiServerData', function(){
         },
         setApiRoot: function (apiRoot) {
             data.apiRoot = apiRoot;
-        },
-        getApiProject: function () {
-            return data.apiProject;
-        },
-        setApiProject: function (apiProject) {
-            data.apiProject = apiProject;
         }
     }
 });
@@ -189,11 +183,9 @@ kanApp.controller('loginController', function($scope, Base64, $http, apiServerDa
     // Variables for logging in to API server.
     $scope.credentials = { username: 'martin.w.greer', password: ''};
     $scope.apiRoot = 'https://softhousegbg.atlassian.net/';
-    $scope.apiProject = 'KTD';
-    $scope.apiServer = $scope.apiRoot + 'projects/' +  $scope.apiProject + '/issues';
+    $scope.apiServer = $scope.apiRoot + 'rest/api/2/issue/createmeta';
 
     apiServerData.setApiRoot($scope.apiRoot);
-    apiServerData.setApiProject($scope.apiProject);
 
     /**
      * Login: Auth to API server.
@@ -202,7 +194,6 @@ kanApp.controller('loginController', function($scope, Base64, $http, apiServerDa
         //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
         //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
         apiServerData.setApiRoot($scope.apiRoot);
-        apiServerData.setApiProject($scope.apiProject);
         if(DEBUG){console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");}
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
         $http({method: 'GET', url: $scope.apiServer})
@@ -246,7 +237,7 @@ kanApp.controller('ldController', function ($scope, $http, $q, apiServerData) {
         issues;
 
     $scope.apiRoot = apiServerData.getApiRoot();
-    $scope.apiProject = apiServerData.getApiProject();
+    $scope.apiProject = 'KTD';
 
     // Assign columns to scope if local storage already exists.
     if(localStorage.getItem('boardDesign')){
@@ -263,7 +254,7 @@ kanApp.controller('ldController', function ($scope, $http, $q, apiServerData) {
     }
 
     // The max results to be returned from API (-1 is unlimited results).
-    $scope.maxResults = -1;
+    $scope.maxResults = null;
 
     // Board ID to get column & status structure from.
     $scope.boardId = '12';
@@ -297,10 +288,16 @@ kanApp.controller('ldController', function ($scope, $http, $q, apiServerData) {
 
         getBoardDesignBeforeIssues.promise.then(function() {
             if(DEBUG){console.log("Attempting to get all issues for project " + $scope.apiProject + "...");}
+            if($scope.maxResults === null){
+                $scope.maxResults = -1;
+            }
             var requestIssues = $http({
                 method: "GET",
                 url: $scope.apiRoot + "rest/api/2/search?jql=project=" + $scope.apiProject + "&expand=changelog" + "&maxResults=" + $scope.maxResults
             });
+            if($scope.maxResults === -1){
+                $scope.maxResults = null;
+            }
             requestIssues.success(function (data) {
                 apiIssuesMinimal = parseMultipleApiIssues(data);
                 //console.log(JSON.stringify(apiIssuesMinimal));

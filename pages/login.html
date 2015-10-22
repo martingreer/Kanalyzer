@@ -9,10 +9,6 @@
         <input type="text" id="apiRoot" class="form-control" ng-model="apiRoot" style="width:400px">
     </div>
     <div class="form-group">
-        <label for="apiProject">Project key:</label>
-        <input type="text" id="apiProject" class="form-control" ng-model="apiProject" style="width:400px">
-    </div>
-    <div class="form-group">
         <label for="username">Username:</label>
         <input type="text" id="username" class="form-control" ng-model="credentials.username" style="width:400px">
     </div>
@@ -24,5 +20,7 @@
         <button type="submit" class="btn btn-default">Log in</button>
     </div>
 </form>
+<br />
+<button class="btn btn-default" ng-click="logout(credentials)">Log out</button>
 </body>
 </html>
