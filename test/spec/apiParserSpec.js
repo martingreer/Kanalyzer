@@ -18,7 +18,7 @@ describe("BoardDesign", function(){
 
     beforeEach(function(){
         boardDesign = new BoardDesign(columnsData);
-        columnCategories =  boardDesign.initColumnCategories();
+        columnCategories =  boardDesign.createColumnCategories();
     });
 
     it("should have columns", function(){
@@ -33,9 +33,9 @@ describe("BoardDesign", function(){
         expect(boardDesign.getColumnMatchingStatus("100100")).toBe(null);
     });
 
-    /*approveIt("should have appropriate column categories", function(approvals){
+    approveIt("should guess appropriate column categories", function(approvals){
         approvals.verify(columnCategories);
-    });*/
+    });
 
     it("should return done category", function(){
        expect(boardDesign.getColumnCategory("Ready for Release")).toEqual("Done");

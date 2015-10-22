@@ -30,20 +30,22 @@ function createBoardDesign(apiBoardDesign){
 function BoardDesign(apiColumnsData) {
     "use strict";
 
+    if(apiColumnsData.category)boardDesignHasCategories
+
     self = _.cloneDeep(apiColumnsData);
 
-    self.getColumnNames = function(){
-      var columnNames = [];
-      _.forEach(self.columns, function(column){
-        columnNames.push(column.name);
-      });
-      return columnNames;
+    self.getColumnNames = function () {
+        var columnNames = [];
+        _.forEach(self.columns, function (column) {
+            columnNames.push(column.name);
+        });
+        return columnNames;
     };
 
-    self.getColumnMatchingStatus = function(status){
+    self.getColumnMatchingStatus = function (status) {
         var columnName = null;
-        _.forEach(self.columns, function(column){
-            if(_.contains(column.statusIds,status)){
+        _.forEach(self.columns, function (column) {
+            if (_.contains(column.statusIds, status)) {
                 columnName = column.name;
                 return false;
             }
@@ -52,20 +54,22 @@ function BoardDesign(apiColumnsData) {
     };
 
     /**
-    * Try to guess initial values of the column categories based on the column name.
-    */
-    self.initColumnCategories = function(){
-        _.forEach(self.columns, function(column){
-            if(column.name.toLowerCase().indexOf("ready") >= 0){
-                column.category = "Delay";
-            }else if(column.name.toLowerCase().indexOf("backlog") >= 0){
-                column.category = "Delay";
-            }else if(column.name.toLowerCase().indexOf("to do") >= 0){
-                column.category = "Delay";
-            }else if(column.name.toLowerCase().indexOf("todo") >= 0){
-                column.category = "Delay";
-            }else{
-                column.category = "Execution";
+     * Try to guess initial values of the column categories based on the column name.
+     */
+    self.createColumnCategories = function () {
+        _.forEach(self.columns, function (column) {
+            if(!column.category) {
+                if (column.name.toLowerCase().indexOf("ready") >= 0) {
+                    column.category = "Delay";
+                } else if (column.name.toLowerCase().indexOf("backlog") >= 0) {
+                    column.category = "Delay";
+                } else if (column.name.toLowerCase().indexOf("to do") >= 0) {
+                    column.category = "Delay";
+                } else if (column.name.toLowerCase().indexOf("todo") >= 0) {
+                    column.category = "Delay";
+                } else {
+                    column.category = "Execution";
+                }
             }
         });
 
@@ -74,30 +78,30 @@ function BoardDesign(apiColumnsData) {
         return self.columns;
     };
 
-    self.getColumnCategory = function(columnName){
+    self.getColumnCategory = function (columnName) {
         var category = "";
-        _.forEach(self.columns, function(column){
-           if(column.name === columnName){
-               category = column.category;
-               return false;
-           }
+        _.forEach(self.columns, function (column) {
+            if (column.name === columnName) {
+                category = column.category;
+                return false;
+            }
         });
         return category;
     };
 
-    self.isExecutionColumn = function(columnName){
+    self.isExecutionColumn = function (columnName) {
         return self.getColumnCategory(columnName) === "Execution";
     };
 
-    self.isDelayColumn = function(columnName){
+    self.isDelayColumn = function (columnName) {
         return self.getColumnCategory(columnName) === "Delay";
     };
 
-    self.isDoneColumn = function(columnName){
+    self.isDoneColumn = function (columnName) {
         return self.getColumnCategory(columnName) === "Done";
     };
 
-    self.initColumnCategories();
+    self.createColumnCategories();
 
     return self;
 }
@@ -192,6 +196,16 @@ function Issue(apiIssue, boardDesign){
         return new ColumnHistoryItem(boardDesign.getColumnMatchingStatus(apiIssue.fields.status.id), self.created, timeUtil.getTimestamp());
     }
 
+    function createColumnHistoryAlreadyParsed(parsedIssue){
+        var columnHistory = [];
+
+        _.forEach(parsedIssue.columnHistory, function(item){
+           columnHistory.push(new ColumnHistoryItem(item.columnName, item.enterTime, item.exitTime));
+        });
+
+        return columnHistory;
+    }
+
     function createColumnHistory(apiIssue){
         var columnHistory = [];
 
@@ -239,7 +253,7 @@ function Issue(apiIssue, boardDesign){
         var i,
             j,
             columnsWithTimeSpent = [],
-            columnCategories = boardDesign.initColumnCategories();
+            columnCategories = boardDesign.createColumnCategories();
 
         for(i = 0; i < self.columnHistory.length; i++){
             var columnName = self.columnHistory[i].columnName,
@@ -344,7 +358,7 @@ function Issue(apiIssue, boardDesign){
         self.summary = apiIssue.summary;
         self.created = apiIssue.created;
         self.currentStatus = apiIssue.currentStatus;
-        self.columnHistory = 0; //TODO: Create new object.
+        self.columnHistory = createColumnHistoryAlreadyParsed(apiIssue);
     }
 
     self.cycleTime = getCycleTime();

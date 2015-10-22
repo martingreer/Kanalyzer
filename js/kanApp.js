@@ -264,12 +264,9 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
             });
             requestIssues.success(function (data) {
                 apiIssuesMinimal = parseMultipleApiIssues(data);
-                console.log(JSON.stringify(apiIssuesMinimal));
+                //console.log(JSON.stringify(apiIssuesMinimal));
                 issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
-                //_.forEach(apiIssuesMinimal, function(issue){
-                 //   issues.push(new Issue(issue, boardColumnsDesign));
-                //});
-                localStorage.setItem('issues', JSON.stringify(issues));
+                                localStorage.setItem('issues', JSON.stringify(issues));
                 if (DEBUG) {console.log("Get all issues SUCCESS!");}
             });
             requestIssues.error(function (data) {
@@ -288,15 +285,15 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
      * Update the column categories to the user defined values.
      */
     $scope.updateColumnCategories = function (columnCategories) {
-        var updatedBoardDesign,
+        var oldBoardDesign,
+            oldIssues,
+            updatedBoardDesign,
             updatedIssues;
 
-        console.log(localStorage.getItem('issues'));
+        oldBoardDesign = createBoardDesign(JSON.parse(localStorage.getItem('boardDesign')));
+        oldIssues = createIssuesFromArray(JSON.parse(localStorage.getItem('issues')), oldBoardDesign);
 
-        boardColumnsDesign = createBoardDesign(JSON.parse(localStorage.getItem('boardDesign')));
-        issues = createIssuesFromArray(JSON.parse(localStorage.getItem('issues')), boardColumnsDesign);
-
-        _.forEach(boardColumnsDesign.columns, function (columnOutput) {
+        _.forEach(oldBoardDesign.columns, function (columnOutput) {
             _.forEach(columnCategories, function (columnInput) {
                 if(columnInput.name === columnOutput.name){
                     columnOutput.category = columnInput.category;
@@ -304,13 +301,13 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
             });
         });
 
-        updatedBoardDesign = createBoardDesign(boardColumnsDesign);
-        updatedIssues = createIssuesFromArray(issues, updatedBoardDesign);
+        updatedBoardDesign = createBoardDesign(oldBoardDesign);
+        updatedIssues = createIssuesFromArray(oldIssues, updatedBoardDesign);
 
+        localStorage.removeItem('boardDesign');
+        localStorage.removeItem('issues');
         localStorage.setItem('boardDesign', JSON.stringify(updatedBoardDesign));
         localStorage.setItem('issues', JSON.stringify(updatedIssues));
-        console.log(localStorage.getItem('boardDesign'));
-        console.log(localStorage.getItem('issues'));
     };
 
     /**
@@ -354,7 +351,6 @@ kanApp.controller('ldController', function ($scope, Base64, $http, $q) {
 
         _.forEach(userConfigs, function (config) {
             if(config.name === name){
-                console.log(config.name + " = " + name + " is true");
                 $scope.columns = config.columnCategories;
                 return false;
             }
