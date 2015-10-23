@@ -35,7 +35,11 @@ describe("Utils", function(){
         });
 
         it("should convert time in ms to DD HH MM format", function(){
-            expect(timeUtilTest.convertMillisecondsToDaysHoursMinutes(1122653000)).toBe("12 days, 23 hours, 51 minutes.");
+            expect(timeUtilTest.convertMsToDHM(1122653000)).toBe("12 days, 23 hours, 51 minutes.");
+        });
+
+        it("should return an array of dates in the interval", function () {
+            expect(timeUtil.getDatesInInterval(1445292000000, 1445464800000)).toEqual([1445292000000, 1445378400000, 1445464800000]);
         });
     });
 });

@@ -1,5 +1,5 @@
 describe("Execution Time vs Delay Time graph", function(){
-    describe("One done issue", function(){
+    describe("Two done issues", function(){
         var etDtData = [],
             key,
             firstIssueData,
@@ -20,7 +20,7 @@ describe("Execution Time vs Delay Time graph", function(){
             expect(firstIssueData.key).toBe("KTD-60");
         });
 
-        it("first should have an execution time", function(){
+        it("first issue should have an execution time", function(){
             expect(firstIssueData.y).toBe(1);
         });
 
@@ -34,3 +34,14 @@ describe("Execution Time vs Delay Time graph", function(){
     });
 });
 
+describe("CFD graph", function() {
+    describe("Dates", function(){
+        it("should return the last date found in column history between two issues", function(){
+            expect(getLastHistoryDate(twoDoneIssues)).toBe(1445694967000);
+        });
+
+        it("should return dates in interval", function(){
+            expect(getDates(twoDoneIssues)).toEqual([1445588124000, 1445674524000, 1445694967000]);
+        });
+    });
+});

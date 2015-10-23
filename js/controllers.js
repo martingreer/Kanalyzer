@@ -365,7 +365,7 @@ application.controller('peController', function ($scope, localStorageHandler) {
 
     _.forEach($scope.issues, function(issue) {
         if(issue.cycleTime != null){
-            issue.cycleTimeConverted = timeUtil.convertMillisecondsToDaysHoursMinutes(issue.cycleTime);
+            issue.cycleTimeConverted = timeUtil.convertMsToDHM(issue.cycleTime);
             cumulativeCycleTime += issue.cycleTime;
             amountOfCycleTimes++;
         }
@@ -374,5 +374,5 @@ application.controller('peController', function ($scope, localStorageHandler) {
         }
     });
 
-    $scope.averageCycleTime = timeUtil.convertMillisecondsToDaysHoursMinutes(cumulativeCycleTime/amountOfCycleTimes);
+    $scope.averageCycleTime = timeUtil.convertMsToDHM(cumulativeCycleTime/amountOfCycleTimes);
 });

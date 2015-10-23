@@ -34,6 +34,12 @@ Date.prototype.customFormat = function (formatString) {
     return formatString.replace("#hhhh#", hhhh).replace("#hhh#", hhh).replace("#hh#", hh).replace("#h#", h).replace("#mm#", mm).replace("#m#", m).replace("#ss#", ss).replace("#s#", s).replace("#ampm#", ampm).replace("#AMPM#", AMPM);
 };
 
+Date.prototype.addDays = function(days) {
+    var dat = new Date(this.valueOf());
+    dat.setDate(dat.getDate() + days);
+    return dat;
+};
+
 /**
  * Time Utility for manipulating epoch time and date timestamps.
  */
@@ -56,7 +62,7 @@ function TimeUtil() {
         return today;
     };
 
-    self.convertMillisecondsToDaysHoursMinutes = function (ms) {
+    self.convertMsToDHM = function (ms) {
         var dayFactor = 24 * 60 * 60 * 1000,
             hourFactor = 60 * 60 * 1000,
             day = Math.floor(ms / dayFactor),
@@ -78,6 +84,17 @@ function TimeUtil() {
         answer = day + " days, " + pad(hour) + " hours, " + pad(minute) + " minutes.";
         return answer;
         //return [day, pad(hour), pad(minute)].join(':');
+    };
+
+    self.getDatesInInterval = function (startDate, stopDate) {
+        var dateArray = [],
+            currentDate = new Date(startDate),
+            endDate = new Date(stopDate);
+        while (currentDate <= endDate) {
+            dateArray.push(Date.parse((new Date(currentDate))));
+            currentDate = currentDate.addDays(1);
+        }
+        return dateArray;
     };
 
     return self;

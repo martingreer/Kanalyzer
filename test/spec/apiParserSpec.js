@@ -145,21 +145,21 @@ describe("Issue", function(){
         });
 
         it("an issue without history should have no execution time", function(){
-            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueWithoutHistory.executionTime)).toBe(timeUtil.convertMillisecondsToDaysHoursMinutes(0));
+            expect(timeUtil.convertMsToDHM(issueWithoutHistory.executionTime)).toBe(timeUtil.convertMsToDHM(0));
         });
 
         it("should calculate execution time for an issue that is done", function(){
-            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueIsDone.executionTime)).toBe("0 days, 00 hours, 01 minutes.");
+            expect(timeUtil.convertMsToDHM(issueIsDone.executionTime)).toBe("0 days, 00 hours, 01 minutes.");
         });
     });
 
     describe("Delay Time calculations", function(){
         it("should calculate delay time for an issue that is not done", function(){
-            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueWithHistoryAndNotDone.delayTime)).toBe(timeUtil.convertMillisecondsToDaysHoursMinutes(22000));
+            expect(timeUtil.convertMsToDHM(issueWithHistoryAndNotDone.delayTime)).toBe(timeUtil.convertMsToDHM(22000));
         });
 
         it("should calculate delay time for an issue that is done", function(){
-            expect(timeUtil.convertMillisecondsToDaysHoursMinutes(issueIsDone.delayTime)).toBe("0 days, 18 hours, 01 minutes.");
+            expect(timeUtil.convertMsToDHM(issueIsDone.delayTime)).toBe("0 days, 18 hours, 01 minutes.");
         });
     });
 

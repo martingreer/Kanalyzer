@@ -31,6 +31,7 @@ function createEtDtData(key, issues){
     return graphArray;
 }
 
+
 function CfdGraphData(columnName){
     var self = this;
 
@@ -46,12 +47,34 @@ function CfdValueItem(date, amountOfIssues){
     return [dateInMilliseconds, amountOfIssues];
 }
 
+function getLastHistoryDate(issues){
+    var allExitTimes = [];
+
+    _.forEach(issues, function (issue){
+        allExitTimes.push(Date.parse(_.last(issue.columnHistory).exitTime));
+    });
+
+    return Math.max.apply(null, allExitTimes);
+}
+
+function getDates(issues){
+    var startDate = Date.parse(_.last(issues).columnHistory[0].enterTime),
+        endDate = getLastHistoryDate(issues),
+        dates = [];
+
+    dates.push(startDate);
+    dates = timeUtil.getDatesInInterval(startDate, endDate);
+    dates.push(endDate);
+
+    return dates;
+}
+
 function parseAmountOfIssues(issues, boardDesign){
 
 }
 
 // Structure: [ { column, [[day1,amountOfIssues],[day2,amountOfIssues]] }   ,   { column, [[day1,amountOfIssues],[day2,amountOfIssues]] } ]
-// Example:   [ { "Ready to Refine", [[1444428000000,5],[1444514400000,3]] }   ,   { "Refine Backlog", [[1444428000000,2],[1444514400000,2]] } ]
+// Example:   [ { "key":Ready to Refine", "values":[[1444428000000,5],[1444514400000,3]] }   ,   { "key":"Refine Backlog", "values":[[1444428000000,2],[1444514400000,2]] } ]
 function createCfdData(issues, boardDesign){
 
 }
