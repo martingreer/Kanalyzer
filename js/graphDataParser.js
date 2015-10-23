@@ -30,3 +30,28 @@ function createEtDtData(key, issues){
 
     return graphArray;
 }
+
+function CfdGraphData(columnName){
+    var self = this;
+
+    self.key = columnName;
+    self.values = [];
+
+    return self;
+}
+
+function CfdValueItem(date, amountOfIssues){
+    var dateInMilliseconds = Date.parse(date);
+
+    return [dateInMilliseconds, amountOfIssues];
+}
+
+function parseAmountOfIssues(issues, boardDesign){
+
+}
+
+// Structure: [ { column, [[day1,amountOfIssues],[day2,amountOfIssues]] }   ,   { column, [[day1,amountOfIssues],[day2,amountOfIssues]] } ]
+// Example:   [ { "Ready to Refine", [[1444428000000,5],[1444514400000,3]] }   ,   { "Refine Backlog", [[1444428000000,2],[1444514400000,2]] } ]
+function createCfdData(issues, boardDesign){
+
+}

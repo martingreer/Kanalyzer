@@ -262,6 +262,19 @@ application.controller('cfdController', function ($scope, $http) {
 
     var requestCfdData;
 
+    requestCfdData = $http({
+        method: "GET",
+        url: '../json/graphTestDataSmall.json'
+    });
+    requestCfdData.success(function (data) {
+        $scope.data = data;
+        if(DEBUG){console.log("Get graph data SUCCESS!");}
+        console.log(data);
+    });
+    requestCfdData.error(function (data) {
+        if(DEBUG){console.log("Get graph data ERROR.");}
+    });
+
     /**
     * Graph structure.
     */
@@ -292,18 +305,6 @@ application.controller('cfdController', function ($scope, $http) {
             text: 'Cumulative Flow Diagram'
         }
     };
-
-    requestCfdData = $http({
-        method: "GET",
-        url: '../json/graphTestData.json'
-    });
-    requestCfdData.success(function (data) {
-        $scope.data = data;
-        if(DEBUG){console.log("Get graph data SUCCESS!");}
-    });
-    requestCfdData.error(function (data) {
-        if(DEBUG){console.log("Get graph data ERROR.");}
-    });
 });
 
 application.controller('etdtController', function ($scope, localStorageHandler) {
