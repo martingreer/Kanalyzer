@@ -1,58 +1,12 @@
 /*global angular, d3, get, console*/
 /*jslint bitwise: true, plusplus: true, white: true, sub: true*/
 
-var kanApp = angular.module('kanApp', ['ui.router', 'nvd3']);
 var DEBUG = true;
-
-/**
-* Definition of angular views and their controllers.
-*/
-kanApp.config(function ($stateProvider, $urlRouterProvider) {
-    "use strict";
-
-	$urlRouterProvider.otherwise('/login');
-
-	$stateProvider
-        .state('login', {
-            url: '/login',
-            templateUrl: 'pages/login.html',
-            controller: 'loginController'
-        })
-
-        .state('ld', {
-            url: '/ld',
-            templateUrl: 'pages/ld.html',
-            controller: 'ldController'
-        })
-
-        .state('cfd', {
-            url: '/cfd',
-            templateUrl: 'pages/cfd.html',
-            controller: 'cfdController'
-        })
-
-        .state('etdt', {
-            url: '/etdt',
-            templateUrl: 'pages/etdt.html',
-            controller: 'etdtController'
-        })
-
-        .state('pe', {
-            url: '/pe',
-            templateUrl: 'pages/pe.html',
-            controller: 'peController'
-        })
-
-        .state('about', {
-            url: '/about',
-            templateUrl: 'pages/about.html'
-        });
-});
 
 /**
 * Base64 encoding + decoding for use in http requests.
 */
-kanApp.factory('Base64', function () {
+application.factory('Base64', function () {
     "use strict";
     /*jslint regexp: true*/
 
@@ -139,7 +93,7 @@ kanApp.factory('Base64', function () {
     };
 });
 
-kanApp.factory('apiServerData', function(){
+application.factory('apiServerData', function(){
     var data = {
         apiRoot: '',
         apiProject: ''
@@ -155,7 +109,7 @@ kanApp.factory('apiServerData', function(){
     }
 });
 
-kanApp.controller('loginController', function($scope, Base64, $http, apiServerData){
+application.controller('loginController', function($scope, Base64, $http, apiServerData){
     "use strict";
 
     // Variables for logging in to API server.
@@ -170,7 +124,7 @@ kanApp.controller('loginController', function($scope, Base64, $http, apiServerDa
      */
     $scope.login = function () {
         //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
-        //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
+        $http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
         apiServerData.setApiRoot($scope.apiRoot);
         if(DEBUG){console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");}
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
@@ -203,7 +157,7 @@ kanApp.controller('loginController', function($scope, Base64, $http, apiServerDa
 /**
 * Controller for the Load Data view.
 */
-kanApp.controller('ldController', function ($scope, $http, $q, apiServerData) {
+application.controller('ldController', function ($scope, $http, $q, apiServerData) {
     "use strict";
 
     // Synchronization variable to make sure http requests are done in the correct order.
@@ -406,7 +360,7 @@ kanApp.controller('ldController', function ($scope, $http, $q, apiServerData) {
 /**
 * Controller for the CFD view.
 */
-kanApp.controller('cfdController', function ($scope, $http) {
+application.controller('cfdController', function ($scope, $http) {
     "use strict";
 
     var requestCfdData;
@@ -455,7 +409,7 @@ kanApp.controller('cfdController', function ($scope, $http) {
     });
 });
 
-kanApp.controller('etdtController', function ($scope) {
+application.controller('etdtController', function ($scope) {
     "use strict";
 
     if(localStorage.getItem('issues')){
@@ -500,7 +454,7 @@ kanApp.controller('etdtController', function ($scope) {
 /**
  * Controller for the Process Efficiency tab.
  */
-kanApp.controller('peController', function ($scope) {
+application.controller('peController', function ($scope) {
     var cumulativeCycleTime = 0,
         amountOfCycleTimes = 0;
 
