@@ -1,6 +1,6 @@
 /**
-* Base64 encoding + decoding for use in http requests.
-*/
+ * Base64 encoding + decoding for use in http requests.
+ */
 application.factory('Base64', function () {
     "use strict";
     /*jslint regexp: true*/
@@ -100,6 +100,38 @@ application.factory('apiServerData', function(){
         },
         setApiRoot: function (apiRoot) {
             data.apiRoot = apiRoot;
+        }
+    }
+});
+
+application.factory('localStorageHandler', function(){
+    return {
+        getBoardDesign: function () {
+            return JSON.parse(localStorage.getItem('boardDesign'));
+        },
+        setBoardDesign: function (data) {
+            localStorage.setItem('boardDesign', JSON.stringify(data));
+        },
+        removeBoardDesign: function () {
+            localStorage.removeItem('boardDesign');
+        },
+        getIssues: function () {
+            return JSON.parse(localStorage.getItem('issues'));
+        },
+        setIssues: function (data) {
+            localStorage.setItem('issues', JSON.stringify(data));
+        },
+        removeIssues: function () {
+            localStorage.removeItem('issues');
+        },
+        getConfigs: function () {
+            return JSON.parse(localStorage.getItem('userConfigs'));
+        },
+        setConfigs: function (data) {
+            localStorage.setItem('userConfigs', JSON.stringify(data));
+        },
+        removeConfigs: function () {
+            localStorage.removeItem('userConfigs');
         }
     }
 });

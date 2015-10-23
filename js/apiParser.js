@@ -55,8 +55,12 @@ function BoardDesign(apiColumnsData) {
      * Try to guess initial values of the column categories based on the column name.
      */
     self.createColumnCategories = function () {
-        _.forEach(self.columns, function (column) {
-            if(!column.category) {
+        var hasCategories;
+
+        hasCategories = (self.columns[0].category === null);
+
+        if(!hasCategories) {
+            _.forEach(self.columns, function (column) {
                 if (column.name.toLowerCase().indexOf("ready") >= 0) {
                     column.category = "Delay";
                 } else if (column.name.toLowerCase().indexOf("backlog") >= 0) {
@@ -68,11 +72,11 @@ function BoardDesign(apiColumnsData) {
                 } else {
                     column.category = "Execution";
                 }
-            }
-        });
+            });
 
-        _.first(self.columns).category = "Ignore";
-        _.last(self.columns).category = "Done";
+            _.first(self.columns).category = "Ignore";
+            _.last(self.columns).category = "Done";
+        }
 
         return self.columns;
     };

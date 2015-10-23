@@ -51,7 +51,7 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
 /**
 * Controller for the Load Data view.
 */
-application.controller('ldController', function ($scope, $http, $q, apiServerData) {
+application.controller('ldController', function ($scope, $http, $q, apiServerData, localStorageHandler) {
     "use strict";
 
     // Synchronization variable to make sure http requests are done in the correct order.
@@ -66,15 +66,15 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     $scope.apiProject = 'KTD';
 
     // Assign columns to scope if local storage already exists.
-    if(localStorage.getItem('boardDesign')){
-        $scope.columns = JSON.parse(localStorage.getItem('boardDesign')).columns;
+    if(localStorageHandler.getBoardDesign()){
+        $scope.columns = localStorageHandler.getBoardDesign().columns;
     } else {
         $scope.columns = [];
     }
 
     // Assign user configs to scope if local storage already exists.
-    if(localStorage.getItem('userConfigs')){
-        $scope.userConfigs = JSON.parse(localStorage.getItem('userConfigs'));
+    if(localStorageHandler.getConfigs()){
+        $scope.userConfigs = localStorageHandler.getConfigs();
     } else {
         $scope.userConfigs = [];
     }
@@ -103,7 +103,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         });
         requestBoardDesign.success(function (data) {
             boardColumnsDesign = createBoardDesign(parseBoardDesign(data));
-            localStorage.setItem('boardDesign', JSON.stringify(boardColumnsDesign));
+            localStorageHandler.setBoardDesign(boardColumnsDesign);
             getBoardDesignBeforeIssues.resolve();
             if(DEBUG){console.log("Get board design SUCCESS!");}
         });
@@ -128,7 +128,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                 apiIssuesMinimal = parseMultipleApiIssues(data);
                 //console.log(JSON.stringify(apiIssuesMinimal));
                 issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
-                                localStorage.setItem('issues', JSON.stringify(issues));
+                localStorageHandler.setIssues(issues);
                 if (DEBUG) {console.log("Get all issues SUCCESS!");}
             });
             requestIssues.error(function (data) {
@@ -136,8 +136,8 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             });
         });
 
-        if(localStorage.getItem('boardDesign')){
-            $scope.columns = JSON.parse(localStorage.getItem('boardDesign')).columns;
+        if(localStorageHandler.getBoardDesign()){
+            $scope.columns = localStorageHandler.getBoardDesign().columns;
         } else {
             $scope.columns = [];
         }
@@ -152,8 +152,8 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             updatedBoardDesign,
             updatedIssues;
 
-        oldBoardDesign = createBoardDesign(JSON.parse(localStorage.getItem('boardDesign')));
-        oldIssues = createIssuesFromArray(JSON.parse(localStorage.getItem('issues')), oldBoardDesign);
+        oldBoardDesign = createBoardDesign(localStorageHandler.getBoardDesign());
+        oldIssues = createIssuesFromArray(localStorageHandler.getIssues(), oldBoardDesign);
 
         _.forEach(oldBoardDesign.columns, function (columnOutput) {
             _.forEach(columnCategories, function (columnInput) {
@@ -166,10 +166,10 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         updatedBoardDesign = createBoardDesign(oldBoardDesign);
         updatedIssues = createIssuesFromArray(oldIssues, updatedBoardDesign);
 
-        localStorage.removeItem('boardDesign');
-        localStorage.removeItem('issues');
-        localStorage.setItem('boardDesign', JSON.stringify(updatedBoardDesign));
-        localStorage.setItem('issues', JSON.stringify(updatedIssues));
+        localStorageHandler.removeBoardDesign();
+        localStorageHandler.removeIssues();
+        localStorageHandler.setBoardDesign(updatedBoardDesign);
+        localStorageHandler.setIssues(updatedIssues);
     };
 
     /**
@@ -179,12 +179,12 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         var userConfigs,
             isNameUnique = true;
 
-        if(localStorage.getItem('userConfigs') === null){
+        if(localStorageHandler.getConfigs() === null){
             console.log("No previous configs! Creating new.");
             userConfigs = [];
         } else {
-            console.log("Previous config exists! Adding this config to it.");
-            userConfigs = JSON.parse(localStorage.getItem('userConfigs'));
+            console.log("Previous configs exist! Adding this config to it.");
+            userConfigs = localStorageHandler.getConfigs();
             _.forEach(userConfigs, function (config) {
                 if(config.name.toLowerCase() === name.toLowerCase()){
                     isNameUnique = false;
@@ -197,11 +197,8 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             console.log("Didn't save new config. Please choose a unique name.");
         } else {
             var newConfig = {"name": name, "columnCategories": columnCategories};
-
             userConfigs.push(newConfig);
-
-            localStorage.setItem('userConfigs', JSON.stringify(userConfigs));
-            console.log(localStorage.getItem('userConfigs'));
+            localStorageHandler.setConfigs(userConfigs);
         }
     };
 
@@ -209,7 +206,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
      * Loads a chosen user config.
      */
     $scope.loadConfig = function (name) {
-        var userConfigs = JSON.parse(localStorage.getItem('userConfigs'));
+        var userConfigs = localStorageHandler.getConfigs();
 
         _.forEach(userConfigs, function (config) {
             if(config.name === name){
@@ -223,7 +220,8 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
      * Clears all configs.
      */
     $scope.clearConfigs = function () {
-        localStorage.removeItem('userConfigs');
+        localStorageHandler.removeConfigs();
+        console.log("All configs removed.");
     };
 
     /**
@@ -232,7 +230,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     $scope.boardDesignString = null;
     $scope.printBoardDesign = function () {
         if ($scope.boardDesignString === null) {
-            $scope.boardDesignString = localStorage.getItem('boardDesign');
+            $scope.boardDesignString = localStorageHandler.getBoardDesign();
         } else {
             $scope.boardDesignString = null;
         }
@@ -244,7 +242,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     $scope.allIssuesString = null;
     $scope.printAllIssues = function () {
         if ($scope.allIssuesString === null) {
-            $scope.allIssuesString = localStorage.getItem('issues');
+            $scope.allIssuesString = localStorageHandler.getIssues();
         } else {
             $scope.allIssuesString = null;
         }
@@ -303,11 +301,11 @@ application.controller('cfdController', function ($scope, $http) {
     });
 });
 
-application.controller('etdtController', function ($scope) {
+application.controller('etdtController', function ($scope, localStorageHandler) {
     "use strict";
 
-    if(localStorage.getItem('issues')){
-        var issues = JSON.parse(localStorage.getItem('issues'));
+    if(localStorageHandler.getIssues()){
+        var issues = localStorageHandler.getIssues();
         $scope.data = createEtDtData("All issues", issues);
     } else {
         $scope.data = [];
@@ -348,12 +346,12 @@ application.controller('etdtController', function ($scope) {
 /**
  * Controller for the Process Efficiency tab.
  */
-application.controller('peController', function ($scope) {
+application.controller('peController', function ($scope, localStorageHandler) {
     var cumulativeCycleTime = 0,
         amountOfCycleTimes = 0;
 
-    if(localStorage.getItem('issues')) {
-        $scope.issues = JSON.parse(localStorage.getItem('issues'));
+    if(localStorageHandler.getIssues()) {
+        $scope.issues = localStorageHandler.getIssues();
     } else {
         $scope.issues = [];
     }
