@@ -3,7 +3,7 @@
 
 var DEBUG = true;
 
-application.controller('loginController', function($scope, Base64, $http, apiServerData){
+application.controller('loginController', function($scope, Base64, $http, apiServerData, Notification){
     "use strict";
 
     // Variables for logging in to API server.
@@ -18,16 +18,16 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
      */
     $scope.login = function () {
         //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
-        $http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
+        //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
         apiServerData.setApiRoot($scope.apiRoot);
-        if(DEBUG){console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");}
+        //if(DEBUG){console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");}
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
         $http({method: 'GET', url: $scope.apiServer})
             .success(function () {
-                if(DEBUG){console.log("Authentication SUCCESS!");}
+                Notification.success('Login succesful!');
             })
             .error(function () {
-                if(DEBUG){console.log("Authentication ERROR.");}
+                Notification.error('Login failed, please try again.');
             });
     };
 
@@ -35,15 +35,14 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
      * Log out by sending empty login details and getting rejected (there is no log out support for API).
      */
     $scope.logout = function () {
-        if(DEBUG){console.log("Logging out from " + $scope.apiRoot + "...");}
         $scope.credentials = { username: 'martin.w.greer', password: '' };
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(' : ');
         $http({method: 'GET', url: $scope.apiServer})
             .success(function () {
-                if(DEBUG){console.log("Logout ERROR.");}
+                Notification.error('Logout failed, please try again.');
             })
             .error(function () {
-                if(DEBUG){console.log("Logout SUCCESS!");}
+                Notification.primary('You have been logged out.');
             });
     };
 });
@@ -51,7 +50,7 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
 /**
 * Controller for the Load Data view.
 */
-application.controller('ldController', function ($scope, $http, $q, apiServerData, localStorageHandler) {
+application.controller('ldController', function ($scope, $http, $q, apiServerData, localStorageHandler, Notification) {
     "use strict";
 
     // Synchronization variable to make sure http requests are done in the correct order.
@@ -95,6 +94,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
         getBoardDesignBeforeIssues = $q.defer();
 
+        Notification.primary('Attempting to get data from server...');
         if(DEBUG){console.log("Attempting to get board design for project " + $scope.apiProject + "...");}
 
         var requestBoardDesign = $http({
@@ -109,6 +109,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         });
         requestBoardDesign.error(function (data) {
             getBoardDesignBeforeIssues.reject();
+            Notification.error('Failed to load issue data from source.');
             if(DEBUG){console.log("Get board design ERROR. API response: " + JSON.stringify(data));}
         });
 
@@ -129,9 +130,11 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                 //console.log(JSON.stringify(apiIssuesMinimal));
                 issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
                 localStorageHandler.setIssues(issues);
+                Notification.success('Issue data succesfully loaded!');
                 if (DEBUG) {console.log("Get all issues SUCCESS!");}
             });
             requestIssues.error(function (data) {
+                Notification.error('Failed to load issue data from source.');
                 if (DEBUG) {console.log("Get all issues ERROR. API response: " + JSON.stringify(data));}
             });
         });
@@ -170,6 +173,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         localStorageHandler.removeIssues();
         localStorageHandler.setBoardDesign(updatedBoardDesign);
         localStorageHandler.setIssues(updatedIssues);
+        Notification.primary('Column categories have been updated.');
     };
 
     /**
@@ -194,11 +198,12 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         }
 
         if(!isNameUnique){
-            console.log("Didn't save new config. Please choose a unique name.");
+            Notification.error('Config was not saved. Please choose a unique name.');
         } else {
             var newConfig = {"name": name, "columnCategories": columnCategories};
             userConfigs.push(newConfig);
             localStorageHandler.setConfigs(userConfigs);
+            Notification.success('Config saved!');
         }
     };
 
@@ -221,6 +226,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
      */
     $scope.clearConfigs = function () {
         localStorageHandler.removeConfigs();
+        Notification.primary('All configs removed.');
         console.log("All configs removed.");
     };
 
