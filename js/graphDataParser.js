@@ -27,7 +27,6 @@ function createEtDtData(key, issues){
     });
 
     graphArray.push(graphData);
-    //console.log(JSON.stringify(graphArray));
 
     return graphArray;
 }

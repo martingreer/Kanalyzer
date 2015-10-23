@@ -35,7 +35,6 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
      * Log out by sending empty login details and getting rejected (there is no log out support for API).
      */
     $scope.logout = function () {
-        $scope.credentials = { username: 'martin.w.greer', password: '' };
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(' : ');
         $http({method: 'GET', url: $scope.apiServer})
             .success(function () {
