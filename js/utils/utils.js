@@ -86,6 +86,10 @@ function TimeUtil() {
         //return [day, pad(hour), pad(minute)].join(':');
     };
 
+    self.parseOnlyDayEpochFromDateString = function (timeString) {
+        return Date.parse(timeString.substring(0, timeString.indexOf('T')));
+    };
+
     self.getDatesInInterval = function (startDate, stopDate) {
         var dateArray = [],
             currentDate = new Date(startDate),

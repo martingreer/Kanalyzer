@@ -1,4 +1,6 @@
 describe("Execution Time vs Delay Time graph", function(){
+    "use strict";
+
     describe("Two done issues", function(){
         var etDtData = [],
             key,
@@ -6,7 +8,7 @@ describe("Execution Time vs Delay Time graph", function(){
             secondIssueData;
 
         beforeEach(function(){
-            etDtData = _.first(createEtDtData("Two done issues", twoDoneIssues));
+            etDtData = _.first(createEtDtData("Two done issues", twoParsedDoneIssues));
             key = etDtData.key;
             firstIssueData = etDtData.values[0];
             secondIssueData = etDtData.values[1];
@@ -34,14 +36,20 @@ describe("Execution Time vs Delay Time graph", function(){
     });
 });
 
-describe("CFD graph", function() {
+describe("CFD graph", function(){
     describe("Dates", function(){
         it("should return the last date found in column history between two issues", function(){
-            expect(getLastHistoryDate(twoDoneIssues)).toBe(1445694967000);
+            expect(getLastHistoryDate(twoParsedDoneIssues)).toBe(1445551200000);
         });
 
         it("should return dates in interval", function(){
-            expect(getDates(twoDoneIssues)).toEqual([1445588124000, 1445674524000, 1445694967000]);
+            expect(getDates(twoParsedDoneIssues)).toEqual([1445637600000]);
+        });
+    });
+
+    describe("Parser", function(){
+        it("should return an array of dates and amount of issues for the column", function(){
+            expect(parseAmountOfIssues(getDates(twoParsedDoneIssues), twoParsedDoneIssues, twoParsedDoneIssues[0].columnHistory[0].columnName)).toEqual(0);
         });
     });
 });

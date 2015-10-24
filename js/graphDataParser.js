@@ -31,6 +31,57 @@ function createEtDtData(key, issues){
     return graphArray;
 }
 
+function getLastHistoryDate(issues){
+    var allExitTimes = [];
+
+    _.forEach(issues, function (issue){
+        allExitTimes.push(timeUtil.parseOnlyDayEpochFromDateString(_.last(issue.columnHistory).exitTime));
+    });
+
+    return Math.max.apply(null, allExitTimes);
+}
+
+function getDates(issues){
+    var startDate = Date.parse(timeUtil.parseOnlyDayEpochFromDateString(_.last(issues).columnHistory[0].enterTime)),
+        endDate = getLastHistoryDate(issues),
+        dates = [];
+
+    dates.push(startDate);
+    dates = timeUtil.getDatesInInterval(startDate, endDate);
+    dates.push(endDate);
+
+    console.log(dates);
+    return dates;
+}
+
+/**
+ * For each date, calculate the amount of issues in the given column.
+ * Column will be the key in CFD data array.
+ */
+function parseAmountOfIssues(dates, issues, columnName){
+    var valuesArray = [],
+        amountOfIssues;
+
+    //console.log(timeUtil.parseOnlyDayEpochFromDateString(issues[0].columnHistory[0].enterTime));
+
+    _.forEach(dates, function(date){
+        amountOfIssues = 0;
+        _.forEach(issues, function(issue){
+            _.forEach(issue.columnHistory, function(historyItem){
+                /*console.log("Iteration: " + (historyItem.columnName === columnName) + " and " + (timeUtil.getDatesInInterval(Date.parse(historyItem.enterTime.substring(0, historyItem.enterTime.indexOf('T'))),
+                        Date.parse(historyItem.exitTime.substring(0, historyItem.exitTime.indexOf('T')))).indexOf(date)));*/
+                if(historyItem.columnName === columnName && timeUtil.getDatesInInterval(historyItem.enterTime, historyItem.exitTime).indexOf(date)){
+                    console.log("Got in!");
+                    amountOfIssues++;
+                }
+            });
+        });
+        valuesArray.push([date, amountOfIssues]);
+    });
+
+    console.log(valuesArray);
+    return valuesArray;
+}
 
 function CfdGraphData(columnName){
     var self = this;
@@ -45,32 +96,6 @@ function CfdValueItem(date, amountOfIssues){
     var dateInMilliseconds = Date.parse(date);
 
     return [dateInMilliseconds, amountOfIssues];
-}
-
-function getLastHistoryDate(issues){
-    var allExitTimes = [];
-
-    _.forEach(issues, function (issue){
-        allExitTimes.push(Date.parse(_.last(issue.columnHistory).exitTime));
-    });
-
-    return Math.max.apply(null, allExitTimes);
-}
-
-function getDates(issues){
-    var startDate = Date.parse(_.last(issues).columnHistory[0].enterTime),
-        endDate = getLastHistoryDate(issues),
-        dates = [];
-
-    dates.push(startDate);
-    dates = timeUtil.getDatesInInterval(startDate, endDate);
-    dates.push(endDate);
-
-    return dates;
-}
-
-function parseAmountOfIssues(issues, boardDesign){
-
 }
 
 // Structure: [ { column, [[day1,amountOfIssues],[day2,amountOfIssues]] }   ,   { column, [[day1,amountOfIssues],[day2,amountOfIssues]] } ]

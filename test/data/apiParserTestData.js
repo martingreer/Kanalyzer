@@ -1628,12 +1628,12 @@ var apiTwoIssues = {
     ]
 };
 
-var twoDoneIssues = [
+var twoParsedDoneIssues = [
     {
         "id": "11932",
         "key": "KTD-60",
         "summary": "Create separate functions for localStorage get/set.",
-        "created": "2015-10-24T10:15:49",
+        "created": "2015-10-21T10:15:49",
         "currentStatus": {
             "id": "10001",
             "name": "Done"
@@ -1641,38 +1641,38 @@ var twoDoneIssues = [
         "columnHistory": [
             {
                 "columnName": "Ready to Refine",
-                "enterTime": "2015-10-24T10:15:49",
-                "exitTime": "2015-10-24T10:16:05"
+                "enterTime": "2015-10-21T10:15:49",
+                "exitTime": "2015-10-21T10:16:05"
             },
             {
                 "columnName": "Refine Backlog",
-                "enterTime": "2015-10-24T10:16:05",
-                "exitTime": "2015-10-24T10:16:32"
+                "enterTime": "2015-10-21T10:16:05",
+                "exitTime": "2015-10-21T10:16:32"
             },
             {
                 "columnName": "Ready for Development",
-                "enterTime": "2015-10-24T10:16:32",
-                "exitTime": "2015-10-24T11:06:38"
+                "enterTime": "2015-10-21T10:16:32",
+                "exitTime": "2015-10-22T11:06:38"
             },
             {
                 "columnName": "In Progress",
-                "enterTime": "2015-10-24T11:06:38",
-                "exitTime": "2015-10-24T11:31:37"
+                "enterTime": "2015-10-22T11:06:38",
+                "exitTime": "2015-10-22T11:31:37"
             },
             {
                 "columnName": "Ready for Test",
-                "enterTime": "2015-10-24T11:31:37",
-                "exitTime": "2015-10-24T13:34:07"
+                "enterTime": "2015-10-22T11:31:37",
+                "exitTime": "2015-10-22T13:34:07"
             },
             {
                 "columnName": "Accept",
-                "enterTime": "2015-10-24T13:34:07",
-                "exitTime": "2015-10-24T13:52:38"
+                "enterTime": "2015-10-22T13:34:07",
+                "exitTime": "2015-10-22T13:52:38"
             },
             {
                 "columnName": "Ready for Release",
-                "enterTime": "2015-10-24T13:52:38",
-                "exitTime": "2015-10-24T15:56:07"
+                "enterTime": "2015-10-22T13:52:38",
+                "exitTime": "2015-10-22T15:56:07"
             }
         ],
         "cycleTime": 12966000,
@@ -1684,7 +1684,7 @@ var twoDoneIssues = [
         "id": "11931",
         "key": "KTD-59",
         "summary": "Split up angular code.",
-        "created": "2015-10-23T10:15:24",
+        "created": "2015-10-22T10:15:24",
         "currentStatus": {
             "id": "10001",
             "name": "Done"
@@ -1692,17 +1692,17 @@ var twoDoneIssues = [
         "columnHistory": [
             {
                 "columnName": "Ready to Refine",
-                "enterTime": "2015-10-23T10:15:24",
-                "exitTime": "2015-10-23T10:16:02"
+                "enterTime": "2015-10-22T10:15:24",
+                "exitTime": "2015-10-22T10:16:02"
             },
             {
                 "columnName": "Refine Backlog",
-                "enterTime": "2015-10-23T10:16:02",
-                "exitTime": "2015-10-23T10:16:29"
+                "enterTime": "2015-10-22T10:16:02",
+                "exitTime": "2015-10-22T10:16:29"
             },
             {
                 "columnName": "In Progress",
-                "enterTime": "2015-10-23T10:16:29",
+                "enterTime": "2015-10-22T10:16:29",
                 "exitTime": "2015-10-23T10:47:27"
             },
             {

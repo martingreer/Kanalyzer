@@ -302,11 +302,12 @@ function Issue(apiIssue, boardDesign){
             columnHistory.pop();
         }
 
-        _.forEach(columnHistory, function(item){
-            if(isExecutionColumn(item.columnName)) {
+        _.forEach(columnHistory, function (item) {
+            if (isExecutionColumn(item.columnName)) {
                 executionTime += item.timeSpentInColumn();
             }
         });
+
         return executionTime;
     }
 

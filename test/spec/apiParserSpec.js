@@ -5,11 +5,6 @@
 /*global describe, it, expect, beforeEach, beforeAll, module, inject, BoardDesign, approveIt, Issue*/
 /*jslint bitwise: true, plusplus: true, white: true, sub: true*/
 
-var issueWithoutHistory = new Issue(apiIssueWithoutHistory, new BoardDesign(columnsData));
-var issueWithHistoryAndNotDone = new Issue(apiIssueWithHistoryAndNotDone, new BoardDesign(columnsData));
-var issueIsDone = new Issue(apiIssueIsDone, new BoardDesign(columnsData));
-var twoIssues = parseMultipleApiIssues(apiTwoIssues);
-
 describe("BoardDesign", function(){
     "use strict";
 
@@ -48,6 +43,11 @@ describe("BoardDesign", function(){
 
 describe("Issue", function(){
     "use strict";
+
+    var issueWithoutHistory = new Issue(apiIssueWithoutHistory, new BoardDesign(columnsData)),
+        issueWithHistoryAndNotDone = new Issue(apiIssueWithHistoryAndNotDone, new BoardDesign(columnsData)),
+        issueIsDone = new Issue(apiIssueIsDone, new BoardDesign(columnsData)),
+        twoIssues = parseMultipleApiIssues(apiTwoIssues);
 
     describe("With history", function(){
         it("should have id", function(){
@@ -164,7 +164,7 @@ describe("Issue", function(){
     });
 
     describe("Process Efficiency", function(){
-        it("should calculate process efficiency for an issue that is not done", function(){
+        it("an issue that is not done should have no process efficiency", function(){
             expect(issueWithHistoryAndNotDone.processEfficiency).toBe(0);
         });
 
