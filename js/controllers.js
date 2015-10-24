@@ -24,7 +24,7 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
         $http({method: 'GET', url: $scope.apiServer})
             .success(function () {
-                Notification.success('Login succesful!');
+                Notification.success('Login successful!');
             })
             .error(function () {
                 Notification.error('Login failed, please try again.');
@@ -129,7 +129,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                 //console.log(JSON.stringify(apiIssuesMinimal));
                 issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
                 localStorageHandler.setIssues(issues);
-                Notification.success('Issue data succesfully loaded!');
+                Notification.success('Issue data successfully loaded!');
                 if (DEBUG) {console.log("Get all issues SUCCESS!");}
             });
             requestIssues.error(function (data) {
