@@ -86,10 +86,13 @@ function TimeUtil() {
         //return [day, pad(hour), pad(minute)].join(':');
     };
 
-    self.parseOnlyDayEpochFromDateString = function (timeString) {
+    self.convertDateToEpochDay = function (timeString) {
         return Date.parse(timeString.substring(0, timeString.indexOf('T')));
     };
 
+    /**
+     * Needs Epoch dates as input.
+     */
     self.getDatesInInterval = function (startDate, stopDate) {
         var dateArray = [],
             currentDate = new Date(startDate),

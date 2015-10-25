@@ -35,23 +35,31 @@ function getLastHistoryDate(issues){
     var allExitTimes = [];
 
     _.forEach(issues, function (issue){
-        allExitTimes.push(timeUtil.parseOnlyDayEpochFromDateString(_.last(issue.columnHistory).exitTime));
+        allExitTimes.push(timeUtil.convertDateToEpochDay(_.last(issue.columnHistory).exitTime));
     });
 
     return Math.max.apply(null, allExitTimes);
 }
 
+function getFirstHistoryDate(issues){
+    var allEnterTimes = [];
+
+    _.forEach(issues, function (issue){
+        allEnterTimes.push(timeUtil.convertDateToEpochDay(_.first(issue.columnHistory).enterTime));
+    });
+
+    return Math.min.apply(null, allEnterTimes);
+}
+
 function getDates(issues){
-    var startDate = Date.parse(timeUtil.parseOnlyDayEpochFromDateString(_.last(issues).columnHistory[0].enterTime)),
-        endDate = getLastHistoryDate(issues),
-        dates = [];
+    var startDate = getFirstHistoryDate(issues),
+        endDate = getLastHistoryDate(issues);
 
-    dates.push(startDate);
-    dates = timeUtil.getDatesInInterval(startDate, endDate);
-    dates.push(endDate);
+    return timeUtil.getDatesInInterval(startDate, endDate);
+}
 
-    console.log(dates);
-    return dates;
+function isInArray(value, array) {
+    return array.indexOf(value) > -1;
 }
 
 /**
@@ -62,24 +70,28 @@ function parseAmountOfIssues(dates, issues, columnName){
     var valuesArray = [],
         amountOfIssues;
 
-    //console.log(timeUtil.parseOnlyDayEpochFromDateString(issues[0].columnHistory[0].enterTime));
+    console.log(dates);
+    console.log(issues);
+    console.log(columnName);
 
     _.forEach(dates, function(date){
         amountOfIssues = 0;
         _.forEach(issues, function(issue){
             _.forEach(issue.columnHistory, function(historyItem){
-                /*console.log("Iteration: " + (historyItem.columnName === columnName) + " and " + (timeUtil.getDatesInInterval(Date.parse(historyItem.enterTime.substring(0, historyItem.enterTime.indexOf('T'))),
-                        Date.parse(historyItem.exitTime.substring(0, historyItem.exitTime.indexOf('T')))).indexOf(date)));*/
-                if(historyItem.columnName === columnName && timeUtil.getDatesInInterval(historyItem.enterTime, historyItem.exitTime).indexOf(date)){
-                    console.log("Got in!");
+                //console.log((historyItem.columnName === columnName) + " " + timeUtil.getDatesInInterval(historyItem.enterTime, historyItem.exitTime).indexOf(date));
+                var datesInColumn = timeUtil.getDatesInInterval(timeUtil.convertDateToEpochDay(historyItem.enterTime), timeUtil.convertDateToEpochDay(historyItem.exitTime));
+                if(historyItem.columnName === columnName && isInArray(date, datesInColumn)){
+                    console.log(timeUtil.getDatesInInterval(timeUtil.convertDateToEpochDay(historyItem.enterTime), timeUtil.convertDateToEpochDay(historyItem.exitTime)) + " contains " + date + "?");
+                    console.log(historyItem.columnName + " gets an issue!");
                     amountOfIssues++;
                 }
             });
         });
+        console.log("Value added to array: " + (new Date(date)).customFormat("#YYYY#-#MM#-#DD#") + ", " + amountOfIssues);
         valuesArray.push([date, amountOfIssues]);
     });
 
-    console.log(valuesArray);
+    //console.log(valuesArray);
     return valuesArray;
 }
 

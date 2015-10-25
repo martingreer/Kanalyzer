@@ -1,6 +1,8 @@
 describe("Execution Time vs Delay Time graph", function(){
     "use strict";
 
+    var twoIssues = twoParsedDoneIssues;
+
     describe("Two done issues", function(){
         var etDtData = [],
             key,
@@ -8,7 +10,7 @@ describe("Execution Time vs Delay Time graph", function(){
             secondIssueData;
 
         beforeEach(function(){
-            etDtData = _.first(createEtDtData("Two done issues", twoParsedDoneIssues));
+            etDtData = _.first(createEtDtData("Two done issues", twoIssues));
             key = etDtData.key;
             firstIssueData = etDtData.values[0];
             secondIssueData = etDtData.values[1];
@@ -37,19 +39,48 @@ describe("Execution Time vs Delay Time graph", function(){
 });
 
 describe("CFD graph", function(){
+    var twoIssues = twoParsedDoneIssues;
+
     describe("Dates", function(){
         it("should return the last date found in column history between two issues", function(){
-            expect(getLastHistoryDate(twoParsedDoneIssues)).toBe(1445551200000);
+            var lastHistoryDay = new Date(getLastHistoryDate(twoIssues));
+            lastHistoryDay = lastHistoryDay.customFormat("#YYYY#-#MM#-#DD#");
+            expect(lastHistoryDay).toBe("2015-10-23");
         });
 
-        it("should return dates in interval", function(){
-            expect(getDates(twoParsedDoneIssues)).toEqual([1445637600000]);
+        it("should return the first date found in column history between two issues", function(){
+            var firstHistoryDay = new Date(getFirstHistoryDate(twoIssues));
+            firstHistoryDay = firstHistoryDay.customFormat("#YYYY#-#MM#-#DD#");
+            expect(firstHistoryDay).toBe("2015-10-21");
+        });
+
+        it("should return array of all dates in interval", function(){
+            var i = 0,
+                dates = getDates(twoIssues);
+            _.forEach(dates, function(date){
+                date = new Date(date);
+                dates[i] = date.customFormat("#YYYY#-#MM#-#DD#");
+                i++;
+            });
+            expect(dates).toEqual(['2015-10-21', '2015-10-22', '2015-10-23']);
         });
     });
 
     describe("Parser", function(){
-        it("should return an array of dates and amount of issues for the column", function(){
-            expect(parseAmountOfIssues(getDates(twoParsedDoneIssues), twoParsedDoneIssues, twoParsedDoneIssues[0].columnHistory[0].columnName)).toEqual(0);
+        it("array should contain value", function(){
+            var array = [1, 2, 3, 4, 5];
+            expect(isInArray(4, array)).toBeTruthy();
+        });
+
+        it("array should not contain value", function(){
+            var array = [1, 2, 3, 4, 5];
+            expect(isInArray(7, array)).toBeFalsy();
+        });
+
+        it("should return an array of dates and amount of issues for the given column", function(){
+            var dates = getDates(twoIssues),
+                amountOfIssues = parseAmountOfIssues(dates, twoIssues, "In Progress");
+            expect(amountOfIssues).toEqual([ [ 1445385600000, 0 ], [ 1445472000000, 2 ], [ 1445558400000, 1 ] ]);
         });
     });
 });

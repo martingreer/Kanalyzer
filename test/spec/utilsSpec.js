@@ -30,10 +30,6 @@ describe("Utils", function(){
             expect(timeUtilTest.getTimestamp(dateTestAM)).toBe("2015-09-23T05:52:21");
         });
 
-        it("should parse a timestamp to milliseconds (epoch)", function(){
-            expect(Date.parse("2015-09-01T14:42:23")).toBe(1441111343000);
-        });
-
         it("should convert time in ms to DD HH MM format", function(){
             expect(timeUtilTest.convertMsToDHM(1122653000)).toBe("12 days, 23 hours, 51 minutes.");
         });
