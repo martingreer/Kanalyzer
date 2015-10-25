@@ -79,10 +79,10 @@ describe("CFD graph", function(){
             expect(isInArray(7, array)).toBeFalsy();
         });
 
-        it("should return an array of dates and amount of issues for the given column", function(){
+        approveIt("should return an array of dates and amount of issues for the given column", function(approvals){
             var dates = getDates(twoIssues),
-                amountOfIssues = CfdValueItem(dates, twoIssues, "In Progress");
-            expect(amountOfIssues).toEqual([ [ 1445385600000, 0 ], [ 1445472000000, 2 ], [ 1445558400000, 1 ] ]);
+                amountOfIssues = new CfdColumnValuesArray(dates, twoIssues, "In Progress");
+            approvals.verify(amountOfIssues);
         });
 
         approveIt("should return an array of complete CFD data", function(approvals){

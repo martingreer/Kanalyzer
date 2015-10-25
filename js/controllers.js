@@ -276,8 +276,6 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
             type: 'stackedAreaChart',
             height: 450,
             width: 800,
-            x: function (d) { return d[0]; },
-            y: function (d) { return d[1]; },
             useVoronoi: false,
             transitionDuration: 500,
             useInteractiveGuideline: true,

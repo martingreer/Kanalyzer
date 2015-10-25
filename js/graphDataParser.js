@@ -75,7 +75,7 @@ function CfdColumnItem(columnName){
  * For each date, calculate the amount of issues in the given column.
  * Column will be the key in CFD data array.
  */
-function CfdValueItem(dates, issues, columnName){
+function CfdColumnValuesArray(dates, issues, columnName){
     var valuesArray = [],
         amountOfIssues;
 
@@ -96,10 +96,19 @@ function CfdValueItem(dates, issues, columnName){
             });
         });
         //console.log("Value added to array: " + (new Date(date)).customFormat("#YYYY#-#MM#-#DD#") + ", " + amountOfIssues);
-        valuesArray.push([date, amountOfIssues]);
+        valuesArray.push(new CfdColumnValuesItem(date, amountOfIssues));
     });
 
     return valuesArray;
+}
+
+function CfdColumnValuesItem(x, y){
+    var self = this;
+
+    self.x = x;
+    self.y = y;
+
+    return self;
 }
 
 // Structure: [ { column, [[day1,amountOfIssues],[day2,amountOfIssues]] }   ,   { column, [[day1,amountOfIssues],[day2,amountOfIssues]] } ]
@@ -111,7 +120,7 @@ function createCfdData(issues, boardDesign){
 
     _.forEach(boardDesign.columns, function(column){
         columnData = new CfdColumnItem(column.name);
-        columnData.values = CfdValueItem(dates, issues, column.name);
+        columnData.values = CfdColumnValuesArray(dates, issues, column.name);
         graphArray.push(columnData);
     });
 
