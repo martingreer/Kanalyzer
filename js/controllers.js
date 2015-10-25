@@ -257,23 +257,16 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 /**
 * Controller for the CFD view.
 */
-application.controller('cfdController', function ($scope, $http) {
+application.controller('cfdController', function ($scope, localStorageHandler) {
     "use strict";
 
-    var requestCfdData;
-
-    requestCfdData = $http({
-        method: "GET",
-        url: '../json/graphTestDataSmall.json'
-    });
-    requestCfdData.success(function (data) {
-        $scope.data = data;
-        if(DEBUG){console.log("Get graph data SUCCESS!");}
-        console.log(data);
-    });
-    requestCfdData.error(function (data) {
-        if(DEBUG){console.log("Get graph data ERROR.");}
-    });
+    if(localStorageHandler.getIssues() && localStorageHandler.getBoardDesign()){
+        var issues = localStorageHandler.getIssues(),
+            boardDesign = localStorageHandler.getBoardDesign();
+        $scope.data = createCfdData(issues, boardDesign);
+    } else {
+        $scope.data = [];
+    }
 
     /**
     * Graph structure.
@@ -291,12 +284,12 @@ application.controller('cfdController', function ($scope, $http) {
             xAxis: {
                 showMaxMin: false,
                 tickFormat: function (d) {
-                    return d3.time.format('%x')(new Date(d));
+                    return d3.time.format('%Y-%m-%d')(new Date(d));
                 }
             },
             yAxis: {
                 tickFormat: function (d) {
-                    return d3.format(',.2f')(d);
+                    return d3.format(',.0d')(d);
                 }
             }
         },

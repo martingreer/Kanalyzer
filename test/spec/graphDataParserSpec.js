@@ -39,6 +39,8 @@ describe("Execution Time vs Delay Time graph", function(){
 });
 
 describe("CFD graph", function(){
+    "use strict";
+
     var twoIssues = twoParsedDoneIssues;
 
     describe("Dates", function(){
@@ -67,20 +69,26 @@ describe("CFD graph", function(){
     });
 
     describe("Parser", function(){
+        var array = [1, 2, 3, 4, 5];
+
         it("array should contain value", function(){
-            var array = [1, 2, 3, 4, 5];
             expect(isInArray(4, array)).toBeTruthy();
         });
 
         it("array should not contain value", function(){
-            var array = [1, 2, 3, 4, 5];
             expect(isInArray(7, array)).toBeFalsy();
         });
 
         it("should return an array of dates and amount of issues for the given column", function(){
             var dates = getDates(twoIssues),
-                amountOfIssues = parseAmountOfIssues(dates, twoIssues, "In Progress");
+                amountOfIssues = CfdValueItem(dates, twoIssues, "In Progress");
             expect(amountOfIssues).toEqual([ [ 1445385600000, 0 ], [ 1445472000000, 2 ], [ 1445558400000, 1 ] ]);
+        });
+
+        approveIt("should return an array of complete CFD data", function(approvals){
+            var boardDesign = new BoardDesign(columnsData),
+                graphArray = createCfdData(twoIssues, boardDesign);
+            approvals.verify(graphArray);
         });
     });
 });
