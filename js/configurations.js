@@ -42,3 +42,17 @@ application.config(function ($stateProvider, $urlRouterProvider) {
             templateUrl: 'pages/about.html'
         });
 });
+
+/**
+ * GUI notifications global config.
+ */
+application.config(function (NotificationProvider) {
+    "use strict";
+
+    NotificationProvider.setOptions({
+        delay: 3000,
+        startTop: 40,
+        positionX: "center",
+        positionY: "top"
+    });
+});
