@@ -44,10 +44,10 @@ describe("BoardDesign", function(){
 describe("Issue", function(){
     "use strict";
 
-    var issueWithoutHistory = new Issue(apiIssueWithoutHistory, new BoardDesign(columnsData)),
-        issueWithHistoryAndNotDone = new Issue(apiIssueWithHistoryAndNotDone, new BoardDesign(columnsData)),
-        issueIsDone = new Issue(apiIssueIsDone, new BoardDesign(columnsData)),
-        twoIssues = parseMultipleApiIssues(apiTwoIssues);
+    var issueWithoutHistory = new Issue(apiIssueWithoutHistory, new BoardDesign(columnsData));
+    var issueWithHistoryAndNotDone = new Issue(apiIssueWithHistoryAndNotDone, new BoardDesign(columnsData), "2015-09-10T00:00:00");
+    var issueIsDone = new Issue(apiIssueIsDone, new BoardDesign(columnsData));
+    var twoIssues = parseMultipleApiIssues(apiTwoIssues);
 
     describe("With history", function(){
         it("should have id", function(){
@@ -140,9 +140,9 @@ describe("Issue", function(){
     });
 
     describe("Execution Time calculations", function(){
-        //it("should calculate execution time for an issue that is not done", function(){
-        //    expect(issueWithHistoryAndNotDone.executionTime).toBeGreaterThan(3891323000);
-        //});
+        it("should calculate execution time for an issue that is not done", function(){
+            expect(issueWithHistoryAndNotDone.executionTime).toBe(724657000);
+        });
 
         it("an issue without history should have no execution time", function(){
             expect(timeUtil.convertMsToDHM(issueWithoutHistory.executionTime)).toBe(timeUtil.convertMsToDHM(0));
@@ -170,6 +170,20 @@ describe("Issue", function(){
 
         it("should calculate process efficiency for an issue that is done", function(){
             expect(issueIsDone.processEfficiency).toBe(0.0004624420020655743);
+        });
+    });
+
+    describe("Check which column issue was in", function(){
+        it("should return true if value exists in the given range", function(){
+            expect(issueIsDone.isInBetween(4, 1, 10)).toBeTruthy();
+        });
+
+        it("should return false if value exists in the given range", function(){
+            expect(issueIsDone.isInBetween(0, 1, 10)).toBeFalsy();
+        });
+
+        it("should return the column name that exists in the given time", function(){
+            expect(issueIsDone.wasInColumn(1442246470000)).toBe("Ready to Analyze");
         });
     });
 });

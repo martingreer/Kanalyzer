@@ -127,14 +127,18 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             requestIssues.success(function (data) {
                 apiIssuesMinimal = parseMultipleApiIssues(data);
                 //console.log(JSON.stringify(apiIssuesMinimal));
-                issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
+                try{
+                    issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
+                    Notification.success('Issue data successfully loaded!');
+                } catch(error) {
+                    Notification.error('Something went wrong when parsing the issue data. Check your board configuration for abnormalities.');
+                }
                 localStorageHandler.setIssues(issues);
-                Notification.success('Issue data successfully loaded!');
-                if (DEBUG) {console.log("Get all issues SUCCESS!");}
+                if (DEBUG) {console.log("Get all issues from API: SUCCESS!");}
             });
             requestIssues.error(function (data) {
                 Notification.error('Failed to load issue data from source.');
-                if (DEBUG) {console.log("Get all issues ERROR. API response: " + JSON.stringify(data));}
+                if (DEBUG) {console.log("Get all issues from API: ERROR. API response: " + JSON.stringify(data));}
             });
         });
 

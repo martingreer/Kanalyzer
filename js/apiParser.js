@@ -182,11 +182,15 @@ function createIssuesFromArray(apiIssues, boardDesign){
 /**
 * Create new issue object containing ID, summary, key, column history.
 */
-function Issue(apiIssue, boardDesign){
+function Issue(apiIssue, boardDesign, time){
     "use strict";
 
     var self = {},
         isAlreadyParsed = apiIssue.changelog == null;
+
+    if(!time){
+        time = timeUtil.getTimestamp();
+    }
 
     function parseCurrentStatus(currentStatus){
       var status = {};
@@ -200,7 +204,7 @@ function Issue(apiIssue, boardDesign){
     }
 
     function startColumn(apiIssue){
-        return new ColumnHistoryItem(boardDesign.getColumnMatchingStatus(apiIssue.fields.status.id), self.created, timeUtil.getTimestamp());
+        return new ColumnHistoryItem(boardDesign.getColumnMatchingStatus(apiIssue.fields.status.id), self.created, time);
     }
 
     function createColumnHistoryAlreadyParsed(parsedIssue){
@@ -245,8 +249,8 @@ function Issue(apiIssue, boardDesign){
         }
 
         // Last item is a special case because toColumn must become its own object and has no real exit time.
-        columnsWithEnterExit.push(new ColumnHistoryItem(columnHistory[columnHistory.length-1].toColumn, columnHistory[columnHistory.length-1].moveTime, timeUtil.getTimestamp()));
-        if(DEBUG_COLUMNHISTORY){console.log("ITERATION: " + columnHistory.length + " - " + columnHistory[columnHistory.length-1].toColumn + " | " + columnHistory[columnHistory.length-1].moveTime + " | " + timeUtil.getTimestamp());}
+        columnsWithEnterExit.push(new ColumnHistoryItem(columnHistory[columnHistory.length-1].toColumn, columnHistory[columnHistory.length-1].moveTime, time));
+        if(DEBUG_COLUMNHISTORY){console.log("ITERATION: " + columnHistory.length + " - " + columnHistory[columnHistory.length-1].toColumn + " | " + columnHistory[columnHistory.length-1].moveTime + " | " + time);}
 
         return columnsWithEnterExit;
     }
@@ -335,6 +339,10 @@ function Issue(apiIssue, boardDesign){
         }
     }
 
+    self.isInBetween = function (x, startValue, endValue) {
+        return x >= startValue && x <= endValue;
+    };
+
     self.id = apiIssue.id;
     self.key = apiIssue.key;
 
@@ -349,6 +357,21 @@ function Issue(apiIssue, boardDesign){
         self.currentStatus = apiIssue.currentStatus;
         self.columnHistory = createColumnHistoryAlreadyParsed(apiIssue);
     }
+
+    /**
+     * Checks which column this issue was in at a given time.
+     */
+    self.wasInColumn = function (time) {
+        var column = "";
+
+        _.forEach(self.columnHistory, function(columnHistoryItem){
+            if(self.isInBetween(time, Date.parse(columnHistoryItem.enterTime), Date.parse(columnHistoryItem.exitTime))){
+                column = columnHistoryItem.columnName;
+            }
+        });
+
+        return column;
+    };
 
     self.cycleTime = getCycleTime();
     self.executionTime = getExecutionTime();
