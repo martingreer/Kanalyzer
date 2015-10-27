@@ -106,7 +106,6 @@ function CfdColumnValuesItem(x, y){
     return self;
 }
 
-// Structure: [{column, [[day1,amountOfIssues],[day2,amountOfIssues]] }   ,   { column, [[day1,amountOfIssues],[day2,amountOfIssues]] } ]
 // Example:   [{"key":Ready to Refine", "values":[{"x":1444428000000,"y":5},{"x":1444514400000,"y":3}]},
 //             {"key":"Refine Backlog", "values":[{"x":1444428000000,"y":2],["x":1444514400000,"y":2}]}]
 function createCfdData(issues, boardDesign){

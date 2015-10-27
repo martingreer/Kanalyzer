@@ -24,9 +24,11 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
         $http({method: 'GET', url: $scope.apiServer})
             .success(function () {
+                apiServerData.setIsLoggedIn(true);
                 Notification.success('Login successful!');
             })
             .error(function () {
+                apiServerData.setIsLoggedIn(false);
                 Notification.error('Login failed, please try again.');
             });
     };
@@ -78,7 +80,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     }
 
     // The max results to be returned from API (-1 is unlimited results).
-    $scope.maxResults = null;
+    $scope.maxResults = '';
 
     // Board ID to get column & status structure from.
     $scope.boardId = '12';
@@ -87,65 +89,76 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     * Get all issues for the project that was given on login.
     */
     $scope.getAllIssues = function () {
-        boardColumnsDesign = {};
-        apiIssuesMinimal = {};
-        issues = [];
-
-        getBoardDesignBeforeIssues = $q.defer();
-
-        Notification.primary('Attempting to get data from server...');
-        if(DEBUG){console.log("Attempting to get board design for project " + $scope.apiProject + "...");}
-
-        var requestBoardDesign = $http({
-            method: "GET",
-            url: $scope.apiRoot + "rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=" + $scope.boardId + "&selectedProjectKey=" + $scope.apiProject
-        });
-        requestBoardDesign.success(function (data) {
-            boardColumnsDesign = createBoardDesign(parseBoardDesign(data));
-            localStorageHandler.setBoardDesign(boardColumnsDesign);
-            getBoardDesignBeforeIssues.resolve();
-            if(DEBUG){console.log("Get board design SUCCESS!");}
-        });
-        requestBoardDesign.error(function (data) {
-            getBoardDesignBeforeIssues.reject();
-            Notification.error('Failed to load issue data from source.');
-            if(DEBUG){console.log("Get board design ERROR. API response: " + JSON.stringify(data));}
-        });
-
-        getBoardDesignBeforeIssues.promise.then(function() {
-            if(DEBUG){console.log("Attempting to get all issues for project " + $scope.apiProject + "...");}
-            if($scope.maxResults === null){
-                $scope.maxResults = -1;
-            }
-            var requestIssues = $http({
-                method: "GET",
-                url: $scope.apiRoot + "rest/api/2/search?jql=project=" + $scope.apiProject + "&expand=changelog" + "&maxResults=" + $scope.maxResults
-            });
-            if($scope.maxResults === -1){
-                $scope.maxResults = null;
-            }
-            requestIssues.success(function (data) {
-                apiIssuesMinimal = parseMultipleApiIssues(data);
-                //console.log(JSON.stringify(apiIssuesMinimal));
-                try{
-                    issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
-                    Notification.success('Issue data successfully loaded!');
-                } catch(error) {
-                    Notification.error('Something went wrong when parsing the issue data. Check your board configuration for abnormalities.');
-                }
-                localStorageHandler.setIssues(issues);
-                if (DEBUG) {console.log("Get all issues from API: SUCCESS!");}
-            });
-            requestIssues.error(function (data) {
-                Notification.error('Failed to load issue data from source.');
-                if (DEBUG) {console.log("Get all issues from API: ERROR. API response: " + JSON.stringify(data));}
-            });
-        });
-
-        if(localStorageHandler.getBoardDesign()){
-            $scope.columns = localStorageHandler.getBoardDesign().columns;
+        if(!apiServerData.getIsLoggedIn()){
+            Notification.error('You are not logged in!');
         } else {
-            $scope.columns = [];
+            boardColumnsDesign = {};
+            apiIssuesMinimal = {};
+            issues = [];
+
+            getBoardDesignBeforeIssues = $q.defer();
+
+            Notification.primary('Attempting to get data from server...');
+            if(DEBUG){console.log("Attempting to get board design for project " + $scope.apiProject + "...");}
+
+            var requestBoardDesign = $http({
+                method: "GET",
+                url: $scope.apiRoot + "rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=" + $scope.boardId + "&selectedProjectKey=" + $scope.apiProject
+            });
+            requestBoardDesign.success(function (data) {
+                if(DEBUG){console.log("Get board design from API: SUCCESS!");}
+                try{
+                    boardColumnsDesign = createBoardDesign(parseBoardDesign(data));
+                    localStorageHandler.setBoardDesign(boardColumnsDesign);
+                    getBoardDesignBeforeIssues.resolve();
+                    if(DEBUG){console.log("Parse board design SUCCESS!");}
+                } catch(error) {
+                    Notification.error('Something went wrong when parsing the board data. Check your board configuration for abnormalities.');
+                    if(DEBUG){console.log("Parse board design SUCCESS!");}
+                }
+
+            });
+            requestBoardDesign.error(function (data) {
+                getBoardDesignBeforeIssues.reject();
+                Notification.error('Failed to load board data from source.');
+                if(DEBUG){console.log("Get board design from API: ERROR.");}
+            });
+
+            getBoardDesignBeforeIssues.promise.then(function() {
+                if(DEBUG){console.log("Attempting to get all issues for project " + $scope.apiProject + "...");}
+                if($scope.maxResults === ''){
+                    $scope.maxResults = -1;
+                }
+                var requestIssues = $http({
+                    method: "GET",
+                    url: $scope.apiRoot + "rest/api/2/search?jql=project=" + $scope.apiProject + "&expand=changelog" + "&maxResults=" + $scope.maxResults
+                });
+                if($scope.maxResults === -1){
+                    $scope.maxResults = '';
+                }
+                requestIssues.success(function (data) {
+                    apiIssuesMinimal = parseMultipleApiIssues(data);
+                    //console.log(JSON.stringify(apiIssuesMinimal));
+                    try{
+                        issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
+                        Notification.success('Issue data successfully loaded!');
+                    } catch(error) {
+                        Notification.error('Something went wrong when parsing the issue data. Check your board configuration for abnormalities.');
+                    }
+                    localStorageHandler.setIssues(issues);
+                    if (DEBUG) {console.log("Get all issues from API: SUCCESS!");}
+                });
+                requestIssues.error(function (data) {
+                    Notification.error('Failed to load issue data from source.');
+                    if (DEBUG) {console.log("Get all issues from API: ERROR");}
+                });
+            });
+
+            if(localStorageHandler.getBoardDesign()){
+                $scope.columns = localStorageHandler.getBoardDesign().columns;
+            } else {
+                $scope.columns = [];
+            }
         }
     };
 

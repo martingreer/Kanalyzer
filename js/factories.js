@@ -91,7 +91,8 @@ application.factory('Base64', function () {
 application.factory('apiServerData', function(){
     var data = {
         apiRoot: '',
-        apiProject: ''
+        apiProject: '',
+        isLoggedIn: ''
     };
 
     return {
@@ -100,6 +101,12 @@ application.factory('apiServerData', function(){
         },
         setApiRoot: function (apiRoot) {
             data.apiRoot = apiRoot;
+        },
+        getIsLoggedIn: function () {
+            return data.isLoggedIn;
+        },
+        setIsLoggedIn: function (isLoggedIn) {
+            data.isLoggedIn = isLoggedIn;
         }
     }
 });
