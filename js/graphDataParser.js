@@ -75,9 +75,11 @@ function CfdColumnItem(columnName){
  * For each date, calculate the amount of issues in the given column.
  * Column will be the key in CFD data array.
  */
-function CfdColumnValuesArray(dates, issues, columnName){
+function CfdColumnValuesArray(dates, issues, boardDesign, columnName){
     var valuesArray = [],
-        amountOfIssues;
+        amountOfIssues,
+        _boardDesign = createBoardDesign(boardDesign),
+        _issues = createIssuesFromArray(issues, _boardDesign);
 
     //console.log(dates);
     //console.log(issues);
@@ -85,15 +87,20 @@ function CfdColumnValuesArray(dates, issues, columnName){
 
     _.forEach(dates, function(date){
         amountOfIssues = 0;
-        _.forEach(issues, function(issue){
+        _.forEach(_issues, function(issue){
             _.forEach(issue.columnHistory, function(historyItem){
+                if(issue.wasInColumn(date, historyItem.enterTime, historyItem.exitTime)){
+                    amountOfIssues++;
+                }
+            });
+            /*_.forEach(issue.columnHistory, function(historyItem){
                 var datesInColumn = timeUtil.getDatesInInterval(timeUtil.convertDateToEpochDay(historyItem.enterTime), timeUtil.convertDateToEpochDay(historyItem.exitTime));
                 if(historyItem.columnName === columnName && isInArray(date, datesInColumn)){
                     //console.log(timeUtil.getDatesInInterval(timeUtil.convertDateToEpochDay(historyItem.enterTime), timeUtil.convertDateToEpochDay(historyItem.exitTime)) + " contains " + date + "?");
                     //console.log(historyItem.columnName + " gets an issue!");
                     amountOfIssues++;
                 }
-            });
+            });*/
         });
         //console.log("Value added to array: " + (new Date(date)).customFormat("#YYYY#-#MM#-#DD#") + ", " + amountOfIssues);
         valuesArray.push(new CfdColumnValuesItem(date, amountOfIssues));
@@ -111,16 +118,19 @@ function CfdColumnValuesItem(x, y){
     return self;
 }
 
-// Structure: [ { column, [[day1,amountOfIssues],[day2,amountOfIssues]] }   ,   { column, [[day1,amountOfIssues],[day2,amountOfIssues]] } ]
-// Example:   [ { "key":Ready to Refine", "values":[[1444428000000,5],[1444514400000,3]] }   ,   { "key":"Refine Backlog", "values":[[1444428000000,2],[1444514400000,2]] } ]
+// Structure: [{column, [[day1,amountOfIssues],[day2,amountOfIssues]] }   ,   { column, [[day1,amountOfIssues],[day2,amountOfIssues]] } ]
+// Example:   [{"key":Ready to Refine", "values":[{"x":1444428000000,"y":5},{"x":1444514400000,"y":3}]},
+//             {"key":"Refine Backlog", "values":[{"x":1444428000000,"y":2],["x":1444514400000,"y":2}]}]
 function createCfdData(issues, boardDesign){
     var graphArray = [],
         columnData,
         dates = getDates(issues);
+        //_boardDesign = new BoardDesign(boardDesign),
+        //_issues = new Issue(issues, _boardDesign);
 
     _.forEach(boardDesign.columns, function(column){
         columnData = new CfdColumnItem(column.name);
-        columnData.values = CfdColumnValuesArray(dates, issues, column.name);
+        columnData.values = CfdColumnValuesArray(dates, issues, boardDesign, column.name);
         graphArray.push(columnData);
     });
 

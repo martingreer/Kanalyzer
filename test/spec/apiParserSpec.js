@@ -183,7 +183,8 @@ describe("Issue", function(){
         });
 
         it("should return the column name that exists in the given time", function(){
-            expect(issueIsDone.wasInColumn(1442246470000)).toBe("Ready to Analyze");
+            var date = new Date("2015-09-14T18:01:53");
+            expect(issueIsDone.wasInColumn(date, "2015-09-13T18:01:53", "2015-09-15T18:01:53")).toBeTruthy();
         });
     });
 });

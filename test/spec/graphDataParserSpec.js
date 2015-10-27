@@ -42,6 +42,7 @@ describe("CFD graph", function(){
     "use strict";
 
     var twoIssues = twoParsedDoneIssues;
+    var boardDesign = createBoardDesign(columnsData);
 
     describe("Dates", function(){
         it("should return the last date found in column history between two issues", function(){
@@ -81,7 +82,7 @@ describe("CFD graph", function(){
 
         approveIt("should return an array of dates and amount of issues for the given column", function(approvals){
             var dates = getDates(twoIssues),
-                amountOfIssues = new CfdColumnValuesArray(dates, twoIssues, "In Progress");
+                amountOfIssues = new CfdColumnValuesArray(dates, twoIssues, boardDesign, "In Progress");
             approvals.verify(amountOfIssues);
         });
 
