@@ -1,7 +1,7 @@
 describe("Execution Time vs Delay Time graph", function(){
     "use strict";
 
-    var twoIssues = twoParsedDoneIssues;
+    var twoIssues = fourParsedDoneIssues;
 
     describe("Two done issues", function(){
         var etDtData = [],
@@ -41,31 +41,31 @@ describe("Execution Time vs Delay Time graph", function(){
 describe("CFD graph", function(){
     "use strict";
 
-    var twoIssues = twoParsedDoneIssues;
+    var fourIssues = fourParsedDoneIssues;
     var boardDesign = createBoardDesign(columnsData);
 
     describe("Dates", function(){
-        it("should return the last date found in column history between two issues", function(){
-            var lastHistoryDay = new Date(getLastHistoryDate(twoIssues));
+        it("should return the last date found in column history between the issues", function(){
+            var lastHistoryDay = new Date(getLastHistoryDate(fourIssues));
             lastHistoryDay = lastHistoryDay.customFormat("#YYYY#-#MM#-#DD#");
-            expect(lastHistoryDay).toBe("2015-10-23");
+            expect(lastHistoryDay).toBe("2015-10-27");
         });
 
-        it("should return the first date found in column history between two issues", function(){
-            var firstHistoryDay = new Date(getFirstHistoryDate(twoIssues));
+        it("should return the first date found in column history between the issues", function(){
+            var firstHistoryDay = new Date(getFirstHistoryDate(fourIssues));
             firstHistoryDay = firstHistoryDay.customFormat("#YYYY#-#MM#-#DD#");
             expect(firstHistoryDay).toBe("2015-10-21");
         });
 
         it("should return array of all dates in interval", function(){
             var i = 0,
-                dates = getDates(twoIssues);
+                dates = getDates(fourIssues);
             _.forEach(dates, function(date){
                 date = new Date(date);
                 dates[i] = date.customFormat("#YYYY#-#MM#-#DD#");
                 i++;
             });
-            expect(dates).toEqual(['2015-10-21', '2015-10-22', '2015-10-23']);
+            expect(dates).toEqual([ '2015-10-21', '2015-10-22', '2015-10-23', '2015-10-24', '2015-10-25', '2015-10-26', '2015-10-27' ]);
         });
     });
 
@@ -80,15 +80,21 @@ describe("CFD graph", function(){
             expect(isInArray(7, array)).toBeFalsy();
         });
 
-        approveIt("should return an array of dates and amount of issues for the given column", function(approvals){
-            var dates = getDates(twoIssues),
-                amountOfIssues = new CfdColumnValuesArray(dates, twoIssues, boardDesign, "In Progress");
+        approveIt("should return an array of dates and amount of issues for the In Progress column", function(approvals){
+            var dates = getDates(fourIssues),
+                amountOfIssues = new CfdColumnValuesArray(dates, fourIssues, boardDesign, "In Progress");
+            approvals.verify(amountOfIssues);
+        });
+
+        approveIt("should return an array of dates and amount of issues for the Ready for Release column", function(approvals){
+            var dates = getDates(fourIssues),
+                amountOfIssues = new CfdColumnValuesArray(dates, fourIssues, boardDesign, "Ready for Release");
             approvals.verify(amountOfIssues);
         });
 
         approveIt("should return an array of complete CFD data", function(approvals){
             var boardDesign = new BoardDesign(columnsData),
-                graphArray = createCfdData(twoIssues, boardDesign);
+                graphArray = createCfdData(fourIssues, boardDesign);
             approvals.verify(graphArray);
         });
     });

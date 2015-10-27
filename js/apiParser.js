@@ -361,8 +361,8 @@ function Issue(apiIssue, boardDesign, time){
     /**
      * Checks which column this issue was in at a given time.
      */
-    self.wasInColumn = function (time, enterTime, exitTime) {
-        return self.isInBetween(time, Date.parse(enterTime), Date.parse(exitTime));
+    self.wasInColumn = function (time, column) {
+        return self.isInBetween(time, Date.parse(column.enterTime), Date.parse(column.exitTime));
     };
 
     self.cycleTime = getCycleTime();

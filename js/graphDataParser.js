@@ -81,28 +81,16 @@ function CfdColumnValuesArray(dates, issues, boardDesign, columnName){
         _boardDesign = createBoardDesign(boardDesign),
         _issues = createIssuesFromArray(issues, _boardDesign);
 
-    //console.log(dates);
-    //console.log(issues);
-    //console.log(columnName);
-
     _.forEach(dates, function(date){
         amountOfIssues = 0;
         _.forEach(_issues, function(issue){
             _.forEach(issue.columnHistory, function(historyItem){
-                if(issue.wasInColumn(date, historyItem.enterTime, historyItem.exitTime)){
+                if(issue.wasInColumn(date, historyItem) && historyItem.columnName === columnName){
+                    //console.log(issue.key + " was in column " + historyItem.columnName + " at the time: " + date);
                     amountOfIssues++;
                 }
             });
-            /*_.forEach(issue.columnHistory, function(historyItem){
-                var datesInColumn = timeUtil.getDatesInInterval(timeUtil.convertDateToEpochDay(historyItem.enterTime), timeUtil.convertDateToEpochDay(historyItem.exitTime));
-                if(historyItem.columnName === columnName && isInArray(date, datesInColumn)){
-                    //console.log(timeUtil.getDatesInInterval(timeUtil.convertDateToEpochDay(historyItem.enterTime), timeUtil.convertDateToEpochDay(historyItem.exitTime)) + " contains " + date + "?");
-                    //console.log(historyItem.columnName + " gets an issue!");
-                    amountOfIssues++;
-                }
-            });*/
         });
-        //console.log("Value added to array: " + (new Date(date)).customFormat("#YYYY#-#MM#-#DD#") + ", " + amountOfIssues);
         valuesArray.push(new CfdColumnValuesItem(date, amountOfIssues));
     });
 
@@ -125,8 +113,6 @@ function createCfdData(issues, boardDesign){
     var graphArray = [],
         columnData,
         dates = getDates(issues);
-        //_boardDesign = new BoardDesign(boardDesign),
-        //_issues = new Issue(issues, _boardDesign);
 
     _.forEach(boardDesign.columns, function(column){
         columnData = new CfdColumnItem(column.name);

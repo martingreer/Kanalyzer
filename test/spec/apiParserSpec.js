@@ -182,9 +182,16 @@ describe("Issue", function(){
             expect(issueIsDone.isInBetween(0, 1, 10)).toBeFalsy();
         });
 
-        it("should return the column name that exists in the given time", function(){
-            var date = new Date("2015-09-14T18:01:53");
-            expect(issueIsDone.wasInColumn(date, "2015-09-13T18:01:53", "2015-09-15T18:01:53")).toBeTruthy();
+        it("should return true if the issue was in the column at the given time", function(){
+            var date = new Date("2015-09-15"),
+                readyToAnalyzeColumn = issueIsDone.columnHistory[2];
+            expect(issueIsDone.wasInColumn(date, readyToAnalyzeColumn)).toBeTruthy();
+        });
+
+        it("should return false if the issue was not in the column at the given time", function(){
+            var date = new Date("2015-09-14"),
+                readyToAnalyzeColumn = issueIsDone.columnHistory[2];
+            expect(issueIsDone.wasInColumn(date, readyToAnalyzeColumn)).toBeFalsy();
         });
     });
 });
