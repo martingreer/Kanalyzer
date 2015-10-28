@@ -35,7 +35,10 @@ function getLastHistoryDate(issues){
     var allExitTimes = [];
 
     _.forEach(issues, function (issue){
-        allExitTimes.push(timeUtil.convertDateToEpochDay(_.last(issue.columnHistory).exitTime));
+        allExitTimes.push(timeUtil.convertDateToEpochMidnight(_.last(issue.columnHistory).exitTime));
+        //console.log(_.last(issue.columnHistory).exitTime);
+        //console.log(new Date(timeUtil.convertDateToEpochMidnight(_.last(issue.columnHistory).exitTime)).customFormat("#YYYY#-#MM#-#DD#T#hh#:#mm#:#ss#"));
+        //console.log("--------------------------------");
     });
 
     return Math.max.apply(null, allExitTimes);
@@ -45,7 +48,7 @@ function getFirstHistoryDate(issues){
     var allEnterTimes = [];
 
     _.forEach(issues, function (issue){
-        allEnterTimes.push(timeUtil.convertDateToEpochDay(_.first(issue.columnHistory).enterTime));
+        allEnterTimes.push(timeUtil.convertDateToEpochMidnight(_.first(issue.columnHistory).enterTime));
     });
 
     return Math.min.apply(null, allEnterTimes);
@@ -106,8 +109,8 @@ function CfdColumnValuesItem(x, y){
     return self;
 }
 
-// Example:   [{"key":Ready to Refine", "values":[{"x":1444428000000,"y":5},{"x":1444514400000,"y":3}]},
-//             {"key":"Refine Backlog", "values":[{"x":1444428000000,"y":2],["x":1444514400000,"y":2}]}]
+// Example:   [{"key":"Ready to Refine", "values":[{"x":1444428000000,"y":5},{"x":1444514400000,"y":3}]},
+//             {"key":"Refine Backlog", "values":[{"x":1444428000000,"y":2},{"x":1444514400000,"y":2}]}]
 function createCfdData(issues, boardDesign){
     var graphArray = [],
         columnData,

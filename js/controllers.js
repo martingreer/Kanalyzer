@@ -43,6 +43,7 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
                 Notification.error('Logout failed, please try again.');
             })
             .error(function () {
+                apiServerData.setIsLoggedIn(false);
                 Notification.primary('You have been logged out.');
             });
     };
