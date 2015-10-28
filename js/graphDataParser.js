@@ -36,9 +36,6 @@ function getLastHistoryDate(issues){
 
     _.forEach(issues, function (issue){
         allExitTimes.push(timeUtil.convertDateToEpochMidnight(_.last(issue.columnHistory).exitTime));
-        //console.log(_.last(issue.columnHistory).exitTime);
-        //console.log(new Date(timeUtil.convertDateToEpochMidnight(_.last(issue.columnHistory).exitTime)).customFormat("#YYYY#-#MM#-#DD#T#hh#:#mm#:#ss#"));
-        //console.log("--------------------------------");
     });
 
     return Math.max.apply(null, allExitTimes);

@@ -89,7 +89,6 @@ function TimeUtil() {
     self.convertDateToEpochMidnight = function (timeString) {
         var date = new Date(timeString.substring(0, timeString.indexOf('T'))),
             offsetInMs = date.getTimezoneOffset()*60000;
-        console.log(offsetInMs);
         return Date.parse(date)+offsetInMs;
     };
 
@@ -100,8 +99,6 @@ function TimeUtil() {
         var dateArray = [],
             currentDate = new Date(startDate),
             endDate = new Date(stopDate);
-        //endDate = self.convertDateToEpochMidnight(endDate.customFormat("#YYYY#-#MM#-#DD#T#hh#:#mm#:#ss#"));
-        //console.log(endDate.customFormat("#YYYY#-#MM#-#DD# #hh#:#mm#:#ss#"));
         while (currentDate <= endDate) {
             dateArray.push(Date.parse((new Date(currentDate))));
             currentDate = currentDate.addDays(1);
