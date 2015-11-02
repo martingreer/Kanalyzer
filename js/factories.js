@@ -92,7 +92,7 @@ application.factory('apiServerData', function(){
     var data = {
         apiRoot: '',
         apiProject: '',
-        isLoggedIn: ''
+        isLoggedIn: false
     };
 
     return {

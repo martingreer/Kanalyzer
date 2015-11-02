@@ -11,6 +11,9 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
     $scope.apiRoot = 'https://softhousegbg.atlassian.net/'; // Temporary hard-code for testing purposes
     apiServerData.setApiRoot($scope.apiRoot);
 
+    // This variable decides what is being shown in the login view.
+    $scope.isLoggedIn = apiServerData.getIsLoggedIn();
+
     /**
      * Login: Auth to API server.
      */
@@ -24,6 +27,7 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
         $http({method: 'GET', url: $scope.apiServer})
             .success(function () {
                 apiServerData.setIsLoggedIn(true);
+                $scope.isLoggedIn = apiServerData.getIsLoggedIn();
                 Notification.success('Login successful!');
             })
             .error(function () {
@@ -33,7 +37,7 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
     };
 
     /**
-     * Log out by sending empty login details and getting rejected (there is no log out support for API).
+     * Log out by sending empty login details and getting rejected (there is no log out support for this API).
      */
     $scope.logout = function () {
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(' : ');
@@ -43,6 +47,7 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
             })
             .error(function () {
                 apiServerData.setIsLoggedIn(false);
+                $scope.isLoggedIn = apiServerData.getIsLoggedIn();
                 Notification.primary('You have been logged out.');
             });
     };

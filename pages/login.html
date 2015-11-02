@@ -3,24 +3,30 @@
     <title>Kanalyzer: Log in</title>
 </head>
 <body>
-<form role="form" name="loginForm" ng-submit="login(credentials)" novalidate>
-    <div class="form-group">
-        <label for="apiRoot">API server:</label>
-        <input type="text" id="apiRoot" class="form-control" ng-model="apiRoot" style="width:400px">
-    </div>
-    <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" class="form-control" ng-model="credentials.username" style="width:400px">
-    </div>
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" class="form-control" ng-model="credentials.password" style="width:400px">
-    </div>
-    <div>
-        <button type="submit" class="btn btn-default">Log in</button>
-    </div>
-</form>
+<div ng-hide="isLoggedIn" ng-show="!isLoggedIn">
+    <form role="form" name="loginForm" ng-submit="login(credentials)" novalidate>
+        <div class="form-group">
+            <label for="apiRoot">API server:</label>
+            <input type="text" id="apiRoot" class="form-control" ng-model="apiRoot" style="width:400px">
+        </div>
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" class="form-control" ng-model="credentials.username" style="width:400px">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" class="form-control" ng-model="credentials.password" style="width:400px">
+        </div>
+        <div>
+            <button type="submit" class="btn btn-default">Log in</button>
+        </div>
+    </form>
+</div>
 <br />
-<button class="btn btn-default" ng-click="logout(credentials)">Log out</button>
+<div ng-hide="!isLoggedIn" ng-show="isLoggedIn">
+    <h4>You are currently logged in as: <b>{{ credentials.username }}</b></h4>
+    <br />
+    <button class="btn btn-default" ng-click="logout(credentials)">Log out</button>
+</div>
 </body>
 </html>

@@ -119,5 +119,5 @@ function createCfdData(issues, boardDesign){
         graphArray.push(columnData);
     });
 
-    return graphArray;
+    return graphArray.reverse();
 }
