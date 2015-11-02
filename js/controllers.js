@@ -64,8 +64,6 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
     $scope.apiRoot = apiServerData.getApiRoot();
     $scope.apiProject = 'KTD'; // Temporary hard-code for testing purposes
-    apiServerData.setApiProject('KTD');
-    apiServerData.getApiProject();
 
     // Assign columns to scope if local storage already exists.
     if(localStorageHandler.getBoardDesign()){
