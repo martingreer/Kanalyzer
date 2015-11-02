@@ -110,6 +110,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                 try{
                     boardColumnsDesign = createBoardDesign(parseBoardDesign(data));
                     localStorageHandler.setBoardDesign(boardColumnsDesign);
+                    $scope.columns = localStorageHandler.getBoardDesign().columns;
                     getBoardDesignBeforeIssues.resolve();
                     if(DEBUG){console.log("Parse board design SUCCESS!");}
                 } catch(error) {
@@ -141,9 +142,10 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     //console.log(JSON.stringify(apiIssuesMinimal));
                     try{
                         issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
-                        Notification.success('Issue data successfully loaded!');
+                        Notification.success('Parse issue data SUCCESS!');
                     } catch(error) {
                         Notification.error('Something went wrong when parsing the issue data. Check your board configuration for abnormalities.');
+                        if (DEBUG) {console.log("Parsing of issues data ERROR: " + error);}
                     }
                     localStorageHandler.setIssues(issues);
                     if (DEBUG) {console.log("Get all issues from API: SUCCESS!");}
@@ -153,12 +155,6 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     if (DEBUG) {console.log("Get all issues from API: ERROR");}
                 });
             });
-
-            if(localStorageHandler.getBoardDesign()){
-                $scope.columns = localStorageHandler.getBoardDesign().columns;
-            } else {
-                $scope.columns = [];
-            }
         }
     };
 
@@ -202,6 +198,9 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         if(localStorageHandler.getConfigs() === null){
             console.log("No previous configs! Creating new.");
             userConfigs = [];
+        } else if (name === '') {
+            Notification.error('Config was not saved. You must choose a name.');
+            console.log("Input name is empty. Not adding config.");
         } else {
             console.log("Previous configs exist! Adding this config to it.");
             userConfigs = localStorageHandler.getConfigs();
@@ -219,6 +218,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             var newConfig = {"name": name, "columnCategories": columnCategories};
             userConfigs.push(newConfig);
             localStorageHandler.setConfigs(userConfigs);
+            $scope.userConfigs = localStorageHandler.getConfigs();
             Notification.success('Config saved!');
         }
     };
@@ -242,6 +242,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
      */
     $scope.clearConfigs = function () {
         localStorageHandler.removeConfigs();
+        $scope.userConfigs = localStorageHandler.getConfigs();
         Notification.primary('All configs removed.');
         console.log("All configs removed.");
     };
