@@ -8,9 +8,7 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
 
     // Variables for logging in to API server.
     $scope.credentials = { username: 'martin.w.greer', password: ''};
-    $scope.apiRoot = 'https://softhousegbg.atlassian.net/';
-    $scope.apiServer = $scope.apiRoot + 'rest/api/2/issue/createmeta';
-
+    $scope.apiRoot = 'https://softhousegbg.atlassian.net/'; // Temporary hard-code for testing purposes
     apiServerData.setApiRoot($scope.apiRoot);
 
     /**
@@ -20,7 +18,8 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
         //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
         //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
         apiServerData.setApiRoot($scope.apiRoot);
-        //if(DEBUG){console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");}
+        $scope.apiServer = apiServerData.getApiServer('jira');
+        if(DEBUG){console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");}
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
         $http({method: 'GET', url: $scope.apiServer})
             .success(function () {
@@ -64,7 +63,9 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         issues;
 
     $scope.apiRoot = apiServerData.getApiRoot();
-    $scope.apiProject = 'KTD';
+    $scope.apiProject = 'KTD'; // Temporary hard-code for testing purposes
+    apiServerData.setApiProject('KTD');
+    apiServerData.getApiProject();
 
     // Assign columns to scope if local storage already exists.
     if(localStorageHandler.getBoardDesign()){

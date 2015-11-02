@@ -102,6 +102,19 @@ application.factory('apiServerData', function(){
         setApiRoot: function (apiRoot) {
             data.apiRoot = apiRoot;
         },
+        getApiProject: function () {
+            return data.apiProject;
+        },
+        setApiProject: function (apiProject) {
+            data.apiProject = apiProject;
+        },
+        getApiServer: function (apiType) {
+            if(apiType === 'jira'){
+                return data.apiRoot + 'rest/api/2/issue/createmeta';
+            } else {
+                return '';
+            }
+        },
         getIsLoggedIn: function () {
             return data.isLoggedIn;
         },
