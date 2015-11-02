@@ -127,7 +127,11 @@ application.factory('apiServerData', function(){
 application.factory('localStorageHandler', function(){
     return {
         getBoardDesign: function () {
-            return JSON.parse(localStorage.getItem('boardDesign'));
+            if(localStorage.getItem('boardDesign')){
+                return JSON.parse(localStorage.getItem('boardDesign'));
+            } else {
+                return [];
+            }
         },
         setBoardDesign: function (data) {
             localStorage.setItem('boardDesign', JSON.stringify(data));
@@ -135,8 +139,22 @@ application.factory('localStorageHandler', function(){
         removeBoardDesign: function () {
             localStorage.removeItem('boardDesign');
         },
+        getLoadedProject: function () {
+            if(localStorage.getItem('loadedProject')){
+                return JSON.parse(localStorage.getItem('loadedProject'));
+            } else {
+                return '';
+            }
+        },
+        setLoadedProject: function (data) {
+            localStorage.setItem('loadedProject', JSON.stringify(data));
+        },
         getIssues: function () {
-            return JSON.parse(localStorage.getItem('issues'));
+            if(localStorage.getItem('issues')){
+                return JSON.parse(localStorage.getItem('issues'));
+            } else {
+                return [];
+            }
         },
         setIssues: function (data) {
             localStorage.setItem('issues', JSON.stringify(data));
@@ -145,7 +163,11 @@ application.factory('localStorageHandler', function(){
             localStorage.removeItem('issues');
         },
         getConfigs: function () {
-            return JSON.parse(localStorage.getItem('userConfigs'));
+            if(localStorage.getItem('userConfigs')){
+                return JSON.parse(localStorage.getItem('userConfigs'));
+            } else {
+                return [];
+            }
         },
         setConfigs: function (data) {
             localStorage.setItem('userConfigs', JSON.stringify(data));

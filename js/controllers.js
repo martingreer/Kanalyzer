@@ -66,18 +66,13 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     $scope.apiProject = 'KTD'; // Temporary hard-code for testing purposes
 
     // Assign columns to scope if local storage already exists.
-    if(localStorageHandler.getBoardDesign()){
-        $scope.columns = localStorageHandler.getBoardDesign().columns;
-    } else {
-        $scope.columns = [];
-    }
+    $scope.columns = localStorageHandler.getBoardDesign().columns;
+    $scope.loadedBoardId = localStorageHandler.getBoardDesign().rapidViewId;
+
+    $scope.loadedProject = localStorageHandler.getLoadedProject()
 
     // Assign user configs to scope if local storage already exists.
-    if(localStorageHandler.getConfigs()){
-        $scope.userConfigs = localStorageHandler.getConfigs();
-    } else {
-        $scope.userConfigs = [];
-    }
+    $scope.userConfigs = localStorageHandler.getConfigs();
 
     // The max results to be returned from API (-1 is unlimited results).
     $scope.maxResults = '';
@@ -110,7 +105,10 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                 try{
                     boardColumnsDesign = createBoardDesign(parseBoardDesign(data));
                     localStorageHandler.setBoardDesign(boardColumnsDesign);
+                    $scope.loadedProject = localStorageHandler.setLoadedProject($scope.apiProject);
                     $scope.columns = localStorageHandler.getBoardDesign().columns;
+                    $scope.loadedBoardId = localStorageHandler.getBoardDesign().rapidViewId;
+                    $scope.loadedProject = localStorageHandler.getLoadedProject();
                     getBoardDesignBeforeIssues.resolve();
                     if(DEBUG){console.log("Parse board design SUCCESS!");}
                 } catch(error) {
@@ -139,20 +137,20 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                 }
                 requestIssues.success(function (data) {
                     apiIssuesMinimal = parseMultipleApiIssues(data);
-                    //console.log(JSON.stringify(apiIssuesMinimal));
                     try{
                         issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
-                        Notification.success('Parse issue data SUCCESS!');
+                        Notification.success('Issue data successfully loaded!');
+                        if(DEBUG){console.log("Parse issue data SUCCESS!");}
                     } catch(error) {
                         Notification.error('Something went wrong when parsing the issue data. Check your board configuration for abnormalities.');
-                        if (DEBUG) {console.log("Parsing of issues data ERROR: " + error);}
+                        if(DEBUG){console.log("Parsing of issues data ERROR: " + error);}
                     }
                     localStorageHandler.setIssues(issues);
-                    if (DEBUG) {console.log("Get all issues from API: SUCCESS!");}
+                    if(DEBUG){console.log("Get all issues from API: SUCCESS!");}
                 });
                 requestIssues.error(function (data) {
                     Notification.error('Failed to load issue data from source.');
-                    if (DEBUG) {console.log("Get all issues from API: ERROR");}
+                    if(DEBUG){console.log("Get all issues from API: ERROR");}
                 });
             });
         }
@@ -167,25 +165,31 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             updatedBoardDesign,
             updatedIssues;
 
-        oldBoardDesign = createBoardDesign(localStorageHandler.getBoardDesign());
-        oldIssues = createIssuesFromArray(localStorageHandler.getIssues(), oldBoardDesign);
+        try{
+            oldBoardDesign = createBoardDesign(localStorageHandler.getBoardDesign());
+            oldIssues = createIssuesFromArray(localStorageHandler.getIssues(), oldBoardDesign);
 
-        _.forEach(oldBoardDesign.columns, function (columnOutput) {
-            _.forEach(columnCategories, function (columnInput) {
-                if(columnInput.name === columnOutput.name){
-                    columnOutput.category = columnInput.category;
-                }
+            _.forEach(oldBoardDesign.columns, function (columnOutput) {
+                _.forEach(columnCategories, function (columnInput) {
+                    if(columnInput.name === columnOutput.name){
+                        //console.log(columnOutput.name + ": " + columnOutput.category + " -> " + columnInput.category);
+                        columnOutput.category = columnInput.category;
+                    }
+                });
             });
-        });
 
-        updatedBoardDesign = createBoardDesign(oldBoardDesign);
-        updatedIssues = createIssuesFromArray(oldIssues, updatedBoardDesign);
+            updatedBoardDesign = createBoardDesign(oldBoardDesign);
+            updatedIssues = createIssuesFromArray(oldIssues, updatedBoardDesign);
 
-        localStorageHandler.removeBoardDesign();
-        localStorageHandler.removeIssues();
-        localStorageHandler.setBoardDesign(updatedBoardDesign);
-        localStorageHandler.setIssues(updatedIssues);
-        Notification.primary('Column categories have been updated.');
+            localStorageHandler.removeBoardDesign();
+            localStorageHandler.removeIssues();
+            localStorageHandler.setBoardDesign(updatedBoardDesign);
+            localStorageHandler.setIssues(updatedIssues);
+            Notification.success('Column categories have been updated.');
+        } catch (error) {
+            Notification.error('Column categories update failed.');
+            if(DEBUG){console.log("Updating columns ERROR: " + error);}
+        }
     };
 
     /**
@@ -195,14 +199,11 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         var userConfigs,
             isNameUnique = true;
 
-        if(localStorageHandler.getConfigs() === null){
-            console.log("No previous configs! Creating new.");
-            userConfigs = [];
-        } else if (name === '') {
+        if (name === '') {
             Notification.error('Config was not saved. You must choose a name.');
             console.log("Input name is empty. Not adding config.");
         } else {
-            console.log("Previous configs exist! Adding this config to it.");
+            console.log("Adding config.");
             userConfigs = localStorageHandler.getConfigs();
             _.forEach(userConfigs, function (config) {
                 if(config.name.toLowerCase() === name.toLowerCase()){
@@ -278,11 +279,12 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 application.controller('cfdController', function ($scope, localStorageHandler) {
     "use strict";
 
-    if(localStorageHandler.getIssues() && localStorageHandler.getBoardDesign()){
-        var issues = localStorageHandler.getIssues(),
-            boardDesign = localStorageHandler.getBoardDesign();
+    var issues = localStorageHandler.getIssues(),
+        boardDesign = localStorageHandler.getBoardDesign();
+
+    try{
         $scope.data = createCfdData(issues, boardDesign);
-    } else {
+    } catch (error) {
         $scope.data = [];
     }
 
@@ -319,10 +321,11 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
 application.controller('etdtController', function ($scope, localStorageHandler) {
     "use strict";
 
-    if(localStorageHandler.getIssues()){
-        var issues = localStorageHandler.getIssues();
+    var issues = localStorageHandler.getIssues();
+
+    try{
         $scope.data = createEtDtData("All issues", issues);
-    } else {
+    } catch (error) {
         $scope.data = [];
     }
 
@@ -365,12 +368,7 @@ application.controller('peController', function ($scope, localStorageHandler) {
     var cumulativeCycleTime = 0,
         amountOfCycleTimes = 0;
 
-    if(localStorageHandler.getIssues()) {
-        $scope.issues = localStorageHandler.getIssues();
-    } else {
-        $scope.issues = [];
-    }
-    //console.log($scope.issues);
+    $scope.issues = localStorageHandler.getIssues();
 
     _.forEach($scope.issues, function(issue) {
         if(issue.cycleTime != null){

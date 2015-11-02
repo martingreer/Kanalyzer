@@ -57,7 +57,7 @@ function BoardDesign(apiColumnsData) {
     self.createColumnCategories = function () {
         var hasCategories;
 
-        hasCategories = (self.columns[0].category === null);
+        hasCategories = self.columns[0].hasOwnProperty('category');
 
         if(!hasCategories) {
             _.forEach(self.columns, function (column) {
@@ -92,7 +92,7 @@ function BoardDesign(apiColumnsData) {
         return category;
     };
 
-    self.isIgnoreColumm = function (columnName) {
+    self.isIgnoreColumn = function (columnName) {
         return self.getColumnCategory(columnName) === "Ignore";
     };
 
@@ -275,7 +275,7 @@ function Issue(apiIssue, boardDesign, time){
      * Check if issue is in a column which should be ignored in calculations.
      */
     self.isIgnored = function(columnName){
-        return boardDesign.isIgnoreColumm(columnName);
+        return boardDesign.isIgnoreColumn(columnName);
     };
 
     /**

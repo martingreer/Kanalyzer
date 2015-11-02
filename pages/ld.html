@@ -41,7 +41,7 @@
 </form>
 <br /><br />
 <div>
-    <h4>Define Column Categories</h4>
+    <h4>Define Column Categories for the board: ID {{ loadedBoardId }}, Project {{ loadedProject }}</h4>
     <table class="table table-condensed table-hover" style="width:610px">
         <thead>
         <tr>
@@ -63,7 +63,7 @@
         </tr>
         </tbody>
     </table>
-    <button class="btn btn-default" ng-click="updateColumnCategories(columns)">Update columns</button>
+    <button class="btn btn-default" ng-click="updateColumnCategories(columns)">Update columns</button> &nbsp;&nbsp; Loaded config: {{ selectedConfig }}
     <!--<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Load config <span class="caret"></span></button>
     <ul class="dropdown-menu" ng-repeat="config in userConfigs">
         <li ng-click="loadConfig(config.name)">{{ config.name }}</li>
@@ -75,7 +75,6 @@
             <option ng-repeat="config in userConfigs" value="{{ config.name }}">{{ config.name }}</option>
         </select>
     </form>
-    Loaded config: {{ selectedConfig }}
     <br /><br />
     <form role="form" name="userConfigForm" novalidate>
         <label for="configName">Config Name:</label>
