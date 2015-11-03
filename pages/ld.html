@@ -19,26 +19,28 @@
     </div>
 </div>-->
 
-
-<form role="form" name="loadIssuesForm" novalidate>
-    <div class="form-group">
-        <label for="apiBoard">Board ID:</label>
-        <input type="text" id="apiBoard" class="form-control" ng-model="boardId" style="width:60px">
-    </div>
-    <div class="form-group">
-        <label for="apiProject">Project key:</label>
-        <input type="text" id="apiProject" class="form-control" ng-model="apiProject" style="width:60px">
-    </div>
-    <div class="form-group">
-        <label for="maxResults">Max results:</label>
-        <input type="text" id="maxResults" class="form-control" ng-model="maxResults" style="width:60px">
-    </div>
-    <div>
-        <button type="submit" class="btn btn-default" ng-click="getAllIssues()">Load issues</button>
-        <button class="btn btn-default" ng-click="printBoardDesign()">Show/hide board design</button>
-        <button class="btn btn-default" ng-click="printAllIssues()">Show/hide issues</button>
-    </div>
-</form>
+<div>
+    <form role="form" name="loadIssuesForm" novalidate>
+        <div class="form-group">
+            <label for="apiBoard">Board ID:</label>
+            <input type="text" id="apiBoard" class="form-control" ng-model="boardId" ng-disabled="!isLoggedIn" style="width:60px">
+        </div>
+        <div class="form-group">
+            <label for="apiProject">Project key:</label>
+            <input type="text" id="apiProject" class="form-control" ng-model="apiProject" ng-disabled="!isLoggedIn" style="width:60px">
+        </div>
+        <div class="form-group">
+            <label for="maxResults">Max results:</label>
+            <input type="text" id="maxResults" class="form-control" ng-model="maxResults" ng-disabled="!isLoggedIn" style="width:60px">
+        </div>
+        <div>
+            <button type="submit" class="btn btn-default" ng-click="getAllIssues()" ng-disabled="!isLoggedIn">Load issues</button>
+        </div>
+        <div ng-show="!isLoggedIn">
+            <h4 style="color:red">Log in first to load data!</h4>
+        </div>
+    </form>
+</div>
 <br /><br />
 <div>
     <h4>Define Column Categories for the board: ID {{ loadedBoardId }}, Project {{ loadedProject }}</h4>
@@ -82,17 +84,7 @@
         <button type="submit" class="btn btn-default" ng-click="saveConfig(configName, columns)">Save this config</button>
     </form>
     <br />
-    <button class="btn btn-default" ng-click="clearConfigs()">Clear all configs</button>
-</div>
-<br /><br />
-<div>
-    <h4>BOARD DESIGN:</h4>
-    {{ boardDesignString }}
-</div>
-<br />
-<div>
-    <h4>ISSUES:</h4>
-    {{ allIssuesString }}
+    <button class="btn btn-default" ng-click="clearConfigs()">Delete all configs</button>
 </div>
 </body>
 </html>

@@ -87,13 +87,15 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     // Board ID to get column & status structure from.
     $scope.boardId = previousLoadData.getBoardId();
 
+    $scope.isLoggedIn = apiServerData.getIsLoggedIn();
+
     /**
     * Get issues for the project.
     */
     $scope.getAllIssues = function () {
         previousLoadData.setPreviousLoadData($scope.boardId, $scope.apiProject, $scope.maxResults);
 
-        if(!apiServerData.getIsLoggedIn()){
+        if(!$scope.isLoggedIn){
             Notification.error('You are not logged in!');
         } else {
             boardColumnsDesign = {};
