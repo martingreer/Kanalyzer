@@ -124,6 +124,82 @@ application.factory('apiServerData', function(){
     }
 });
 
+application.factory('previousLogin', function(){
+    var data = {
+        url: '',
+        userName: ''
+    };
+
+    return {
+        getUrl: function () {
+            if(localStorage.getItem('previousLogin')){
+                data = JSON.parse(localStorage.getItem('previousLogin'));
+                return data.url;
+            } else {
+                return '';
+            }
+        },
+        getUserName: function () {
+            if(localStorage.getItem('previousLogin')){
+                data = JSON.parse(localStorage.getItem('previousLogin'));
+                return data.userName;
+            } else {
+                return '';
+            }
+        },
+        setPreviousLogin: function (url, userName) {
+            data.url = url;
+            data.userName = userName;
+            localStorage.setItem('previousLogin', JSON.stringify(data));
+        }
+    }
+});
+
+application.factory('previousLoadData', function(){
+    var data = {
+        boardId: '',
+        projectKey: '',
+        maxResults: ''
+    };
+
+    return {
+        getBoardId: function () {
+            if(localStorage.getItem('previousLoadData')){
+                data = JSON.parse(localStorage.getItem('previousLoadData'));
+                return data.boardId;
+            } else {
+                return '';
+            }
+        },
+        getProjectKey: function () {
+            if(localStorage.getItem('previousLoadData')){
+                data = JSON.parse(localStorage.getItem('previousLoadData'));
+                return data.projectKey;
+            } else {
+                return '';
+            }
+        },
+        getMaxResults: function () {
+            if(localStorage.getItem('previousLoadData')){
+                data = JSON.parse(localStorage.getItem('previousLoadData'));
+                return data.maxResults;
+            } else {
+                return '';
+            }
+        },
+        setPreviousLoadData: function (boardId, projectKey, maxResults) {
+            data.boardId = boardId;
+            data.projectKey = projectKey;
+            if (maxResults === '-1') {
+                data.maxResults = '';
+            } else{
+                data.maxResults = maxResults;
+            }
+            localStorage.setItem('previousLoadData', JSON.stringify(data));
+        }
+    }
+});
+
 application.factory('localStorageHandler', function(){
     return {
         getBoardDesign: function () {
@@ -141,13 +217,13 @@ application.factory('localStorageHandler', function(){
         },
         getLoadedProject: function () {
             if(localStorage.getItem('loadedProject')){
-                return JSON.parse(localStorage.getItem('loadedProject'));
+                return localStorage.getItem('loadedProject');
             } else {
                 return '';
             }
         },
         setLoadedProject: function (data) {
-            localStorage.setItem('loadedProject', JSON.stringify(data));
+            localStorage.setItem('loadedProject', data);
         },
         getIssues: function () {
             if(localStorage.getItem('issues')){

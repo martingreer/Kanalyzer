@@ -3,12 +3,12 @@
 
 var DEBUG = true;
 
-application.controller('loginController', function($scope, Base64, $http, apiServerData, Notification){
+application.controller('loginController', function($scope, Base64, $http, apiServerData, previousLogin, Notification){
     "use strict";
 
     // Variables for logging in to API server.
-    $scope.credentials = { username: 'martin.w.greer', password: ''};
-    $scope.apiRoot = 'https://softhousegbg.atlassian.net/'; // Temporary hard-code for testing purposes
+    $scope.credentials = { username: previousLogin.getUserName(), password: ''};
+    $scope.apiRoot = previousLogin.getUrl();
     apiServerData.setApiRoot($scope.apiRoot);
 
     // This variable decides what is being shown in the login view.
@@ -20,8 +20,10 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
     $scope.login = function () {
         //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
         //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
+        previousLogin.setPreviousLogin($scope.apiRoot, $scope.credentials.username);
         apiServerData.setApiRoot($scope.apiRoot);
         $scope.apiServer = apiServerData.getApiServer('jira');
+        Notification.primary('Logging in...');
         if(DEBUG){console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");}
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
         $http({method: 'GET', url: $scope.apiServer})
@@ -56,7 +58,7 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
 /**
 * Controller for the Load Data view.
 */
-application.controller('ldController', function ($scope, $http, $q, apiServerData, localStorageHandler, Notification) {
+application.controller('ldController', function ($scope, $http, $q, apiServerData, localStorageHandler, previousLoadData, Notification) {
     "use strict";
 
     // Synchronization variable to make sure http requests are done in the correct order.
@@ -68,27 +70,29 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         issues;
 
     $scope.apiRoot = apiServerData.getApiRoot();
-    $scope.apiProject = 'KTD'; // Temporary hard-code for testing purposes
+    $scope.apiProject = previousLoadData.getProjectKey();
 
     // Assign columns to scope if local storage already exists.
     $scope.columns = localStorageHandler.getBoardDesign().columns;
     $scope.loadedBoardId = localStorageHandler.getBoardDesign().rapidViewId;
 
-    $scope.loadedProject = localStorageHandler.getLoadedProject()
+    $scope.loadedProject = localStorageHandler.getLoadedProject();
 
     // Assign user configs to scope if local storage already exists.
     $scope.userConfigs = localStorageHandler.getConfigs();
 
     // The max results to be returned from API (-1 is unlimited results).
-    $scope.maxResults = '';
+    $scope.maxResults = previousLoadData.getMaxResults();
 
     // Board ID to get column & status structure from.
-    $scope.boardId = '12';
+    $scope.boardId = previousLoadData.getBoardId();
 
     /**
-    * Get all issues for the project that was given on login.
+    * Get issues for the project.
     */
     $scope.getAllIssues = function () {
+        previousLoadData.setPreviousLoadData($scope.boardId, $scope.apiProject, $scope.maxResults);
+
         if(!apiServerData.getIsLoggedIn()){
             Notification.error('You are not logged in!');
         } else {
@@ -131,13 +135,13 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             getBoardDesignBeforeIssues.promise.then(function() {
                 if(DEBUG){console.log("Attempting to get all issues for project " + $scope.apiProject + "...");}
                 if($scope.maxResults === ''){
-                    $scope.maxResults = -1;
+                    $scope.maxResults = '-1';
                 }
                 var requestIssues = $http({
                     method: "GET",
                     url: $scope.apiRoot + "rest/api/2/search?jql=project=" + $scope.apiProject + "&expand=changelog" + "&maxResults=" + $scope.maxResults
                 });
-                if($scope.maxResults === -1){
+                if($scope.maxResults === '-1'){
                     $scope.maxResults = '';
                 }
                 requestIssues.success(function (data) {
@@ -147,8 +151,8 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                         Notification.success('Issue data successfully loaded!');
                         if(DEBUG){console.log("Parse issue data SUCCESS!");}
                     } catch(error) {
-                        Notification.error('Something went wrong when parsing the issue data. Check your board configuration for abnormalities.');
                         if(DEBUG){console.log("Parsing of issues data ERROR: " + error);}
+                        Notification.error('Something went wrong when parsing the issue data. Check your board configuration for abnormalities.');
                     }
                     localStorageHandler.setIssues(issues);
                     if(DEBUG){console.log("Get all issues from API: SUCCESS!");}
@@ -323,6 +327,9 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
     };
 });
 
+/**
+ * Controller for the Execution Time vs Delay Time view.
+ */
 application.controller('etdtController', function ($scope, localStorageHandler) {
     "use strict";
 
