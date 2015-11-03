@@ -19,19 +19,19 @@
     </div>
 </div>-->
 
-<div>
+<div style="float:left; margin-right:50px; margin-top:10px">
     <form role="form" name="loadIssuesForm" novalidate>
         <div class="form-group">
             <label for="apiBoard">Board ID:</label>
-            <input type="text" id="apiBoard" class="form-control" ng-model="boardId" ng-disabled="!isLoggedIn" style="width:60px">
+            <input type="text" id="apiBoard" class="form-control" ng-model="boardId" ng-disabled="!isLoggedIn" style="width:70px">
         </div>
         <div class="form-group">
             <label for="apiProject">Project key:</label>
-            <input type="text" id="apiProject" class="form-control" ng-model="apiProject" ng-disabled="!isLoggedIn" style="width:60px">
+            <input type="text" id="apiProject" class="form-control" ng-model="apiProject" ng-disabled="!isLoggedIn" style="width:70px">
         </div>
         <div class="form-group">
             <label for="maxResults">Max results:</label>
-            <input type="text" id="maxResults" class="form-control" ng-model="maxResults" ng-disabled="!isLoggedIn" style="width:60px">
+            <input type="text" id="maxResults" class="form-control" ng-model="maxResults" ng-disabled="!isLoggedIn" style="width:70px">
         </div>
         <div>
             <button type="submit" class="btn btn-default" ng-click="getAllIssues()" ng-disabled="!isLoggedIn">Load issues</button>
@@ -41,8 +41,7 @@
         </div>
     </form>
 </div>
-<br /><br />
-<div>
+<div style="float:left; margin-right:50px">
     <h4>Define Column Categories for the board: ID {{ loadedBoardId }}, Project {{ loadedProject }}</h4>
     <table class="table table-condensed table-hover" style="width:610px">
         <thead>
@@ -66,14 +65,11 @@
         </tbody>
     </table>
     <button class="btn btn-default" ng-click="updateColumnCategories(columns)">Update columns</button> &nbsp;&nbsp; Loaded config: {{ selectedConfig }}
-    <!--<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Load config <span class="caret"></span></button>
-    <ul class="dropdown-menu" ng-repeat="config in userConfigs">
-        <li ng-click="loadConfig(config.name)">{{ config.name }}</li>
-    </ul>-->
-    <br /><br />
+</div>
+<div style="float:left; margin-top:10px">
     <form role="form" name="loadConfigForm">
-        <label for="loadConfigSelect">Load config:</label>
-        <select name="loadConfigSelect" id="loadConfigSelect" ng-model="selectedConfig" ng-change="loadConfig(selectedConfig)">
+        <label for="loadConfigSelect">Load config:</label><br />
+        <select class="form-control" name="loadConfigSelect" id="loadConfigSelect" ng-model="selectedConfig" ng-change="loadConfig(selectedConfig)">
             <option ng-repeat="config in userConfigs" value="{{ config.name }}">{{ config.name }}</option>
         </select>
     </form>

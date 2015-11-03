@@ -305,8 +305,7 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
     $scope.options = {
         chart: {
             type: 'stackedAreaChart',
-            height: 450,
-            width: 800,
+            width: 1000,
             useVoronoi: false,
             transitionDuration: 500,
             useInteractiveGuideline: true,
@@ -349,8 +348,6 @@ application.controller('etdtController', function ($scope, localStorageHandler) 
     $scope.options = {
         chart: {
             type: 'scatterChart',
-            height: 450,
-            width: 800,
             interactive: true,
             scatter: {
                 onlyCircles: true
