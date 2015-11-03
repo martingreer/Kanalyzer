@@ -64,9 +64,9 @@
         </tr>
         </tbody>
     </table>
-    <button class="btn btn-default" ng-click="updateColumnCategories(columns)">Update columns</button> &nbsp;&nbsp; Loaded config: <b>{{ selectedConfig }}</b>
+    <button class="btn btn-default" ng-click="updateColumnCategories(columns)">Update columns</button> &nbsp;&nbsp; Loaded config: <b>{{ loadedConfig }}</b>
 </div>
-<div style="float:left; margin-top:10px">
+<div style="float:left; margin-top:45px">
     <form role="form" name="loadConfigForm">
         <label for="loadConfigSelect">Load config:</label><br />
         <select class="form-control" name="loadConfigSelect" id="loadConfigSelect" ng-model="selectedConfig" ng-change="loadConfig(selectedConfig)">

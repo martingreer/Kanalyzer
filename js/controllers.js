@@ -31,11 +31,13 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
                 apiServerData.setIsLoggedIn(true);
                 $scope.isLoggedIn = apiServerData.getIsLoggedIn();
                 Notification.success('Login successful!');
+                if(DEBUG){console.log("User " + $scope.credentials.username + " is now logged in!");}
             })
             .error(function () {
                 apiServerData.setIsLoggedIn(false);
                 Notification.error('Login failed, please try again.');
-            })
+                if(DEBUG){console.log("Login failed.");}
+            });
     };
 
     /**
@@ -44,14 +46,17 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
     $scope.logout = function () {
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(' : ');
         $scope.apiServer = apiServerData.getApiServer('jira');
+        if(DEBUG){console.log("Attempting to log out...");}
         $http({method: 'GET', url: $scope.apiServer})
             .success(function () {
                 Notification.error('Logout failed, please try again.');
+                if(DEBUG){console.log("Logout failed.");}
             })
             .error(function () {
                 apiServerData.setIsLoggedIn(false);
                 $scope.isLoggedIn = apiServerData.getIsLoggedIn();
                 Notification.primary('You have been logged out.');
+                if(DEBUG){console.log("User " + $scope.credentials.username + " has logged out.");}
             });
     };
 });
@@ -88,7 +93,11 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     // Board ID to get column & status structure from.
     $scope.boardId = previousLoadData.getBoardId();
 
+    // Keeps track of whether user is logged in or not.
     $scope.isLoggedIn = apiServerData.getIsLoggedIn();
+
+    // The config that is currently selected.
+    $scope.loadedConfig = '';
 
     /**
     * Get issues for the project.
@@ -125,7 +134,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     if(DEBUG){console.log("Parse board design SUCCESS!");}
                 } catch(error) {
                     Notification.error('Something went wrong when parsing the board data. Check your board configuration for abnormalities.');
-                    if(DEBUG){console.log("Parse board design SUCCESS!");}
+                    if(DEBUG){console.log("Parsing of board data ERROR: " + error);}
                 }
 
             });
@@ -154,8 +163,8 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                         Notification.success('Issue data successfully loaded!');
                         if(DEBUG){console.log("Parse issue data SUCCESS!");}
                     } catch(error) {
-                        if(DEBUG){console.log("Parsing of issues data ERROR: " + error);}
                         Notification.error('Something went wrong when parsing the issue data. Check your board configuration for abnormalities.');
+                        if(DEBUG){console.log("Parsing of issues data ERROR: " + error);}
                     }
                     localStorageHandler.setIssues(issues);
                     if(DEBUG){console.log("Get all issues from API: SUCCESS!");}
@@ -184,7 +193,6 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             _.forEach(oldBoardDesign.columns, function (columnOutput) {
                 _.forEach(columnCategories, function (columnInput) {
                     if(columnInput.name === columnOutput.name){
-                        //console.log(columnOutput.name + ": " + columnOutput.category + " -> " + columnInput.category);
                         columnOutput.category = columnInput.category;
                     }
                 });
@@ -211,7 +219,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         var userConfigs,
             isNameUnique = true;
 
-        if (!name.replace(/\s/g, '').length || name === '' || !name) {
+        if (name === '' || !name || !name.replace(/\s/g, '').length) {
             Notification.error('Config was not saved. You must choose a name.');
             console.log("Input name is empty. Not adding config.");
         } else {
@@ -239,15 +247,44 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
      * Loads a chosen user config.
      */
     $scope.loadConfig = function (name) {
-        var userConfigs = localStorageHandler.getConfigs();
+        var config = localStorageHandler.getSelectedConfig(name);
 
-        _.forEach(userConfigs, function (config) {
-            if(config.name === name){
-                $scope.columns = config.columnCategories;
+        if(haveSameColumnStructure($scope.columns, config.columnCategories)){
+            $scope.loadedConfig = localStorageHandler.getSelectedConfig(name).name;
+            $scope.columns = config.columnCategories;
+            if(DEBUG){console.log("Config was successfully loaded.");}
+        } else {
+            Notification.error("The selected config is not compatible with the current board.");
+            if(DEBUG){console.log("Config was not loaded.");}
+        }
+    };
+
+    /**
+     * Checks if the given column arrays have the same structure.
+     */
+    function haveSameColumnStructure(columnsToConfig, columns){
+        if (columnsToConfig === columns){
+            if(DEBUG){console.log("Columns are exactly equal!");}
+            return true;
+        }
+        if (columnsToConfig == null || columns == null) {
+            if(DEBUG){console.log("At least one column array is null!");}
+            return false;
+        }
+        if (columnsToConfig.length != columns.length) {
+            if(DEBUG){console.log("Lengths are not the same!");}
+            return false;
+        }
+
+        for (var i = 0; i < columnsToConfig.length; ++i) {
+            if (columnsToConfig[i].name !== columns[i].name) {
+                if(DEBUG){console.log("Column names are not equal!");}
                 return false;
             }
-        });
-    };
+        }
+
+        return true;
+    }
 
     /**
      * Clears all configs.

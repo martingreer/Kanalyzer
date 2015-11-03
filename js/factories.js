@@ -250,6 +250,22 @@ application.factory('localStorageHandler', function(){
         },
         removeConfigs: function () {
             localStorage.removeItem('userConfigs');
+        },
+        getSelectedConfig: function (name) {
+            var configs = JSON.parse(localStorage.getItem('userConfigs')),
+                selectedConfig = {};
+
+            if(configs){
+                _.forEach(configs, function(config){
+                    if(config.name === name){
+                        selectedConfig = config;
+                        return false;
+                    }
+                });
+                return selectedConfig;
+            } else {
+                return {};
+            }
         }
     }
 });
