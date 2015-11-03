@@ -3,6 +3,9 @@
 
 var DEBUG = true;
 
+/**
+ * Controller for the Log In view.
+ */
 application.controller('loginController', function($scope, Base64, $http, apiServerData, previousLogin, Notification){
     "use strict";
 
@@ -145,7 +148,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             });
 
             getBoardDesignBeforeIssues.promise.then(function() {
-                if(DEBUG){console.log("Attempting to get all issues for project " + $scope.apiProject + "...");}
+                if(DEBUG){console.log("Attempting to get issues for project " + $scope.apiProject + " from server " + $scope.apiRoot + "...");}
                 if($scope.maxResults === ''){
                     $scope.maxResults = '-1';
                 }
@@ -368,7 +371,7 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
 /**
  * Controller for the Execution Time vs Delay Time view.
  */
-application.controller('etdtController', function ($scope, localStorageHandler) {
+application.controller('etdtController', function ($scope, localStorageHandler, Notification) {
     "use strict";
 
     var issues = localStorageHandler.getIssues();
@@ -391,8 +394,18 @@ application.controller('etdtController', function ($scope, localStorageHandler) 
             },
             showDistX: false,
             showDistY: false,
+            showLegend: false,
             useInteractiveGuideline: true,
             transitionDuration: 350,
+            zoom: {
+                enabled: true,
+                scaleExtent: [1,10],
+                useFixedDomain: false,
+                useNiceScale: false,
+                horizontalOff: false,
+                verticalOff: false,
+                unzoomEventType: "dblclick.zoom"
+            },
             xAxis: {
                 axisLabel: 'Delay Time (hours)',
                 axisLabelDistance: '0'
@@ -407,6 +420,44 @@ application.controller('etdtController', function ($scope, localStorageHandler) 
             text: 'Execution Time vs Delay Time'
         }
     };
+
+    /**
+     * Filters the issues to be shown in the graph up to the max Cycle Time value.
+     */
+    $scope.applyCycleTimeFilter = function (maxCycleTime) {
+        var allIssues = localStorageHandler.getIssues(),
+            filteredIssues = [];
+
+        function msToHours(ms){
+            return ((ms/1000)/60)/60;
+        }
+
+        if(maxCycleTime === '' || maxCycleTime === null || maxCycleTime === ' ' || maxCycleTime === undefined){
+            try{
+                $scope.data = createEtDtData("All issues", allIssues);
+                Notification.success("Filter removed.");
+                if(DEBUG){console.log("Filter removed.");}
+            } catch (error) {
+                Notification.error("Removing filter failed.");
+                $scope.data = [];
+            }
+        } else {
+            _.forEach(allIssues, function(issue){
+                if(msToHours(issue.cycleTime) <= maxCycleTime && issue.cycleTime !== null){
+                    filteredIssues.push(issue);
+                }
+            });
+
+            try{
+                $scope.data = createEtDtData("All issues", filteredIssues);
+                if(DEBUG){console.log("Graph data updated according to filter.");}
+                Notification.success("Filter applied.");
+            } catch (error) {
+                Notification.error("Filter failed.");
+                $scope.data = [];
+            }
+        }
+    }
 });
 
 /**

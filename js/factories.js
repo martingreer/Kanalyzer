@@ -88,6 +88,9 @@ application.factory('Base64', function () {
     };
 });
 
+/**
+ * Session storage for API info and "logged in" status.
+ */
 application.factory('apiServerData', function(){
     var data = {
         apiRoot: '',
@@ -124,6 +127,9 @@ application.factory('apiServerData', function(){
     }
 });
 
+/**
+ * Local storage helper for remembering a users previous login username and URL.
+ */
 application.factory('previousLogin', function(){
     var data = {
         url: '',
@@ -155,6 +161,9 @@ application.factory('previousLogin', function(){
     }
 });
 
+/**
+ * Local storage helper for remembering a users previous Load Data choices.
+ */
 application.factory('previousLoadData', function(){
     var data = {
         boardId: '',
@@ -200,6 +209,9 @@ application.factory('previousLoadData', function(){
     }
 });
 
+/**
+ * Local storage helper for board design, issues and configs.
+ */
 application.factory('localStorageHandler', function(){
     return {
         getBoardDesign: function () {
