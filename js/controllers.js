@@ -210,7 +210,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         var userConfigs,
             isNameUnique = true;
 
-        if (name === '') {
+        if (name === '' || !name) {
             Notification.error('Config was not saved. You must choose a name.');
             console.log("Input name is empty. Not adding config.");
         } else {
@@ -222,16 +222,15 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     return false;
                 }
             });
-        }
-
-        if(!isNameUnique){
-            Notification.error('Config was not saved. Please choose a unique name.');
-        } else {
-            var newConfig = {"name": name, "columnCategories": columnCategories};
-            userConfigs.push(newConfig);
-            localStorageHandler.setConfigs(userConfigs);
-            $scope.userConfigs = localStorageHandler.getConfigs();
-            Notification.success('Config saved!');
+            if(!isNameUnique){
+                Notification.error('Config was not saved. Please choose a unique name.');
+            } else {
+                var newConfig = {"name": name, "columnCategories": columnCategories};
+                userConfigs.push(newConfig);
+                localStorageHandler.setConfigs(userConfigs);
+                $scope.userConfigs = localStorageHandler.getConfigs();
+                Notification.success('Config saved!');
+            }
         }
     };
 
