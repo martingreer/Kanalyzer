@@ -3,10 +3,18 @@
     <title>Kanalyzer: ET / DT distribution</title>
 </head>
 <body>
-    <div class="row">
+    <div style="float:left; margin-right:50px">
         <div class="chart" style="height: 550px; width: 725px; margin-left: 30px">
             <nvd3 options="options" data="data"></nvd3>
         </div>
+    </div>
+    <div style="float:left; margin-top:40px">
+        <form role="form" name="cycleTimeFilterForm" novalidate>
+            <label for="cycleTimeFilter" style="width: 150px">Filter by maximum Cycle Time in hours:</label>
+            <input type="text" class="form-control" id="cycleTimeFilter" ng-model="cycleTimeFilter" style="width:150px">
+            <br />
+            <button type="submit" class="btn btn-default" ng-click="">Apply</button>
+        </form>
     </div>
 </body>
 </html>

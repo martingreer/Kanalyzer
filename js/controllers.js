@@ -35,7 +35,7 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
             .error(function () {
                 apiServerData.setIsLoggedIn(false);
                 Notification.error('Login failed, please try again.');
-            });
+            })
     };
 
     /**
@@ -43,6 +43,7 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
      */
     $scope.logout = function () {
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(' : ');
+        $scope.apiServer = apiServerData.getApiServer('jira');
         $http({method: 'GET', url: $scope.apiServer})
             .success(function () {
                 Notification.error('Logout failed, please try again.');
@@ -210,7 +211,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         var userConfigs,
             isNameUnique = true;
 
-        if (name === '' || !name) {
+        if (!name.replace(/\s/g, '').length || name === '' || !name) {
             Notification.error('Config was not saved. You must choose a name.');
             console.log("Input name is empty. Not adding config.");
         } else {
