@@ -157,6 +157,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     $scope.maxResults = '';
                 }
                 requestIssues.success(function (data) {
+                    if(DEBUG){console.log("Get all issues from API: SUCCESS!");}
                     apiIssuesMinimal = parseMultipleApiIssues(data);
                     try{
                         issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
@@ -167,7 +168,6 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                         if(DEBUG){console.log("Parsing of issues data ERROR: " + error);}
                     }
                     localStorageHandler.setIssues(issues);
-                    if(DEBUG){console.log("Get all issues from API: SUCCESS!");}
                 });
                 requestIssues.error(function (data) {
                     Notification.error('Failed to load issue data from source.');

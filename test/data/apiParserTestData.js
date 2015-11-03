@@ -101,6 +101,33 @@ var columnsData = {
     ]
 };
 
+var coachAppColumnsData = {
+    "rapidViewId": 9,
+    "columns": [
+        {
+            "id": 35,
+            "name": "To Do",
+            "statusIds": [
+                "10000"
+            ]
+        },
+        {
+            "id": 36,
+            "name": "In Progress",
+            "statusIds": [
+                "3"
+            ]
+        },
+        {
+            "id": 39,
+            "name": "Done",
+            "statusIds": [
+                "10001"
+            ]
+        }
+    ]
+};
+
 var apiIssueWithHistoryAndNotDone = {
     "expand": "operations,versionedRepresentations,editmeta,changelog,transitions,renderedFields",
     "id": "10000",
@@ -1626,4 +1653,257 @@ var apiTwoIssues = {
             }
         }
     ]
+};
+
+var apiIssueWithHistoryButNoStatusChange = {
+    "expand": "operations,versionedRepresentations,editmeta,changelog,transitions,renderedFields",
+    "id": "12008",
+    "self": "https://softhousegbg.atlassian.net/rest/api/2/issue/12008",
+    "key": "COAC-71",
+    "fields": {
+        "issuetype": {
+            "self": "https://softhousegbg.atlassian.net/rest/api/2/issuetype/7",
+            "id": "7",
+            "description": "Created by JIRA Agile - do not edit or delete. Issue type for a user story.",
+            "iconUrl": "https://softhousegbg.atlassian.net/secure/viewavatar?size=xsmall&avatarId=10615&avatarType=issuetype",
+            "name": "Story",
+            "subtask": false,
+            "avatarId": 10615
+        },
+        "timespent": null,
+        "project": {
+            "self": "https://softhousegbg.atlassian.net/rest/api/2/project/10500",
+            "id": "10500",
+            "key": "COAC",
+            "name": "CoachApp",
+            "avatarUrls": {
+                "48x48": "https://softhousegbg.atlassian.net/secure/projectavatar?avatarId=10703",
+                "24x24": "https://softhousegbg.atlassian.net/secure/projectavatar?size=small&avatarId=10703",
+                "16x16": "https://softhousegbg.atlassian.net/secure/projectavatar?size=xsmall&avatarId=10703",
+                "32x32": "https://softhousegbg.atlassian.net/secure/projectavatar?size=medium&avatarId=10703"
+            }
+        },
+        "fixVersions": [
+
+        ],
+        "aggregatetimespent": null,
+        "resolution": null,
+        "resolutiondate": null,
+        "workratio": 0,
+        "lastViewed": null,
+        "watches": {
+            "self": "https://softhousegbg.atlassian.net/rest/api/2/issue/COAC-71/watchers",
+            "watchCount": 1,
+            "isWatching": false
+        },
+        "created": "2015-10-26T13:47:12.000+0100",
+        "customfield_10020": null,
+        "customfield_10021": "Not started",
+        "priority": {
+            "self": "https://softhousegbg.atlassian.net/rest/api/2/priority/3",
+            "iconUrl": "https://softhousegbg.atlassian.net/images/icons/priorities/major.svg",
+            "name": "Major",
+            "id": "3"
+        },
+        "customfield_10100": null,
+        "customfield_10300": null,
+        "labels": [
+
+        ],
+        "customfield_10016": null,
+        "customfield_10017": null,
+        "customfield_10018": null,
+        "customfield_10019": null,
+        "timeestimate": 10800,
+        "aggregatetimeoriginalestimate": 10800,
+        "versions": [
+
+        ],
+        "issuelinks": [
+
+        ],
+        "assignee": null,
+        "updated": "2015-10-26T13:47:39.000+0100",
+        "status": {
+            "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10000",
+            "description": "",
+            "iconUrl": "https://softhousegbg.atlassian.net/images/icons/subtask.gif",
+            "name": "To Do",
+            "id": "10000",
+            "statusCategory": {
+                "self": "https://softhousegbg.atlassian.net/rest/api/2/statuscategory/2",
+                "id": 2,
+                "key": "new",
+                "colorName": "blue-gray",
+                "name": "To Do"
+            }
+        },
+        "components": [
+
+        ],
+        "timeoriginalestimate": 10800,
+        "description": null,
+        "customfield_10012": null,
+        "customfield_10013": null,
+        "customfield_10014": null,
+        "customfield_10015": null,
+        "customfield_10005": null,
+        "customfield_10401": null,
+        "customfield_10006": "9223372036854775807",
+        "customfield_10007": null,
+        "customfield_10008": null,
+        "aggregatetimeestimate": 10800,
+        "summary": "Retro",
+        "creator": {
+            "self": "https://softhousegbg.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
+            "name": "Jonas Jaconelli",
+            "key": "jonas jaconelli",
+            "emailAddress": "jonas.jaconelli@softhouse.se",
+            "avatarUrls": {
+                "48x48": "https://softhousegbg.atlassian.net/secure/useravatar?ownerId=jonas+jaconelli&avatarId=10800",
+                "24x24": "https://softhousegbg.atlassian.net/secure/useravatar?size=small&ownerId=jonas+jaconelli&avatarId=10800",
+                "16x16": "https://softhousegbg.atlassian.net/secure/useravatar?size=xsmall&ownerId=jonas+jaconelli&avatarId=10800",
+                "32x32": "https://softhousegbg.atlassian.net/secure/useravatar?size=medium&ownerId=jonas+jaconelli&avatarId=10800"
+            },
+            "displayName": "Jonas Jaconelli",
+            "active": true,
+            "timeZone": "Europe/Stockholm"
+        },
+        "subtasks": [
+
+        ],
+        "reporter": {
+            "self": "https://softhousegbg.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
+            "name": "Jonas Jaconelli",
+            "key": "jonas jaconelli",
+            "emailAddress": "jonas.jaconelli@softhouse.se",
+            "avatarUrls": {
+                "48x48": "https://softhousegbg.atlassian.net/secure/useravatar?ownerId=jonas+jaconelli&avatarId=10800",
+                "24x24": "https://softhousegbg.atlassian.net/secure/useravatar?size=small&ownerId=jonas+jaconelli&avatarId=10800",
+                "16x16": "https://softhousegbg.atlassian.net/secure/useravatar?size=xsmall&ownerId=jonas+jaconelli&avatarId=10800",
+                "32x32": "https://softhousegbg.atlassian.net/secure/useravatar?size=medium&ownerId=jonas+jaconelli&avatarId=10800"
+            },
+            "displayName": "Jonas Jaconelli",
+            "active": true,
+            "timeZone": "Europe/Stockholm"
+        },
+        "customfield_10000": null,
+        "aggregateprogress": {
+            "progress": 0,
+            "total": 10800,
+            "percent": 0
+        },
+        "customfield_10001": null,
+        "customfield_10200": "0|zzzb4m:3zzqlmy",
+        "customfield_10002": null,
+        "customfield_10003": null,
+        "customfield_10004": null,
+        "customfield_10400": null,
+        "environment": null,
+        "duedate": null,
+        "progress": {
+            "progress": 0,
+            "total": 10800,
+            "percent": 0
+        },
+        "votes": {
+            "self": "https://softhousegbg.atlassian.net/rest/api/2/issue/COAC-71/votes",
+            "votes": 0,
+            "hasVoted": false
+        }
+    },
+    "changelog": {
+        "startAt": 0,
+        "maxResults": 3,
+        "total": 3,
+        "histories": [
+            {
+                "id": "13752",
+                "author": {
+                    "self": "https://softhousegbg.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
+                    "name": "Jonas Jaconelli",
+                    "key": "jonas jaconelli",
+                    "emailAddress": "jonas.jaconelli@softhouse.se",
+                    "avatarUrls": {
+                        "48x48": "https://softhousegbg.atlassian.net/secure/useravatar?ownerId=jonas+jaconelli&avatarId=10800",
+                        "24x24": "https://softhousegbg.atlassian.net/secure/useravatar?size=small&ownerId=jonas+jaconelli&avatarId=10800",
+                        "16x16": "https://softhousegbg.atlassian.net/secure/useravatar?size=xsmall&ownerId=jonas+jaconelli&avatarId=10800",
+                        "32x32": "https://softhousegbg.atlassian.net/secure/useravatar?size=medium&ownerId=jonas+jaconelli&avatarId=10800"
+                    },
+                    "displayName": "Jonas Jaconelli",
+                    "active": true,
+                    "timeZone": "Europe/Stockholm"
+                },
+                "created": "2015-10-26T13:47:21.418+0100",
+                "items": [
+                    {
+                        "field": "Rank",
+                        "fieldtype": "custom",
+                        "from": "",
+                        "fromString": "",
+                        "to": "",
+                        "toString": "Ranked higher"
+                    }
+                ]
+            },
+            {
+                "id": "13755",
+                "author": {
+                    "self": "https://softhousegbg.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
+                    "name": "Jonas Jaconelli",
+                    "key": "jonas jaconelli",
+                    "emailAddress": "jonas.jaconelli@softhouse.se",
+                    "avatarUrls": {
+                        "48x48": "https://softhousegbg.atlassian.net/secure/useravatar?ownerId=jonas+jaconelli&avatarId=10800",
+                        "24x24": "https://softhousegbg.atlassian.net/secure/useravatar?size=small&ownerId=jonas+jaconelli&avatarId=10800",
+                        "16x16": "https://softhousegbg.atlassian.net/secure/useravatar?size=xsmall&ownerId=jonas+jaconelli&avatarId=10800",
+                        "32x32": "https://softhousegbg.atlassian.net/secure/useravatar?size=medium&ownerId=jonas+jaconelli&avatarId=10800"
+                    },
+                    "displayName": "Jonas Jaconelli",
+                    "active": true,
+                    "timeZone": "Europe/Stockholm"
+                },
+                "created": "2015-10-26T13:47:39.501+0100",
+                "items": [
+                    {
+                        "field": "timeoriginalestimate",
+                        "fieldtype": "jira",
+                        "from": null,
+                        "fromString": null,
+                        "to": "10800",
+                        "toString": "10800"
+                    }
+                ]
+            },
+            {
+                "id": "13756",
+                "author": {
+                    "self": "https://softhousegbg.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
+                    "name": "Jonas Jaconelli",
+                    "key": "jonas jaconelli",
+                    "emailAddress": "jonas.jaconelli@softhouse.se",
+                    "avatarUrls": {
+                        "48x48": "https://softhousegbg.atlassian.net/secure/useravatar?ownerId=jonas+jaconelli&avatarId=10800",
+                        "24x24": "https://softhousegbg.atlassian.net/secure/useravatar?size=small&ownerId=jonas+jaconelli&avatarId=10800",
+                        "16x16": "https://softhousegbg.atlassian.net/secure/useravatar?size=xsmall&ownerId=jonas+jaconelli&avatarId=10800",
+                        "32x32": "https://softhousegbg.atlassian.net/secure/useravatar?size=medium&ownerId=jonas+jaconelli&avatarId=10800"
+                    },
+                    "displayName": "Jonas Jaconelli",
+                    "active": true,
+                    "timeZone": "Europe/Stockholm"
+                },
+                "created": "2015-10-26T13:47:39.593+0100",
+                "items": [
+                    {
+                        "field": "timeestimate",
+                        "fieldtype": "jira",
+                        "from": null,
+                        "fromString": null,
+                        "to": "10800",
+                        "toString": "10800"
+                    }
+                ]
+            }
+        ]
+    }
 };

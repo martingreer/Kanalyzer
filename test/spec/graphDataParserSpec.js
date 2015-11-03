@@ -92,10 +92,10 @@ describe("CFD graph", function(){
             approvals.verify(amountOfIssues);
         });
 
-        approveIt("should return an array of complete CFD data", function(approvals){
+        /*approveIt("should return an array of complete CFD data", function(approvals){
             var boardDesign = new BoardDesign(columnsData),
                 graphArray = createCfdData(fourIssues, boardDesign);
             approvals.verify(graphArray);
-        });
+        });*/
     });
 });

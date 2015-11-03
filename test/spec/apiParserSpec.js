@@ -44,10 +44,14 @@ describe("BoardDesign", function(){
 describe("Issue", function(){
     "use strict";
 
-    var issueWithoutHistory = new Issue(apiIssueWithoutHistory, new BoardDesign(columnsData));
-    var issueWithHistoryAndNotDone = new Issue(apiIssueWithHistoryAndNotDone, new BoardDesign(columnsData), "2015-09-10T00:00:00");
-    var issueIsDone = new Issue(apiIssueIsDone, new BoardDesign(columnsData));
+    var ktdBoardDesign = new BoardDesign(columnsData);
+    var coachAppBoardDesign = new BoardDesign(coachAppColumnsData);
+
+    var issueWithoutHistory = new Issue(apiIssueWithoutHistory, ktdBoardDesign);
+    var issueWithHistoryAndNotDone = new Issue(apiIssueWithHistoryAndNotDone, ktdBoardDesign, "2015-09-10T00:00:00");
+    var issueIsDone = new Issue(apiIssueIsDone, ktdBoardDesign);
     var twoIssues = parseMultipleApiIssues(apiTwoIssues);
+    var issueWithHistoryButNoStatusChange = new Issue(apiIssueWithHistoryButNoStatusChange, coachAppBoardDesign);
 
     describe("With history", function(){
         it("should have id", function(){
@@ -122,6 +126,13 @@ describe("Issue", function(){
 
         it("should have only one history record", function(){
             expect(columnHistory.length).toBe(1);
+        });
+    });
+
+    describe("With history but no status change", function(){
+        it("should have a first column", function(){
+            var firstColumn = issueWithHistoryButNoStatusChange.columnHistory[0].columnName;
+            expect(firstColumn).toBe("To Do");
         });
     });
 

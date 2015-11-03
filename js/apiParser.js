@@ -203,7 +203,7 @@ function Issue(apiIssue, boardDesign, time){
         return new Moves(apiIssueHistories, boardDesign);
     }
 
-    function startColumn(apiIssue){
+    function getStartColumn(apiIssue){
         return new ColumnHistoryItem(boardDesign.getColumnMatchingStatus(apiIssue.fields.status.id), self.created, time);
     }
 
@@ -218,10 +218,23 @@ function Issue(apiIssue, boardDesign, time){
     }
 
     function createColumnHistory(apiIssue){
-        var columnHistory = [];
+        var columnHistory = [],
+            issueHasHistory = !(apiIssue.changelog.histories.length === 0),
+            issueHasStatusChangeInHistory = false;
 
-        if(apiIssue.changelog.histories.length === 0){
-            columnHistory.push(startColumn(apiIssue));
+        _.forEach(apiIssue.changelog.histories, function(event){
+            _.forEach(event.items, function(item){
+                if(item.field === "status"){
+                    //console.log(apiIssue.key + " ||| StatusChange: false | FirstColumn: " + boardDesign.getColumnMatchingStatus(apiIssue.fields.status.id));
+                    issueHasStatusChangeInHistory = true;
+                    return false;
+                }
+            });
+        });
+
+        if(!issueHasHistory || !issueHasStatusChangeInHistory){
+            //console.log(apiIssue.key + " ||| History: " + issueHasHistory + " | StatusChange: " + issueHasStatusChangeInHistory + " | FirstColumn: " + boardDesign.getColumnMatchingStatus(apiIssue.fields.status.id));
+            columnHistory.push(getStartColumn(apiIssue));
         } else {
             columnHistory = parseMoves(parseApiIssueHistories(apiIssue.changelog.histories));
         }
