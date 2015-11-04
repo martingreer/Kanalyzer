@@ -460,8 +460,14 @@ application.controller('etdtController', function ($scope, localStorageHandler, 
  * Controller for the Process Efficiency tab.
  */
 application.controller('peController', function ($scope, localStorageHandler) {
-    var cumulativeCycleTime = 0,
+    var cumulativeProcessEfficiency = 0,
+        amountOfProcessEfficiencies = 0,
+        cumulativeCycleTime = 0,
         amountOfCycleTimes = 0,
+        cumulativeExecutionTime = 0,
+        amountOfExecutionsTimes = 0,
+        cumulativeDelayTime = 0,
+        amountOfDelayTimes = 0,
         allIssues = localStorageHandler.getIssues(),
         issues,
         issuesNotDoneOrBadlyTracked;
@@ -474,14 +480,31 @@ application.controller('peController', function ($scope, localStorageHandler) {
         return issue.cycleTime !== 0 && issue.processEfficiency !== 0;
     });
 
+    function convertToPercent (decimal){
+        return (Math.round(decimal*100) + "%");
+    }
+
+    /**
+     * Calculates the average values for the collection of issues.
+     */
     _.forEach(issues, function(issue) {
-        if(issue.cycleTime !== null){
+        if(issue.processEfficiency > 0){
+            issue.processEfficiencyConverted = convertToPercent(issue.processEfficiency);
+            cumulativeProcessEfficiency += issue.processEfficiency;
+            amountOfProcessEfficiencies++;
+        }
+        if(issue.cycleTime > 0){
             issue.cycleTimeConverted = timeUtil.convertMsToDHM(issue.cycleTime);
             cumulativeCycleTime += issue.cycleTime;
             amountOfCycleTimes++;
         }
-        if(issue.processEfficiency !== 0){
-            issue.processEfficiencyConverted = (Math.round(issue.processEfficiency*100) + "%");
+        if(issue.executionTime > 0){
+            cumulativeExecutionTime += issue.executionTime;
+            amountOfExecutionsTimes++;
+        }
+        if(issue.delayTime > 0){
+            cumulativeDelayTime += issue.delayTime;
+            amountOfDelayTimes++;
         }
     });
 
@@ -493,5 +516,8 @@ application.controller('peController', function ($scope, localStorageHandler) {
 
     $scope.issues = issues;
 
+    $scope.averageProcessEfficiency = convertToPercent(cumulativeProcessEfficiency/amountOfProcessEfficiencies);
     $scope.averageCycleTime = timeUtil.convertMsToDHM(cumulativeCycleTime/amountOfCycleTimes);
+    $scope.averageExecutionTime = timeUtil.convertMsToDHM(cumulativeExecutionTime/amountOfExecutionsTimes);
+    $scope.averageDelayTime = timeUtil.convertMsToDHM(cumulativeDelayTime/amountOfDelayTimes);
 });
