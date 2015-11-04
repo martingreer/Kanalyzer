@@ -428,10 +428,6 @@ application.controller('etdtController', function ($scope, localStorageHandler, 
         var allIssues = localStorageHandler.getIssues(),
             filteredIssues = [];
 
-        function msToHours(ms){
-            return ((ms/1000)/60)/60;
-        }
-
         if(maxCycleTime === '' || maxCycleTime === null || maxCycleTime === ' ' || maxCycleTime === undefined){
             try{
                 $scope.data = createEtDtData("All issues", allIssues);
@@ -443,7 +439,7 @@ application.controller('etdtController', function ($scope, localStorageHandler, 
             }
         } else {
             _.forEach(allIssues, function(issue){
-                if(msToHours(issue.cycleTime) <= maxCycleTime && issue.cycleTime !== null){
+                if(timeUtil.msToHours(issue.cycleTime) <= maxCycleTime && issue.cycleTime !== null){
                     filteredIssues.push(issue);
                 }
             });

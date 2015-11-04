@@ -49,6 +49,12 @@ function TimeUtil() {
 
     var self = this;
 
+    self.msToHours = function (ms){
+        var hours;
+        hours = +(((ms/1000)/60)/60).toFixed(2);
+        return hours;
+    };
+
     self.getTimestamp = function (millisecondsSinceEpoch) {
         var today;
 
@@ -69,7 +75,10 @@ function TimeUtil() {
             hour = Math.floor( (ms - day * dayFactor) / hourFactor),
             minute = Math.round( (ms - day * dayFactor - hour * hourFactor) / 60000),
             pad = function(n){ return n < 10 ? '0' + n : n;},
-            answer = "";
+            days,
+            hours,
+            minutes,
+            answer;
 
         if( minute === 60 ){
             hour++;
@@ -81,7 +90,40 @@ function TimeUtil() {
             hour = 0;
         }
 
-        answer = day + " days, " + pad(hour) + " hours, " + pad(minute) + " minutes.";
+        days = day + " days, ";
+        hours = hour + " hours, ";
+        minutes = minute + " minutes.";
+
+        if(day === 0){
+            days = "";
+        } else if (day > 0 && hour === 0 && minute === 0){
+            days = day + " days.";
+            if (day === 1) {
+                days = day + " day.";
+            }
+        } else if (day === 1 && (hour > 0 || minute > 0)){
+            days = day + " day, ";
+        }
+
+        if (hour === 0) {
+            hours = "";
+        } else if (hour > 0 && minute === 0){
+            hours = hour + " hours.";
+            if (hour === 1) {
+                hours = hour + " hour.";
+            }
+        } else if (hour === 1 && minute > 0){
+            hours = hour + " hour, ";
+        }
+
+        if (minute === 0) {
+            minutes = "";
+        } else if (minute === 1){
+            minutes = minute + " minute.";
+        }
+
+        answer = days + hours + minutes;
+        //answer = day + " days, " + pad(hour) + " hours, " + pad(minute) + " minutes.";
         return answer;
         //return [day, pad(hour), pad(minute)].join(':');
     };

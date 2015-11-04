@@ -11,9 +11,9 @@ function EtDtValueItem(issueKey, delayTime, executionTime, cycleTime){
     var self = this;
 
     self.key = issueKey;
-    self.x = Math.round(((delayTime/1000)/60)/60);
-    self.y = Math.round(((executionTime/1000)/60)/60);
-    self.size = Math.round(cycleTime);
+    self.x = timeUtil.msToHours(delayTime);
+    self.y = timeUtil.msToHours(executionTime);
+    self.size = timeUtil.msToHours(cycleTime);
 
     return self;
 }
