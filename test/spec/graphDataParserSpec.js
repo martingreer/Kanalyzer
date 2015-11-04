@@ -25,15 +25,15 @@ describe("Execution Time vs Delay Time graph", function(){
         });
 
         it("first issue should have an execution time", function(){
-            expect(firstIssueData.y).toBe(1);
+            expect(firstIssueData.y).toBe(0.72);
         });
 
         it("second issue should have a delay time", function(){
-            expect(secondIssueData.x).toBe(1);
+            expect(secondIssueData.x).toBe(0.73);
         });
 
         it("second issue should have a size", function(){
-            expect(secondIssueData.size).toBe(4502000);
+            expect(secondIssueData.size).toBe(1.25);
         });
     });
 });

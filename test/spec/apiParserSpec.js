@@ -160,7 +160,7 @@ describe("Issue", function(){
         });
 
         it("should calculate execution time for an issue that is done", function(){
-            expect(timeUtil.convertMsToDHM(issueIsDone.executionTime)).toBe("0 days, 00 hours, 01 minutes.");
+            expect(timeUtil.convertMsToDHM(issueIsDone.executionTime)).toBe("1 minute.");
         });
     });
 
@@ -170,7 +170,7 @@ describe("Issue", function(){
         });
 
         it("should calculate delay time for an issue that is done", function(){
-            expect(timeUtil.convertMsToDHM(issueIsDone.delayTime)).toBe("0 days, 18 hours, 01 minutes.");
+            expect(timeUtil.convertMsToDHM(issueIsDone.delayTime)).toBe("18 hours, 1 minute.");
         });
     });
 
