@@ -331,13 +331,19 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
     "use strict";
 
     var issues = localStorageHandler.getIssues(),
-        boardDesign = localStorageHandler.getBoardDesign();
+        boardDesign = localStorageHandler.getBoardDesign(),
+        allCfdData = [];
 
     try{
-        $scope.data = createCfdData(issues, boardDesign);
+        allCfdData = createCfdData(issues, boardDesign);
     } catch (error) {
-        $scope.data = [];
+        allCfdData = [];
     }
+
+    $scope.data = allCfdData;
+    $scope.startDate = "2015-10-15";
+    $scope.endDate = "2015-10-30";
+    $scope.startFromZero = false;
 
     /**
     * Graph structure.
@@ -366,6 +372,61 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
             text: 'Cumulative Flow Diagram'
         }
     };
+
+    /**
+     * Apply a given date filter for the CFD graph.
+     */
+    $scope.applyCfdDateFilter = function (startDate, endDate, startFromZero) {
+        var _startDate = Date.parse(new Date(startDate)),
+            _endDate = Date.parse(new Date(endDate)),
+            columnArray = [],
+            dateArray = [];
+
+        //console.log(JSON.stringify(allCfdData));
+        if(DEBUG){console.log("Applying filter: " + startDate + " to " + endDate + " || Done from 0? " + startFromZero);}
+
+        function filterDates(){
+            if(startFromZero){
+                _.forEach(allCfdData, function (cfdColumnItem) {
+                    dateArray = [];
+                    _.forEach(cfdColumnItem.values, function (valuesItem){
+                        // x attribute is the date.
+                        if(valuesItem.x >= _startDate && valuesItem.x <= _endDate){
+                            dateArray.push(valuesItem);
+                        }
+                    });
+                    columnArray.push({"key": cfdColumnItem.key, "values": dateArray});
+                });
+            } else {
+                _.forEach(allCfdData, function (cfdColumnItem) {
+                    dateArray = [];
+                    _.forEach(cfdColumnItem.values, function (valuesItem){
+                        // x attribute is the date.
+                        if(valuesItem.x >= _startDate && valuesItem.x <= _endDate){
+                            dateArray.push(valuesItem);
+                        }
+                    });
+                    columnArray.push({"key": cfdColumnItem.key, "values": dateArray});
+                });
+            }
+
+            return columnArray;
+        }
+
+        $scope.data = filterDates();
+    };
+
+    /**
+     * Removes the CFD date filter by resetting the scope data to initial value.
+     */
+    $scope.removeCfdDateFilter = function () {
+        $scope.data = allCfdData;
+    };
+
+    $scope.applyStartFromZero = function (startFromZero) {
+        console.log("Toggle done column to start from zero: " + startFromZero);
+
+    }
 });
 
 /**
@@ -465,7 +526,7 @@ application.controller('peController', function ($scope, localStorageHandler) {
         cumulativeCycleTime = 0,
         amountOfCycleTimes = 0,
         cumulativeExecutionTime = 0,
-        amountOfExecutionsTimes = 0,
+        amountOfExecutionTimes = 0,
         cumulativeDelayTime = 0,
         amountOfDelayTimes = 0,
         allIssues = localStorageHandler.getIssues(),
@@ -489,22 +550,22 @@ application.controller('peController', function ($scope, localStorageHandler) {
      */
     _.forEach(issues, function(issue) {
         if(issue.processEfficiency > 0){
-            issue.processEfficiencyConverted = convertToPercent(issue.processEfficiency)+"%";
-            cumulativeProcessEfficiency += issue.processEfficiency;
-            amountOfProcessEfficiencies++;
-
-            var value = Math.round(issue.processEfficiency*100);
+            var processEfficiency = convertToPercent(issue.processEfficiency);
             var type;
 
-            if (value < 15) {
+            issue.processEfficiencyConverted = processEfficiency+"%";
+            cumulativeProcessEfficiency += processEfficiency;
+            amountOfProcessEfficiencies++;
+
+            if (processEfficiency < 15) {
                 type = 'danger';
-            } else if (value < 25) {
+            } else if (processEfficiency < 25) {
                 type = 'warning';
             } else {
                 type = 'success';
             }
 
-            issue.barDynamic = value;
+            issue.barDynamic = processEfficiency;
             issue.barType = type;
         }
         if(issue.cycleTime > 0){
@@ -514,7 +575,7 @@ application.controller('peController', function ($scope, localStorageHandler) {
         }
         if(issue.executionTime > 0){
             cumulativeExecutionTime += issue.executionTime;
-            amountOfExecutionsTimes++;
+            amountOfExecutionTimes++;
         }
         if(issue.delayTime > 0){
             cumulativeDelayTime += issue.delayTime;
@@ -529,13 +590,13 @@ application.controller('peController', function ($scope, localStorageHandler) {
     });
 
     $scope.issues = issues;
-    $scope.averageProcessEfficiency = convertToPercent(cumulativeProcessEfficiency/amountOfProcessEfficiencies)+"%";
+    $scope.averageProcessEfficiency = Math.round(cumulativeProcessEfficiency/amountOfProcessEfficiencies)+"%";
     $scope.averageCycleTime = timeUtil.convertMsToDHM(cumulativeCycleTime/amountOfCycleTimes);
-    $scope.averageExecutionTime = timeUtil.convertMsToDHM(cumulativeExecutionTime/amountOfExecutionsTimes);
+    $scope.averageExecutionTime = timeUtil.convertMsToDHM(cumulativeExecutionTime/amountOfExecutionTimes);
     $scope.averageDelayTime = timeUtil.convertMsToDHM(cumulativeDelayTime/amountOfDelayTimes);
 
     function averageProcessEfficiencyBar (){
-        var barValue = convertToPercent(cumulativeProcessEfficiency/amountOfProcessEfficiencies);
+        var barValue = Math.round(cumulativeProcessEfficiency/amountOfProcessEfficiencies);
         var barType;
 
         if (barValue < 15) {

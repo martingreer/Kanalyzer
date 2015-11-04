@@ -3,9 +3,31 @@
     <title>Kanalyzer: CFD</title>
 </head>
 <body>
-    <div class="row">
-        <div class="chart" style="height: 500px; margin-left: 30px;">
+    <div class="row" style="float: top; margin-bottom: 40px">
+        <div class="chart" style="height: 500px; margin-left: 30px">
             <nvd3 options="options" data="data"></nvd3>
+        </div>
+    </div>
+    <div class="row" style="float: top">
+        <form class="form-inline" role="form" style="margin-left: 70px" name="cfdDateFilterForm" novalidate>
+            <div style="float: left; margin-right: 15px">
+                <label for="startDate">Start date:</label>
+                <input type="text" class="form-control" id="startDate" ng-model="startDate" style="width:150px">
+            </div>
+            <div style="float: left; margin-right: 35px">
+                <label for="endDate">End date:</label>
+                <input type="text" class="form-control" id="endDate" ng-model="endDate" style="width:150px">
+            </div>
+            <div style="float: left; margin-right: 10px">
+                <button type="submit" class="btn btn-default" ng-click="applyCfdDateFilter(startDate, endDate, startFromZero)">Apply filter</button>
+            </div>
+        </form>
+        <div style="float: left; margin-right: 35px">
+            <button class="btn btn-default" ng-click="removeCfdDateFilter()">Remove filter</button>
+        </div>
+        <div style="float: left; margin-top: 5px">
+            <input type="checkbox" id="startFromZero" ng-model="startFromZero" ng-click="applyStartFromZero(startFromZero)">
+            <label for="startFromZero">Done starts from 0</label>
         </div>
     </div>
 </body>
