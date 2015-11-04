@@ -461,20 +461,37 @@ application.controller('etdtController', function ($scope, localStorageHandler, 
  */
 application.controller('peController', function ($scope, localStorageHandler) {
     var cumulativeCycleTime = 0,
-        amountOfCycleTimes = 0;
+        amountOfCycleTimes = 0,
+        allIssues = localStorageHandler.getIssues(),
+        issues,
+        issuesNotDoneOrBadlyTracked;
 
-    $scope.issues = localStorageHandler.getIssues();
+    issuesNotDoneOrBadlyTracked = _.filter(allIssues, function (issue){
+        return issue.cycleTime === 0 || issue.processEfficiency === 0;
+    });
 
-    _.forEach($scope.issues, function(issue) {
-        if(issue.cycleTime != null){
+    issues = _.filter(allIssues, function (issue){
+        return issue.cycleTime !== 0 && issue.processEfficiency !== 0;
+    });
+
+    _.forEach(issues, function(issue) {
+        if(issue.cycleTime !== null){
             issue.cycleTimeConverted = timeUtil.convertMsToDHM(issue.cycleTime);
             cumulativeCycleTime += issue.cycleTime;
             amountOfCycleTimes++;
         }
-        if(issue.processEfficiency != 0){
+        if(issue.processEfficiency !== 0){
             issue.processEfficiencyConverted = (Math.round(issue.processEfficiency*100) + "%");
         }
     });
+
+    issues = _.sortByOrder(issues, ['processEfficiency', 'cycleTime'], ['asc', 'desc']);
+
+    _.forEach(issuesNotDoneOrBadlyTracked, function(issue){
+        issues.push(issue);
+    });
+
+    $scope.issues = issues;
 
     $scope.averageCycleTime = timeUtil.convertMsToDHM(cumulativeCycleTime/amountOfCycleTimes);
 });
