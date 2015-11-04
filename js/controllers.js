@@ -481,7 +481,7 @@ application.controller('peController', function ($scope, localStorageHandler) {
     });
 
     function convertToPercent (decimal){
-        return (Math.round(decimal*100) + "%");
+        return Math.round(decimal*100);
     }
 
     /**
@@ -489,9 +489,23 @@ application.controller('peController', function ($scope, localStorageHandler) {
      */
     _.forEach(issues, function(issue) {
         if(issue.processEfficiency > 0){
-            issue.processEfficiencyConverted = convertToPercent(issue.processEfficiency);
+            issue.processEfficiencyConverted = convertToPercent(issue.processEfficiency)+"%";
             cumulativeProcessEfficiency += issue.processEfficiency;
             amountOfProcessEfficiencies++;
+
+            var value = Math.round(issue.processEfficiency*100);
+            var type;
+
+            if (value < 15) {
+                type = 'danger';
+            } else if (value < 25) {
+                type = 'warning';
+            } else {
+                type = 'success';
+            }
+
+            issue.barDynamic = value;
+            issue.barType = type;
         }
         if(issue.cycleTime > 0){
             issue.cycleTimeConverted = timeUtil.convertMsToDHM(issue.cycleTime);
@@ -515,9 +529,25 @@ application.controller('peController', function ($scope, localStorageHandler) {
     });
 
     $scope.issues = issues;
-
-    $scope.averageProcessEfficiency = convertToPercent(cumulativeProcessEfficiency/amountOfProcessEfficiencies);
+    $scope.averageProcessEfficiency = convertToPercent(cumulativeProcessEfficiency/amountOfProcessEfficiencies)+"%";
     $scope.averageCycleTime = timeUtil.convertMsToDHM(cumulativeCycleTime/amountOfCycleTimes);
     $scope.averageExecutionTime = timeUtil.convertMsToDHM(cumulativeExecutionTime/amountOfExecutionsTimes);
     $scope.averageDelayTime = timeUtil.convertMsToDHM(cumulativeDelayTime/amountOfDelayTimes);
+
+    function averageProcessEfficiencyBar (){
+        var barValue = convertToPercent(cumulativeProcessEfficiency/amountOfProcessEfficiencies);
+        var barType;
+
+        if (barValue < 15) {
+            barType = 'danger';
+        } else if (barValue < 25) {
+            barType = 'warning';
+        } else {
+            barType = 'success';
+        }
+
+        $scope.avgPeBarValue = barValue;
+        $scope.avgPeBarType = barType;
+    }
+    averageProcessEfficiencyBar();
 });

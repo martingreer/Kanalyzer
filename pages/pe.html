@@ -8,7 +8,8 @@
     </div>
     <br />
     <div>
-        <b>Average Process Efficiency:</b> {{ averageProcessEfficiency }}
+        <b>Average Process Efficiency:</b>
+        <div style="width:190px"><uib-progressbar animate="false" value="avgPeBarValue" type="{{avgPeBarType}}">{{ averageProcessEfficiency }}</uib-progressbar></div>
     </div>
     <div>
         <b>Average Cycle Time:</b> {{ averageCycleTime }}
@@ -36,7 +37,7 @@
                 <td>{{ issue.key }}</td>
                 <td>{{ issue.summary }}</td>
                 <td>{{ issue.cycleTimeConverted }}</td>
-                <td>{{ issue.processEfficiencyConverted }}</td>
+                <td><uib-progressbar animate="false" value="issue.barDynamic" type="{{issue.barType}}">{{ issue.processEfficiencyConverted }}</uib-progressbar></td>
             </tr>
             </tbody>
         </table>

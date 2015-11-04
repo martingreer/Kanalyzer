@@ -1,1 +1,1 @@
-var application = angular.module('kanalyzerApp', ['ui.router', 'nvd3', 'ui-notification']);
+var application = angular.module('kanalyzerApp', ['ui.router', 'ui.bootstrap', 'nvd3', 'ui-notification']);
