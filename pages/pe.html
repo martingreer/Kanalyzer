@@ -3,22 +3,25 @@
     <title>Kanalyzer: Process Efficiency</title>
 </head>
 <body>
-    <div>
-        A transactional process is considered Lean when the process efficiency is >25%.<br />
-    </div>
-    <br />
-    <div>
-        <b>Average Process Efficiency:</b>
-        <div style="width:190px"><uib-progressbar animate="false" value="avgPeBarValue" type="{{avgPeBarType}}">{{ averageProcessEfficiency }}</uib-progressbar></div>
-    </div>
-    <div>
-        <b>Average Cycle Time:</b> {{ averageCycleTime }}
-    </div>
-    <div>
-        <b>Average Execution Time:</b> {{ averageExecutionTime }}
-    </div>
-    <div>
-        <b>Average Delay Time:</b> {{ averageDelayTime }}
+    <div style="margin-left: 20%">
+        <div>
+            <b>Average Process Efficiency:</b>
+            <div style="width:190px">
+                <uib-progressbar style="margin-bottom: 0" animate="false" value="avgPeBarValue" type="{{avgPeBarType}}">
+                    <p style="color: black; font-weight: bold"> &nbsp;{{ averageProcessEfficiency }} </p>
+                </uib-progressbar>
+            </div>
+        </div>
+        <br />
+        <div>
+            <b>Average Cycle Time:</b> {{ averageCycleTime }}
+        </div>
+        <div>
+            <b>Average Execution Time:</b> {{ averageExecutionTime }}
+        </div>
+        <div>
+            <b>Average Delay Time:</b> {{ averageDelayTime }}
+        </div>
     </div>
     <br />
     <div>
@@ -37,7 +40,11 @@
                 <td>{{ issue.key }}</td>
                 <td>{{ issue.summary }}</td>
                 <td>{{ issue.cycleTimeConverted }}</td>
-                <td><uib-progressbar animate="false" value="issue.barDynamic" type="{{issue.barType}}">{{ issue.processEfficiencyConverted }}</uib-progressbar></td>
+                <td>
+                    <uib-progressbar style="margin-bottom: 0" animate="false" value="issue.barDynamic" type="{{issue.barType}}"><p style="color: black; font-weight: bold">
+                        &nbsp;{{ issue.processEfficiencyConverted }} </p>
+                    </uib-progressbar>
+                </td>
             </tr>
             </tbody>
         </table>
