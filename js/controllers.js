@@ -431,29 +431,22 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
         $scope.data = filterDates(allCfdData, startFromZero);
     };
 
+    /**
+     * Toggles
+     */
     function toggleDoneColumnValues (data, startFromZero) {
-        var columnArray = data,
-            doneColumn = {},
+        var columnArray = [],
             initialValue = 0;
 
         if(startFromZero){
             if(DEBUG){console.log("Done column starts from zero.");}
-            doneColumn = _.first(columnArray);
-            console.log(columnArray);
-            columnArray.shift();
-            initialValue = _.first(doneColumn.values.y);
+            columnArray = _.cloneDeep(data);
+            initialValue = (_.first(_.first(columnArray).values).y);
 
-            console.log(doneColumn);
-            console.log(columnArray);
-            console.log(initialValue);
-
-            _.forEach(doneColumn.values, function (value) {
+            _.forEach(_.first(columnArray).values, function (value) {
                 // y attribute is the number of issues in the date.
-                console.log(value.y + " -> " + value.y-initialValue);
                 value.y -= initialValue;
             });
-
-            columnArray.unshift(doneColumn);
         } else {
             if(DEBUG){console.log("Done column starts from actual value.");}
             columnArray = allCfdData; // TODO
