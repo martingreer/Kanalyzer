@@ -332,10 +332,14 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
 
     var issues = localStorageHandler.getIssues(),
         boardDesign = localStorageHandler.getBoardDesign(),
-        allCfdData = [];
+        allCfdData = [],
+        allCfdDataDoneColumnInitialValue = 0,
+        doneColumnPreviousInitialValue = 0,
+        doneColumnInitialValue = 0;
 
     try{
         allCfdData = createCfdData(issues, boardDesign);
+        allCfdDataDoneColumnInitialValue = (_.first(_.first(allCfdData).values).y);
     } catch (error) {
         allCfdData = [];
     }
@@ -383,10 +387,9 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
             columnArray = [],
             dateArray = [];
 
-        if(DEBUG){console.log("Applying filter: " + startDate + " to " + endDate + " || Done from 0? " + startFromZero);}
-
         // TODO
         function filterWithDoneStartFromZero (data) {
+            if(DEBUG){console.log("Applying filter: " + startDate + " to " + endDate + " and Done from ZERO.");}
             columnArray = [];
             _.forEach(data, function (cfdColumnItem) {
                 dateArray = [];
@@ -399,10 +402,22 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
                 columnArray.push({"key": cfdColumnItem.key, "values": dateArray});
             });
 
+            console.log("Previous value: " + doneColumnPreviousInitialValue + " -> " + (_.first(_.first(columnArray).values).y));
+            doneColumnInitialValue = doneColumnPreviousInitialValue = (_.first(_.first(columnArray).values).y);
+            _.forEach(_.first(columnArray).values, function (value) {
+                // y attribute is the number of issues in the date.
+                value.y -= doneColumnInitialValue;
+            });
+
             return columnArray;
         }
 
+        /**
+         * Normal case: If "Done start from 0" checkbox is unchecked.
+         * Filters CFD data between start date and end date.
+         */
         function filterNormal (data) {
+            if(DEBUG){console.log("Applying filter: " + startDate + " to " + endDate + ".");}
             columnArray = [];
             _.forEach(data, function (cfdColumnItem) {
                 dateArray = [];
@@ -413,60 +428,80 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
                     }
                 });
                 columnArray.push({"key": cfdColumnItem.key, "values": dateArray});
+
+                /*_.forEach(_.first(columnArray).values, function (value) {
+                    value.y += doneColumnPreviousInitialValue;
+                });*/
             });
 
             return columnArray;
         }
 
         function filterDates (data, startFromZero) {
+            var _columnArray = [];
+
             if(startFromZero){
-                columnArray = filterWithDoneStartFromZero(data);
+                _columnArray = filterWithDoneStartFromZero(data);
             } else {
-                columnArray = filterNormal(data);
+                _columnArray = filterNormal(data);
             }
 
-            return columnArray;
+            return _columnArray;
         }
 
         $scope.data = filterDates(allCfdData, startFromZero);
     };
 
     /**
-     * Toggles
+     * Removes the CFD date filter by resetting the scope data to initial value.
+     */
+    $scope.removeCfdDateFilter = function (startFromZero) {
+
+        if (startFromZero) {
+            if(DEBUG){console.log("Filter removed (done from zero).");}
+            var _allCfdData = _.cloneDeep(allCfdData);
+            console.log("Initial value: " + doneColumnInitialValue + " -> " + allCfdDataDoneColumnInitialValue);
+            doneColumnInitialValue = allCfdDataDoneColumnInitialValue;
+            _.forEach(_.first(_allCfdData).values, function (value) {
+                // y attribute is the number of issues in the date.
+                value.y -= doneColumnInitialValue;
+            });
+            $scope.data = allCfdData;
+        } else {
+            if(DEBUG){console.log("Filter removed.");}
+            $scope.data = allCfdData;
+        }
+    };
+
+    /**
+     * Toggles whether the done column should start from zero for the current filter.
      */
     function toggleDoneColumnValues (data, startFromZero) {
-        var columnArray = [],
-            initialValue = 0;
+        var columnArray = [];
 
         if(startFromZero){
             if(DEBUG){console.log("Done column starts from zero.");}
             columnArray = _.cloneDeep(data);
-            initialValue = (_.first(_.first(columnArray).values).y);
-
+            console.log("Previous value: " + doneColumnPreviousInitialValue + " -> " + (_.first(_.first(columnArray).values).y));
+            doneColumnInitialValue = doneColumnPreviousInitialValue = (_.first(_.first(columnArray).values).y);
             _.forEach(_.first(columnArray).values, function (value) {
                 // y attribute is the number of issues in the date.
-                value.y -= initialValue;
+                value.y -= doneColumnInitialValue;
             });
+        } else if (!startFromZero && (data == allCfdData)) {
+            console.log("Scope CFD data equals original CFD data");
+            columnArray = allCfdData;
         } else {
             if(DEBUG){console.log("Done column starts from actual value.");}
-            columnArray = allCfdData; // TODO
+            columnArray = _.cloneDeep(data);
+            console.log("Previous value: " + doneColumnPreviousInitialValue);
+            _.forEach(_.first(columnArray).values, function (value) {
+                value.y += doneColumnPreviousInitialValue;
+            });
         }
 
         return columnArray;
     }
-
-    /**
-     * Removes the CFD date filter by resetting the scope data to initial value.
-     */
-    $scope.removeCfdDateFilter = function (startFromZero) {
-        if(startFromZero){
-            $scope.data = allCfdData; // TODO
-            if(DEBUG){console.log("Filter removed (done from zero).");}
-        } else {
-            $scope.data = allCfdData;
-            if(DEBUG){console.log("Filter removed.");}
-        }
-    };
 
     /**
      * Toggles if the graph should reset the amount of issues in Done column
