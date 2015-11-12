@@ -345,9 +345,32 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
     }
 
     $scope.data = allCfdData;
-    $scope.startDate = "2015-10-15";
-    $scope.endDate = "2015-10-30";
     $scope.startFromZero = false;
+
+    // Datepicker variables.
+    $scope.minDate = getFirstHistoryDate(issues);
+    $scope.maxDate = getLastHistoryDate(issues);
+    $scope.startDate = getFirstHistoryDate(issues);
+    $scope.endDate = getLastHistoryDate(issues);
+    $scope.dateFormat = 'yyyy-MM-dd';
+    $scope.startDateStatus = { opened: false };
+    $scope.endDateStatus = { opened: false };
+    $scope.datepickerOptions = {
+        formatYear: 'yyyy',
+        startingDay: 1
+    };
+
+    $scope.openStartDate = function($event) {
+        $scope.startDateStatus.opened = true;
+    };
+
+    $scope.openEndDate = function($event) {
+        $scope.endDateStatus.opened = true;
+    };
+
+    $scope.setDate = function(year, month, day) {
+        $scope.dt = new Date(year, month, day);
+    };
 
     /**
     * Graph structure.
@@ -387,7 +410,7 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
             columnArray = [],
             dateArray = [];
 
-        // TODO
+        // TODO: Fix bug when "start from 0" is pressed and then apply filter.
         function filterWithDoneStartFromZero (data) {
             if(DEBUG){console.log("Applying filter: " + startDate + " to " + endDate + " and Done from ZERO.");}
             columnArray = [];
