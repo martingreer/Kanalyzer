@@ -99,3 +99,16 @@ describe("CFD graph", function(){
         });*/
     });
 });
+
+describe("Column Distribution Graph", function(){
+    "use strict";
+
+    var fourIssues = fourParsedDoneIssues;
+    var boardDesign = createBoardDesign(columnsData);
+
+    describe("Parser", function(){
+       it("should ", function(){
+           expect(1).toBe(1);
+       })
+    });
+});

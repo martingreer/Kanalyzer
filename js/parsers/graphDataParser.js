@@ -121,3 +121,42 @@ function createCfdData(issues, boardDesign){
 
     return graphArray.reverse();
 }
+
+function ColDistItem (columnName) {
+    var self = this;
+
+    self.key = columnName;
+    self.values = [];
+
+    return self;
+}
+
+function ColDistValuesArray () {
+
+}
+
+function ColDistValuesItem (key, x, y) {
+    var self = this;
+
+    self.key = key;
+    self.x = x;
+    self.y = y;
+
+    return self;
+}
+
+// Example: [{"key":"Ready to Refine", "values":[{"key":"Ready to Refine","x":40,"y":0},{"key":"Ready to Refine","x":20,"y":1}]}]
+//          [{"key":"In Progress", "values":[{"key":"In Progress","x":60,"y":0},{"key":"In Progress","x":80,"y":1}]}]
+function createColDistData(issues, boardDesign){
+    var graphArray = [],
+        columnData,
+        dates = getDates(issues);
+
+    _.forEach(boardDesign.columns, function(column){
+        columnData = new ColDistItem(column.name);
+        columnData.values = ColDistValuesArray(dates, issues, boardDesign, column.name);
+        graphArray.push(columnData);
+    });
+
+    return graphArray.reverse();
+}

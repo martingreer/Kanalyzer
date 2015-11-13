@@ -21,7 +21,7 @@ application.controller('coldistController', function ($scope, localStorageHandle
             duration: 400,
             transitionDuration: 350,
             xAxis: {
-                axisLabel: 'Issues',
+                axisLabel: 'Issue',
                 axisLabelDistance: '0'
             },
             yAxis: {
@@ -36,6 +36,7 @@ application.controller('coldistController', function ($scope, localStorageHandle
     };
 
     $scope.data = generateData();
+    console.log($scope.data);
 
     /* Random Data Generator (took from nvd3.org) */
     function generateData() {
