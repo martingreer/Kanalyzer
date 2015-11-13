@@ -31,6 +31,12 @@ application.config(function ($stateProvider, $urlRouterProvider) {
             controller: 'etdtController'
         })
 
+        .state('coldist', {
+            url: '/coldist',
+            templateUrl: 'pages/coldist.html',
+            controller: 'coldistController'
+        })
+
         .state('pe', {
             url: '/pe',
             templateUrl: 'pages/pe.html',
