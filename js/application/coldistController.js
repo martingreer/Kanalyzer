@@ -36,7 +36,7 @@ application.controller('coldistController', function ($scope, localStorageHandle
     };
 
     $scope.data = generateData();
-    console.log($scope.data);
+    //console.log(JSON.stringify($scope.data));
 
     /* Random Data Generator (took from nvd3.org) */
     function generateData() {

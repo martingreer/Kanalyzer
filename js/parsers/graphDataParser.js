@@ -1,3 +1,7 @@
+/*********************************************************
+ * Below is the parsing for the Execution vs Delay view. *
+ *********************************************************/
+
 function EtDtGraphData(key){
     var self = this;
 
@@ -30,6 +34,11 @@ function createEtDtData(key, issues){
 
     return graphArray;
 }
+
+
+/******************************************
+ * Below is the parsing for the CFD view. *
+ ******************************************/
 
 function getLastHistoryDate(issues){
     var allExitTimes = [];
@@ -122,6 +131,11 @@ function createCfdData(issues, boardDesign){
     return graphArray.reverse();
 }
 
+
+/**********************************************************
+ * Below is the parsing for the Column Distribution view. *
+ **********************************************************/
+
 function ColDistItem (columnName) {
     var self = this;
 
@@ -131,32 +145,76 @@ function ColDistItem (columnName) {
     return self;
 }
 
-function ColDistValuesArray () {
+function ColDistValuesArray (issues, columnName, highestTime) {
+    var valuesArray = [];
+    var valuesItem = {};
+    var issueNumber = 0;
 
+    if(issues.constructor === Array) {
+        _.forEach(issues, function (issue) {
+            valuesItem = new ColDistValuesItem(issueNumber, getTimeSpentInColumn(issue, columnName, highestTime));
+            issueNumber++;
+            valuesArray.push(valuesItem);
+        });
+    } else {
+        valuesItem = new ColDistValuesItem(issueNumber, getTimeSpentInColumn(issues, columnName, highestTime));
+        issueNumber++;
+        valuesArray.push(valuesItem);
+    }
+
+    return valuesArray;
 }
 
-function ColDistValuesItem (key, x, y) {
+function ColDistValuesItem (x, y) {
     var self = this;
 
-    self.key = key;
     self.x = x;
     self.y = y;
 
     return self;
 }
 
+function HighestTime () {
+    var self = this;
+
+    self.time = 0;
+
+    return self;
+}
+
+function setHighestTime (time, highestTime) {
+    //console.log(time + " > " + highestTime.time + " = " + (time > highestTime.time));
+    if(time > highestTime.time){
+        highestTime.time = time;
+    }
+}
+
+function getTimeSpentInColumn (issue, columnName, highestTime) {
+    var time = 0;
+
+    _.forEach(issue.columnHistory, function(columnHistoryItem){
+        if(columnHistoryItem.columnName === columnName){
+            time += Date.parse(columnHistoryItem.exitTime) - Date.parse(columnHistoryItem.enterTime);
+        }
+    });
+
+    setHighestTime(time, highestTime);
+
+    return time;
+}
+
 // Example: [{"key":"Ready to Refine", "values":[{"key":"Ready to Refine","x":40,"y":0},{"key":"Ready to Refine","x":20,"y":1}]}]
 //          [{"key":"In Progress", "values":[{"key":"In Progress","x":60,"y":0},{"key":"In Progress","x":80,"y":1}]}]
-function createColDistData(issues, boardDesign){
+function createColDistData (issues, boardDesign) {
     var graphArray = [],
         columnData,
-        dates = getDates(issues);
+        highestTime = new HighestTime;
 
     _.forEach(boardDesign.columns, function(column){
         columnData = new ColDistItem(column.name);
-        columnData.values = ColDistValuesArray(dates, issues, boardDesign, column.name);
+        columnData.values = ColDistValuesArray(issues, column.name, highestTime);
         graphArray.push(columnData);
     });
 
-    return graphArray.reverse();
+    return graphArray;
 }

@@ -1,3 +1,60 @@
+var oneParsedDoneIssue = {
+    "id": "11932",
+    "key": "KTD-60",
+    "summary": "Create separate functions for localStorage get/set.",
+    "created": "2015-10-21T10:15:49",
+    "currentStatus": {
+        "id": "10001",
+        "name": "Done"
+    },
+    "columnHistory": [
+        {
+            "columnName": "Ready to Refine",
+            "enterTime": "2015-10-21T10:15:49",
+            "exitTime": "2015-10-21T10:16:05"
+        },
+        {
+            "columnName": "Refine Backlog",
+            "enterTime": "2015-10-21T10:16:05",
+            "exitTime": "2015-10-21T10:16:32"
+        },
+        {
+            "columnName": "Ready for Development",
+            "enterTime": "2015-10-21T10:16:32",
+            "exitTime": "2015-10-22T11:06:38"
+        },
+        {
+            "columnName": "In Progress",
+            "enterTime": "2015-10-22T11:06:38",
+            "exitTime": "2015-10-22T11:31:37"
+        },
+        {
+            "columnName": "Ready for Test",
+            "enterTime": "2015-10-22T11:31:37",
+            "exitTime": "2015-10-22T12:34:07"
+        },
+        {
+            "columnName": "In Progress",
+            "enterTime": "2015-10-22T12:34:07",
+            "exitTime": "2015-10-22T13:34:07"
+        },
+        {
+            "columnName": "Accept",
+            "enterTime": "2015-10-22T13:34:07",
+            "exitTime": "2015-10-22T13:52:38"
+        },
+        {
+            "columnName": "Ready for Release",
+            "enterTime": "2015-10-22T13:52:38",
+            "exitTime": "2015-10-22T15:56:07"
+        }
+    ],
+    "cycleTime": 12966000,
+    "executionTime": 2610000,
+    "delayTime": 10356000,
+    "processEfficiency": 0.2012956964368348
+};
+
 var fourParsedDoneIssues = [
     {
         "id": "11932",
