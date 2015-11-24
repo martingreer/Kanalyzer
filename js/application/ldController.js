@@ -43,6 +43,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
     /**
      * Get issues for the project.
+     * TODO 2015-11-24 (CRITICAL): Fix Board Design request to work with the new Greenhopper API. Request returns http response 403 since the change.
      */
     $scope.getAllIssues = function () {
         previousLoadData.setPreviousLoadData($scope.boardId, $scope.apiProject, $scope.maxResults);

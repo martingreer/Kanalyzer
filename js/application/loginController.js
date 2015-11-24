@@ -23,13 +23,13 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
     $scope.login = function () {
         //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
         //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
-        previousLogin.setPreviousLogin($scope.apiRoot, $scope.credentials.username);
 
         // If the last character of the given url does not end with a forward slash, add a forward slash to the variable.
         if($scope.apiRoot.slice(-1) !== "/"){
             $scope.apiRoot += "/";
         }
 
+        previousLogin.setPreviousLogin($scope.apiRoot, $scope.credentials.username);
         apiServerData.setApiRoot($scope.apiRoot);
         $scope.apiServer = apiServerData.getApiServer('jira');
         Notification.primary('Logging in...');
