@@ -34,19 +34,37 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
         $scope.apiServer = apiServerData.getApiServer('jira');
         Notification.primary('Logging in...');
         if(DEBUG){console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");}
-        $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
-        $http({method: 'GET', url: $scope.apiServer})
-            .success(function () {
-                apiServerData.setIsLoggedIn(true);
-                $scope.isLoggedIn = apiServerData.getIsLoggedIn();
-                Notification.success('Login successful!');
-                if(DEBUG){console.log("User " + $scope.credentials.username + " is now logged in!");}
-            })
-            .error(function () {
-                apiServerData.setIsLoggedIn(false);
-                Notification.error('Login failed, please try again.');
-                if(DEBUG){console.log("Login failed.");}
-            });
+
+        // Attempt cookie auth
+        var login = $http({
+            method: 'POST',
+            url: $scope.apiRoot + "rest/auth/1/session",
+            data: {
+                'username': $scope.credentials.username,
+                'password': $scope.credentials.password
+            },
+            headers: {
+                'Content-Type': "application/json",
+                'upgrade-insecure-requests': 1
+            }
+        });
+
+        //$http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
+        //var login = $http({
+        //    method: 'GET',
+        //    url: $scope.apiServer
+        //});
+        login.success(function () {
+            apiServerData.setIsLoggedIn(true);
+            $scope.isLoggedIn = apiServerData.getIsLoggedIn();
+            Notification.success('Login successful!');
+            if(DEBUG){console.log("User " + $scope.credentials.username + " is now logged in!");}
+        });
+        login.error(function () {
+            apiServerData.setIsLoggedIn(false);
+            Notification.error('Login failed, please try again.');
+            if(DEBUG){console.log("Login failed.");}
+        });
     };
 
     /**
@@ -56,16 +74,19 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
         $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(' : ');
         $scope.apiServer = apiServerData.getApiServer('jira');
         if(DEBUG){console.log("Attempting to log out...");}
-        $http({method: 'GET', url: $scope.apiServer})
-            .success(function () {
-                Notification.error('Logout failed, please try again.');
-                if(DEBUG){console.log("Logout failed.");}
-            })
-            .error(function () {
-                apiServerData.setIsLoggedIn(false);
-                $scope.isLoggedIn = apiServerData.getIsLoggedIn();
-                Notification.primary('You have been logged out.');
-                if(DEBUG){console.log("User " + $scope.credentials.username + " has logged out.");}
-            });
+        var logout = $http({
+            method: 'GET',
+            url: $scope.apiServer
+        });
+        logout.success(function () {
+            Notification.error('Logout failed, please try again.');
+            if(DEBUG){console.log("Logout failed.");}
+        });
+        logout.error(function () {
+            apiServerData.setIsLoggedIn(false);
+            $scope.isLoggedIn = apiServerData.getIsLoggedIn();
+            Notification.primary('You have been logged out.');
+            if(DEBUG){console.log("User " + $scope.credentials.username + " has logged out.");}
+        });
     };
 });

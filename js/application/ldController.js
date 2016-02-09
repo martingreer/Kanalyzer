@@ -4,7 +4,7 @@
 /**
  * Controller for the Load Data view.
  */
-application.controller('ldController', function ($scope, $http, $q, apiServerData, localStorageHandler, previousLoadData, Notification) {
+application.controller('ldController', function ($scope, $http, $q, apiServerData, localStorageHandler, previousLoadData, previousLogin, Notification) {
     "use strict";
 
     var DEBUG = true;
@@ -60,9 +60,13 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             Notification.primary('Attempting to get data from server...');
             if(DEBUG){console.log("Attempting to get board design for project " + $scope.apiProject + "...");}
 
-            var requestBoardDesign = $http({
+            /*var requestBoardDesign = $http({
                 method: "GET",
                 url: $scope.apiRoot + "rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=" + $scope.boardId + "&selectedProjectKey=" + $scope.apiProject
+            });*/
+            var requestBoardDesign = $http({
+                method: "GET",
+                url: $scope.apiRoot + "rest/agile/1.0/board/" + $scope.boardId
             });
             requestBoardDesign.success(function (data) {
                 if(DEBUG){console.log("Get board design from API: SUCCESS!");}
@@ -92,15 +96,19 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                 if($scope.maxResults === ''){
                     $scope.maxResults = '-1';
                 }
-                var requestIssues = $http({
+                /*var requestIssues = $http({
                     method: "GET",
                     url: $scope.apiRoot + "rest/api/2/search?jql=project=" + $scope.apiProject + "&expand=changelog" + "&maxResults=" + $scope.maxResults
+                });*/
+                var requestIssues = $http({
+                    method: "GET",
+                    url: $scope.apiRoot + "rest/agile/1.0/board/" + $scope.boardId + "/issue?maxResults=" + $scope.maxResults + "&expand=changelog"
                 });
                 if($scope.maxResults === '-1'){
                     $scope.maxResults = '';
                 }
                 requestIssues.success(function (data) {
-                    if(DEBUG){console.log("Get all issues from API: SUCCESS!");}
+                    if(DEBUG){console.log("Get issues from API: SUCCESS!");}
                     apiIssuesMinimal = parseMultipleApiIssues(data);
                     try{
                         issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
@@ -114,7 +122,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                 });
                 requestIssues.error(function (data) {
                     Notification.error('Failed to load issue data from source.');
-                    if(DEBUG){console.log("Get all issues from API: ERROR");}
+                    if(DEBUG){console.log("Get issues from API: ERROR");}
                 });
             });
         }
