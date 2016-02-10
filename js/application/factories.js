@@ -131,32 +131,32 @@ application.factory('apiServerData', function(){
  * Local storage helper for remembering a users previous login username and URL.
  */
 application.factory('previousLogin', function(){
-    var data = {
-        url: '',
-        userName: ''
-    };
+
+    var userName = '1';
+    var url = '2';
+
+    console.log("Initializing previousLogin...");
+    chrome.storage.sync.set({previousLoginUrl: url, previousLoginUserName: userName});
+    chrome.storage.sync.get(['previousLoginUrl','previousLoginUserName'], function (data){
+        console.log(data.previousLoginUrl + " & " + data.previousLoginUserName);
+    });
 
     return {
         getUrl: function () {
-            if(localStorage.getItem('previousLogin')){
-                data = JSON.parse(localStorage.getItem('previousLogin'));
-                return data.url;
-            } else {
-                return '';
-            }
+            url = chrome.storage.sync.get('previousLoginUrl', function (data) {
+                return data.previousLoginUrl;
+            });
+            return url;
         },
         getUserName: function () {
-            if(localStorage.getItem('previousLogin')){
-                data = JSON.parse(localStorage.getItem('previousLogin'));
-                return data.userName;
-            } else {
-                return '';
-            }
+            userName = chrome.storage.sync.get('previousLoginUserName', function (data) {
+                console.log("Username: " + data.previousLoginUserName);
+                return data.previousLoginUserName;
+            });
+            return userName;
         },
         setPreviousLogin: function (url, userName) {
-            data.url = url;
-            data.userName = userName;
-            localStorage.setItem('previousLogin', JSON.stringify(data));
+            chrome.storage.sync.set({previousLoginUrl: url, previousLoginUserName: userName});
         }
     }
 });
@@ -173,24 +173,24 @@ application.factory('previousLoadData', function(){
 
     return {
         getBoardId: function () {
-            if(localStorage.getItem('previousLoadData')){
-                data = JSON.parse(localStorage.getItem('previousLoadData'));
+            if(chrome.storage.sync.get('previousLoadData')){
+                data = JSON.parse(chrome.storage.sync.get('previousLoadData'));
                 return data.boardId;
             } else {
                 return '';
             }
         },
         getProjectKey: function () {
-            if(localStorage.getItem('previousLoadData')){
-                data = JSON.parse(localStorage.getItem('previousLoadData'));
+            if(chrome.storage.sync.get('previousLoadData')){
+                data = JSON.parse(chrome.storage.sync.get('previousLoadData'));
                 return data.projectKey;
             } else {
                 return '';
             }
         },
         getMaxResults: function () {
-            if(localStorage.getItem('previousLoadData')){
-                data = JSON.parse(localStorage.getItem('previousLoadData'));
+            if(chrome.storage.sync.get('previousLoadData')){
+                data = JSON.parse(chrome.storage.sync.get('previousLoadData'));
                 return data.maxResults;
             } else {
                 return '';
@@ -204,7 +204,7 @@ application.factory('previousLoadData', function(){
             } else{
                 data.maxResults = maxResults;
             }
-            localStorage.setItem('previousLoadData', JSON.stringify(data));
+            chrome.storage.sync.set('previousLoadData', JSON.stringify(data));
         }
     }
 });
@@ -215,56 +215,56 @@ application.factory('previousLoadData', function(){
 application.factory('localStorageHandler', function(){
     return {
         getBoardDesign: function () {
-            if(localStorage.getItem('boardDesign')){
-                return JSON.parse(localStorage.getItem('boardDesign'));
+            if(chrome.storage.sync.get('boardDesign')){
+                return JSON.parse(chrome.storage.sync.get('boardDesign'));
             } else {
                 return [];
             }
         },
         setBoardDesign: function (data) {
-            localStorage.setItem('boardDesign', JSON.stringify(data));
+            chrome.storage.sync.set('boardDesign', JSON.stringify(data));
         },
         removeBoardDesign: function () {
-            localStorage.removeItem('boardDesign');
+            chrome.storage.sync.remove('boardDesign');
         },
         getLoadedProject: function () {
-            if(localStorage.getItem('loadedProject')){
-                return localStorage.getItem('loadedProject');
+            if(chrome.storage.sync.get('loadedProject')){
+                return chrome.storage.sync.get('loadedProject');
             } else {
                 return '';
             }
         },
         setLoadedProject: function (data) {
-            localStorage.setItem('loadedProject', data);
+            chrome.storage.sync.set('loadedProject', data);
         },
         getIssues: function () {
-            if(localStorage.getItem('issues')){
-                return JSON.parse(localStorage.getItem('issues'));
+            if(chrome.storage.sync.get('issues')){
+                return JSON.parse(chrome.storage.sync.get('issues'));
             } else {
                 return [];
             }
         },
         setIssues: function (data) {
-            localStorage.setItem('issues', JSON.stringify(data));
+            chrome.storage.sync.set('issues', JSON.stringify(data));
         },
         removeIssues: function () {
-            localStorage.removeItem('issues');
+            StorageArea.sync.remove('issues');
         },
         getConfigs: function () {
-            if(localStorage.getItem('userConfigs')){
-                return JSON.parse(localStorage.getItem('userConfigs'));
+            if(chrome.storage.sync.get('userConfigs')){
+                return JSON.parse(chrome.storage.sync.get('userConfigs'));
             } else {
                 return [];
             }
         },
         setConfigs: function (data) {
-            localStorage.setItem('userConfigs', JSON.stringify(data));
+            chrome.storage.sync.set('userConfigs', JSON.stringify(data));
         },
         removeConfigs: function () {
-            localStorage.removeItem('userConfigs');
+            StorageArea.sync.remove('userConfigs');
         },
         getSelectedConfig: function (name) {
-            var configs = JSON.parse(localStorage.getItem('userConfigs')),
+            var configs = JSON.parse(chrome.storage.sync.get('userConfigs')),
                 selectedConfig = {};
 
             if(configs){

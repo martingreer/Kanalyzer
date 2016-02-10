@@ -10,8 +10,10 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
     var DEBUG = true;
 
     // Variables for logging in to API server.
+    console.log("Getting previousLogin...");
     $scope.credentials = { username: previousLogin.getUserName(), password: ''};
     $scope.apiRoot = previousLogin.getUrl();
+    console.log("Got " + previousLogin.getUserName() + " : " + previousLogin.getUrl());
     apiServerData.setApiRoot($scope.apiRoot);
 
     // This variable decides what is being shown in the login view.
