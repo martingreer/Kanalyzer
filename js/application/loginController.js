@@ -10,14 +10,28 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
     var DEBUG = true;
 
     // Variables for logging in to API server.
-    console.log("Getting previousLogin...");
-    $scope.credentials = { username: previousLogin.getUserName(), password: ''};
-    $scope.apiRoot = previousLogin.getUrl();
-    console.log("Got " + previousLogin.getUserName() + " : " + previousLogin.getUrl());
-    apiServerData.setApiRoot($scope.apiRoot);
+    $scope.credentials = {
+        username: '',
+        password: ''
+    };
+    $scope.apiRoot = '';
 
-    // This variable decides what is being shown in the login view.
-    $scope.isLoggedIn = apiServerData.getIsLoggedIn();
+    function setPreviousValues(previousLogin) {
+        $scope.credentials.username = previousLogin.userName;
+        $scope.apiRoot = previousLogin.url;
+        apiServerData.setApiRoot($scope.apiRoot);
+        // Decides what is being shown in the login view.
+        $scope.isLoggedIn = apiServerData.getIsLoggedIn();
+    }
+
+    console.log("GET previousLogin attempt...");
+    /**
+     * Fetches previous values (except password) from previous login attempt.
+     */
+    previousLogin.getPreviousLogin(function (previousLogin) {
+        setPreviousValues(previousLogin);
+        console.log("GET previousLogin success!")
+    });
 
     /**
      * Login: Auth to API server.

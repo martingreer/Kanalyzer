@@ -132,31 +132,15 @@ application.factory('apiServerData', function(){
  */
 application.factory('previousLogin', function(){
 
-    var userName = '1';
-    var url = '2';
-
-    console.log("Initializing previousLogin...");
-    chrome.storage.sync.set({previousLoginUrl: url, previousLoginUserName: userName});
-    chrome.storage.sync.get(['previousLoginUrl','previousLoginUserName'], function (data){
-        console.log(data.previousLoginUrl + " & " + data.previousLoginUserName);
-    });
+    // Initialize
+    chrome.storage.sync.set({url: '', userName: ''});
 
     return {
-        getUrl: function () {
-            url = chrome.storage.sync.get('previousLoginUrl', function (data) {
-                return data.previousLoginUrl;
-            });
-            return url;
+        getPreviousLogin: function (callback) {
+            chrome.storage.sync.get(['url', 'userName'], callback);
         },
-        getUserName: function () {
-            userName = chrome.storage.sync.get('previousLoginUserName', function (data) {
-                console.log("Username: " + data.previousLoginUserName);
-                return data.previousLoginUserName;
-            });
-            return userName;
-        },
-        setPreviousLogin: function (url, userName) {
-            chrome.storage.sync.set({previousLoginUrl: url, previousLoginUserName: userName});
+        setPreviousLogin: function (urlToSet, userNameToSet) {
+            chrome.storage.sync.set({url: urlToSet, userName: userNameToSet});
         }
     }
 });
