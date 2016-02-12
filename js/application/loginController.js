@@ -37,9 +37,6 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
      * Login: Auth to API server.
      */
     $scope.login = function () {
-        //$http.defaults.headers.common = {"Access-Control-Request-Headers": "accept, origin, authorization", "Access-Control-Allow-Origin": "*"};
-        //$http.defaults.headers.common = {"Access-Control-Allow-Origin": "*"};
-
         // If the last character of the given url does not end with a forward slash, add a forward slash to the variable.
         if($scope.apiRoot.slice(-1) !== "/"){
             $scope.apiRoot += "/";
@@ -64,13 +61,9 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
                 'upgrade-insecure-requests': 1
             }
         });
-
-        //$http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
-        //var login = $http({
-        //    method: 'GET',
-        //    url: $scope.apiServer
-        //});
-        login.success(function () {
+        login.success(function (response) {
+            //$http.defaults.headers.common['Cookie'] = response.session.name + "=" + response.session.value;
+            console.log("Cookie set: " + response.session.name + "=" + response.session.value);
             apiServerData.setIsLoggedIn(true);
             $scope.isLoggedIn = apiServerData.getIsLoggedIn();
             Notification.success('Login successful!');
@@ -84,25 +77,13 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
     };
 
     /**
-     * Log out by sending empty login details and getting rejected (there is no log out support for this API).
+     * Log out by simply removing the cookie header and setting FE logged in status to false.
      */
     $scope.logout = function () {
-        $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(' : ');
-        $scope.apiServer = apiServerData.getApiServer('jira');
-        if(DEBUG){console.log("Attempting to log out...");}
-        var logout = $http({
-            method: 'GET',
-            url: $scope.apiServer
-        });
-        logout.success(function () {
-            Notification.error('Logout failed, please try again.');
-            if(DEBUG){console.log("Logout failed.");}
-        });
-        logout.error(function () {
-            apiServerData.setIsLoggedIn(false);
-            $scope.isLoggedIn = apiServerData.getIsLoggedIn();
-            Notification.primary('You have been logged out.');
-            if(DEBUG){console.log("User " + $scope.credentials.username + " has logged out.");}
-        });
+        //$http.defaults.headers.common['Cookie'] = '';
+        apiServerData.setIsLoggedIn(false);
+        $scope.isLoggedIn = apiServerData.getIsLoggedIn();
+        Notification.primary('You have been logged out.');
+        if(DEBUG){console.log("User " + $scope.credentials.username + " has logged out.");}
     };
 });

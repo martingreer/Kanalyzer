@@ -131,10 +131,6 @@ application.factory('apiServerData', function(){
  * Local storage helper for remembering a users previous login username and URL.
  */
 application.factory('previousLogin', function(){
-
-    // Initialize
-    chrome.storage.sync.set({url: '', userName: ''});
-
     return {
         getPreviousLogin: function (callback) {
             chrome.storage.sync.get(['url', 'userName'], callback);
