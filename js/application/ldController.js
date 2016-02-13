@@ -18,28 +18,51 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         issues;
 
     $scope.apiRoot = apiServerData.getApiRoot();
-    $scope.apiProject = previousLoadData.getProjectKey();
-
-    // Assign columns to scope if local storage already exists.
-    $scope.columns = localStorageHandler.getBoardDesign().columns;
-    $scope.loadedBoardId = localStorageHandler.getBoardDesign().rapidViewId;
-
-    $scope.loadedProject = localStorageHandler.getLoadedProject();
-
-    // Assign user configs to scope if local storage already exists.
-    $scope.userConfigs = localStorageHandler.getConfigs();
-
-    // The max results to be returned from API (-1 is unlimited results).
-    $scope.maxResults = previousLoadData.getMaxResults();
-
-    // Board ID to get column & status structure from.
-    $scope.boardId = previousLoadData.getBoardId();
 
     // Keeps track of whether user is logged in or not.
     $scope.isLoggedIn = apiServerData.getIsLoggedIn();
 
     // The config that is currently selected.
     $scope.loadedConfig = '';
+
+    function setPreviousLoadData(previousLoadData) {
+        $scope.apiProject = previousLoadData.projectKey;
+        // The max results to be returned from API (-1 is unlimited results).
+        $scope.maxResults = previousLoadData.maxResults;
+        // Board ID to get column & status structure from.
+        $scope.boardId = previousLoadData.boardId;
+    }
+
+    function setBoardDesign(boardDesign) {
+        // Assign columns to scope if local storage already exists.
+        $scope.columns = boardDesign.columns;
+        $scope.loadedBoardId = boardDesign.rapidViewId;
+    }
+
+    console.log("Get previousLoadData attempt...");
+    previousLoadData.getPreviousLoadData(function (previousLoadData) {
+        setPreviousLoadData(previousLoadData);
+        console.log("Get previousLoadData success!");
+    });
+
+    console.log("Get boardDesign attempt...");
+    localStorageHandler.getBoardDesign(function (boardDesign) {
+        setBoardDesign(boardDesign);
+        console.log("Get boardDesign success!");
+    });
+
+    console.log("Get loadedProject attempt...");
+    localStorageHandler.getLoadedProject(function (loadedProject) {
+        $scope.loadedProject = loadedProject;
+        console.log("Get loadedProject success!");
+    });
+
+    console.log("Get configs attempt...");
+    localStorageHandler.getConfigs(function (configs) {
+        // Assign user configs to scope if local storage already exists.
+        $scope.userConfigs = configs;
+        console.log("Get configs success!");
+    });
 
     /**
      * Get issues for the project.
@@ -74,16 +97,23 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     boardColumnsDesign = createBoardDesign(parseBoardDesign(data));
                     localStorageHandler.setBoardDesign(boardColumnsDesign);
                     $scope.loadedProject = localStorageHandler.setLoadedProject($scope.apiProject);
-                    $scope.columns = localStorageHandler.getBoardDesign().columns;
-                    $scope.loadedBoardId = localStorageHandler.getBoardDesign().rapidViewId;
-                    $scope.loadedProject = localStorageHandler.getLoadedProject();
-                    getBoardDesignBeforeIssues.resolve();
+                    console.log("Get boardDesign attempt...");
+                    localStorageHandler.getBoardDesign(function (boardDesign) {
+                        $scope.columns = boardDesign.columns;
+                        $scope.loadedBoardId = boardDesign.rapidViewId;
+                        console.log("Get boardDesign success!");
+                        console.log("Get loadedProject attempt...");
+                        localStorageHandler.getLoadedProject(function (loadedProject) {
+                            $scope.loadedProject = loadedProject;
+                            console.log("Get loadedProject success!");
+                            getBoardDesignBeforeIssues.resolve();
+                        });
+                    });
                     if(DEBUG){console.log("Parse board design SUCCESS!");}
                 } catch(error) {
                     Notification.error('Something went wrong when parsing the board data. Check your board configuration for abnormalities.');
                     if(DEBUG){console.log("Parsing of board data ERROR: " + error);}
                 }
-
             });
             requestBoardDesign.error(function (data) {
                 getBoardDesignBeforeIssues.reject();

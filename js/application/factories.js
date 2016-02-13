@@ -145,46 +145,17 @@ application.factory('previousLogin', function(){
  * Local storage helper for remembering a users previous Load Data choices.
  */
 application.factory('previousLoadData', function(){
-    var data = {
-        boardId: '',
-        projectKey: '',
-        maxResults: ''
-    };
-
     return {
-        getBoardId: function () {
-            if(chrome.storage.sync.get('previousLoadData')){
-                data = JSON.parse(chrome.storage.sync.get('previousLoadData'));
-                return data.boardId;
-            } else {
-                return '';
-            }
+        getPreviousLoadData: function (callback) {
+            chrome.storage.sync.get(['boardId', 'projectKey', 'maxResults'], callback)
         },
-        getProjectKey: function () {
-            if(chrome.storage.sync.get('previousLoadData')){
-                data = JSON.parse(chrome.storage.sync.get('previousLoadData'));
-                return data.projectKey;
-            } else {
-                return '';
-            }
-        },
-        getMaxResults: function () {
-            if(chrome.storage.sync.get('previousLoadData')){
-                data = JSON.parse(chrome.storage.sync.get('previousLoadData'));
-                return data.maxResults;
-            } else {
-                return '';
-            }
-        },
-        setPreviousLoadData: function (boardId, projectKey, maxResults) {
-            data.boardId = boardId;
-            data.projectKey = projectKey;
+        setPreviousLoadData: function (boardIdToSet, projectKeyToSet, maxResultsToSet) {
             if (maxResults === '-1') {
                 data.maxResults = '';
             } else{
                 data.maxResults = maxResults;
             }
-            chrome.storage.sync.set('previousLoadData', JSON.stringify(data));
+            chrome.storage.sync.set({boardId: boardIdToSet, projectKey: projectKeyToSet, maxResults: maxResultsToSet});
         }
     }
 });
@@ -194,70 +165,55 @@ application.factory('previousLoadData', function(){
  */
 application.factory('localStorageHandler', function(){
     return {
-        getBoardDesign: function () {
-            if(chrome.storage.sync.get('boardDesign')){
-                return JSON.parse(chrome.storage.sync.get('boardDesign'));
-            } else {
-                return [];
-            }
+        getBoardDesign: function (callback) {
+            chrome.storage.sync.get('boardDesign', callback);
         },
-        setBoardDesign: function (data) {
-            chrome.storage.sync.set('boardDesign', JSON.stringify(data));
+        setBoardDesign: function (boardDesignToSet) {
+            chrome.storage.sync.set({boardDesign: boardDesignToSet});
         },
         removeBoardDesign: function () {
             chrome.storage.sync.remove('boardDesign');
         },
-        getLoadedProject: function () {
-            if(chrome.storage.sync.get('loadedProject')){
-                return chrome.storage.sync.get('loadedProject');
-            } else {
-                return '';
-            }
+        getLoadedProject: function (callback) {
+            return chrome.storage.sync.get('loadedProject', callback);
         },
-        setLoadedProject: function (data) {
-            chrome.storage.sync.set('loadedProject', data);
+        setLoadedProject: function (loadedProjectToSet) {
+            chrome.storage.sync.set({loadedProject: loadedProjectToSet});
         },
-        getIssues: function () {
-            if(chrome.storage.sync.get('issues')){
-                return JSON.parse(chrome.storage.sync.get('issues'));
-            } else {
-                return [];
-            }
+        getIssues: function (callback) {
+            chrome.storage.sync.get('issues', callback);
         },
-        setIssues: function (data) {
-            chrome.storage.sync.set('issues', JSON.stringify(data));
+        setIssues: function (issuesToSet) {
+            chrome.storage.sync.set({issues: issuesToSet});
         },
         removeIssues: function () {
             StorageArea.sync.remove('issues');
         },
-        getConfigs: function () {
-            if(chrome.storage.sync.get('userConfigs')){
-                return JSON.parse(chrome.storage.sync.get('userConfigs'));
-            } else {
-                return [];
-            }
+        getConfigs: function (callback) {
+            chrome.storage.sync.get('userConfigs', callback);
         },
-        setConfigs: function (data) {
-            chrome.storage.sync.set('userConfigs', JSON.stringify(data));
+        setConfigs: function (userConfigsToSet) {
+            chrome.storage.sync.set({userConfigs: userConfigsToSet});
         },
         removeConfigs: function () {
             StorageArea.sync.remove('userConfigs');
         },
-        getSelectedConfig: function (name) {
-            var configs = JSON.parse(chrome.storage.sync.get('userConfigs')),
-                selectedConfig = {};
-
-            if(configs){
-                _.forEach(configs, function(config){
-                    if(config.name === name){
-                        selectedConfig = config;
-                        return false;
-                    }
-                });
-                return selectedConfig;
-            } else {
-                return {};
-            }
+        getSelectedConfig: function () {
+            return chrome.storage.sync.get('userConfigs', function (data) {
+                var configs = data;
+                var selectedConfig = {};
+                if (configs) {
+                    _.forEach(configs, function (config) {
+                        if (config.name === name) {
+                            selectedConfig = config;
+                            return false;
+                        }
+                    });
+                    return selectedConfig;
+                } else {
+                    return {};
+                }
+            });
         }
     }
 });

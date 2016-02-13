@@ -16,7 +16,7 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
     };
     $scope.apiRoot = '';
 
-    function setPreviousValues(previousLogin) {
+    function setPreviousLoginValues(previousLogin) {
         $scope.credentials.username = previousLogin.userName;
         $scope.apiRoot = previousLogin.url;
         apiServerData.setApiRoot($scope.apiRoot);
@@ -24,13 +24,13 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
         $scope.isLoggedIn = apiServerData.getIsLoggedIn();
     }
 
-    console.log("GET previousLogin attempt...");
+    console.log("Get previousLogin attempt...");
     /**
      * Fetches previous values (except password) from previous login attempt.
      */
     previousLogin.getPreviousLogin(function (previousLogin) {
-        setPreviousValues(previousLogin);
-        console.log("GET previousLogin success!")
+        setPreviousLoginValues(previousLogin);
+        console.log("Get previousLogin success!")
     });
 
     /**
@@ -82,7 +82,7 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
     $scope.logout = function () {
         //$http.defaults.headers.common['Cookie'] = '';
         apiServerData.setIsLoggedIn(false);
-        $scope.isLoggedIn = apiServerData.getIsLoggedIn();
+        $scope.isLoggedIn = apiServerData.getIsLoggedIn(); // synchronous
         Notification.primary('You have been logged out.');
         if(DEBUG){console.log("User " + $scope.credentials.username + " has logged out.");}
     };
