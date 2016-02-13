@@ -150,12 +150,11 @@ application.factory('previousLoadData', function(){
             chrome.storage.sync.get(['boardId', 'projectKey', 'maxResults'], callback)
         },
         setPreviousLoadData: function (boardIdToSet, projectKeyToSet, maxResultsToSet) {
-            if (maxResults === '-1') {
-                data.maxResults = '';
-            } else{
-                data.maxResults = maxResults;
+            if (maxResultsToSet === '-1') {
+                chrome.storage.sync.set({boardId: boardIdToSet, projectKey: projectKeyToSet, maxResults: ''});
+            } else {
+                chrome.storage.sync.set({boardId: boardIdToSet, projectKey: projectKeyToSet, maxResults: maxResultsToSet});
             }
-            chrome.storage.sync.set({boardId: boardIdToSet, projectKey: projectKeyToSet, maxResults: maxResultsToSet});
         }
     }
 });
