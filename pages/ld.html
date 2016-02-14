@@ -42,7 +42,7 @@
     </form>
 </div>
 <div style="float:left; margin-right:50px">
-    <h4>Define Column Categories for the board: ID {{ loadedBoardId }}, Project {{ loadedProject }}</h4>
+    <h4>Set column categories for board: <b>{{ loadedBoardName }}</b></h4>
     <table class="table table-condensed table-hover" style="width:610px">
         <thead>
         <tr>
@@ -64,7 +64,7 @@
         </tr>
         </tbody>
     </table>
-    <button class="btn btn-default" ng-click="updateColumnCategories(columns)">Update columns</button> &nbsp;&nbsp; Loaded config: <b>{{ loadedConfig }}</b>
+    <button class="btn btn-default" ng-click="updateColumnCategories(columns)">Apply changes</button> &nbsp;&nbsp; Loaded config: <b>{{ loadedConfig }}</b>
 </div>
 <div style="float:left; margin-top:45px">
     <form role="form" name="loadConfigForm">

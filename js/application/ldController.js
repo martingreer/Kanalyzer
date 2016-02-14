@@ -36,7 +36,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     function setBoardDesign(boardDesign) {
         // Assign columns to scope if local storage already exists.
         $scope.columns = boardDesign.columns;
-        $scope.loadedBoardId = boardDesign.rapidViewId;
+        $scope.loadedBoardName = boardDesign.name;
     }
 
     console.log("Get previousLoadData attempt...");
@@ -66,7 +66,6 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
     /**
      * Get issues for the project.
-     * TODO 2015-11-24 (CRITICAL): Fix Board Design request to work with the new Greenhopper API. Request returns http response 403 since the change.
      */
     $scope.getAllIssues = function () {
         previousLoadData.setPreviousLoadData($scope.boardId, $scope.apiProject, $scope.maxResults);
@@ -81,7 +80,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             getBoardDesignBeforeIssues = $q.defer();
 
             Notification.primary('Attempting to get data from server...');
-            if(DEBUG){console.log("Attempting to get board design for project " + $scope.apiProject + "...");}
+            if(DEBUG){console.log("Attempting to get board design for board with ID: " + $scope.boardId + "...");}
 
             /*var requestBoardDesign = $http({
                 method: "GET",
@@ -89,26 +88,17 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             });*/
             var requestBoardDesign = $http({
                 method: "GET",
-                url: $scope.apiRoot + "rest/agile/1.0/board/" + $scope.boardId
+                url: $scope.apiRoot + "rest/agile/1.0/board/" + $scope.boardId + "/configuration"
             });
             requestBoardDesign.success(function (data) {
                 if(DEBUG){console.log("Get board design from API: SUCCESS!");}
                 try{
                     boardColumnsDesign = createBoardDesign(parseBoardDesign(data));
                     localStorageHandler.setBoardDesign(boardColumnsDesign);
-                    $scope.loadedProject = localStorageHandler.setLoadedProject($scope.apiProject);
-                    console.log("Get boardDesign attempt...");
-                    localStorageHandler.getBoardDesign(function (boardDesign) {
-                        $scope.columns = boardDesign.columns;
-                        $scope.loadedBoardId = boardDesign.rapidViewId;
-                        console.log("Get boardDesign success!");
-                        console.log("Get loadedProject attempt...");
-                        localStorageHandler.getLoadedProject(function (loadedProject) {
-                            $scope.loadedProject = loadedProject;
-                            console.log("Get loadedProject success!");
-                            getBoardDesignBeforeIssues.resolve();
-                        });
-                    });
+                    localStorageHandler.setLoadedProject($scope.apiProject);
+                    $scope.columns = boardColumnsDesign.columns;
+                    $scope.loadedBoardName = boardColumnsDesign.name;
+                    getBoardDesignBeforeIssues.resolve();
                     if(DEBUG){console.log("Parse board design SUCCESS!");}
                 } catch(error) {
                     Notification.error('Something went wrong when parsing the board data. Check your board configuration for abnormalities.');

@@ -9,12 +9,12 @@ var DEBUG_COLUMNHISTORY = false;
 function parseBoardDesign(apiBoardDesignRaw){
     "use strict";
 
-    /** @namespace apiBoardDesignRaw.columnsData */
-    return apiBoardDesignRaw.columnsData;
+    /** @namespace apiBoardDesignRaw.columnConfig */
+    return apiBoardDesignRaw.columnConfig;
 }
 
 /**
- * Create a new board design.
+ * Create a new instance of a board design object.
  */
 function createBoardDesign(apiBoardDesign){
     var boardDesign;
@@ -37,16 +37,19 @@ function BoardDesign(apiColumnsData) {
         _.forEach(self.columns, function (column) {
             columnNames.push(column.name);
         });
+        console.log(columnNames);
         return columnNames;
     };
 
     self.getColumnMatchingStatus = function (status) {
         var columnName = null;
         _.forEach(self.columns, function (column) {
-            if (_.contains(column.statusIds, status)) {
-                columnName = column.name;
-                return false;
-            }
+            _.forEach(column.statuses, function (columnStatus) {
+                if (columnStatus === status) {
+                    columnName = column.name;
+                    return false; // break loop
+                }
+            });
         });
         return columnName;
     };
