@@ -19,7 +19,7 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
     // First get issues from chrome.storage
     localStorageHandler.getIssues(function (issuesCallback) {
         // Since only objects can be stored in chrome.storage, parse out the issues array from the stored object.
-        issues = parseMultipleApiIssues(issuesCallback);
+        issues = issuesCallback.issues;
 
         // Datepicker variables.
         $scope.minDate = $scope.startDate = getFirstHistoryDate(issues);

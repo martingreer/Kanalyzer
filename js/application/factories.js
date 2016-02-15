@@ -160,6 +160,22 @@ application.factory('previousLoadData', function(){
  * Local storage helper for board design, issues and configs.
  */
 application.factory('localStorageHandler', function(){
+    function getSelectedConfig (name, data) {
+        var configs = data;
+        var selectedConfig = {};
+        if (configs) {
+            _.forEach(configs, function (config) {
+                if (config.name === name) {
+                    selectedConfig = config;
+                    return false;
+                }
+            });
+            return selectedConfig;
+        } else {
+            return {};
+        }
+    }
+
     return {
         getBoardDesign: function (callback) {
             chrome.storage.local.get('boardDesign', callback);
@@ -194,21 +210,9 @@ application.factory('localStorageHandler', function(){
         removeConfigs: function () {
             StorageArea.sync.remove('userConfigs');
         },
-        getSelectedConfig: function () {
+        getSelectedConfig: function (name) {
             return chrome.storage.local.get('userConfigs', function (data) {
-                var configs = data;
-                var selectedConfig = {};
-                if (configs) {
-                    _.forEach(configs, function (config) {
-                        if (config.name === name) {
-                            selectedConfig = config;
-                            return false;
-                        }
-                    });
-                    return selectedConfig;
-                } else {
-                    return {};
-                }
+                return getSelectedConfig(name, data);
             });
         }
     }

@@ -177,27 +177,28 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
         try{
             localStorageHandler.getBoardDesign(function (boardDesignCallback) {
-                oldBoardDesign = createBoardDesign(boardDesignCallback);
+                oldBoardDesign = createBoardDesign(boardDesignCallback.boardDesign);
+
+                _.forEach(oldBoardDesign.columns, function (columnOutput) {
+                    _.forEach(columnCategories, function (columnInput) {
+                        if(columnInput.name === columnOutput.name){
+                            columnOutput.category = columnInput.category;
+                        }
+                    });
+                });
+
+                updatedBoardDesign = createBoardDesign(oldBoardDesign);
+                localStorageHandler.setBoardDesign(updatedBoardDesign);
 
                 localStorageHandler.getIssues(function (issuesCallback) {
-                    oldIssues = createIssuesFromArray(parseMultipleApiIssues(issuesCallback), oldBoardDesign);
+                    oldIssues = createIssuesFromArray(issuesCallback.issues, oldBoardDesign);
+
+                    updatedIssues = createIssuesFromArray(oldIssues, updatedBoardDesign);
+                    localStorageHandler.setIssues(updatedIssues);
+
+                    Notification.success('Column categories have been updated.');
                 });
             });
-
-            _.forEach(oldBoardDesign.columns, function (columnOutput) {
-                _.forEach(columnCategories, function (columnInput) {
-                    if(columnInput.name === columnOutput.name){
-                        columnOutput.category = columnInput.category;
-                    }
-                });
-            });
-
-            updatedBoardDesign = createBoardDesign(oldBoardDesign);
-            updatedIssues = createIssuesFromArray(oldIssues, updatedBoardDesign);
-
-            localStorageHandler.setBoardDesign(updatedBoardDesign);
-            localStorageHandler.setIssues(updatedIssues);
-            Notification.success('Column categories have been updated.');
         } catch (error) {
             Notification.error('Column categories update failed.');
             if(DEBUG){console.log("Updating columns ERROR: " + error);}
@@ -208,7 +209,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
      * Save the user choices for a set of columns for quick re-use.
      */
     $scope.saveConfig = function (name, columnCategories) {
-        var userConfigs,
+        var userConfigs = [],
             isNameUnique = true;
 
         if (name === '' || !name || !name.replace(/\s/g, '').length) {
@@ -217,7 +218,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         } else {
             console.log("Adding config.");
             localStorageHandler.getConfigs(function (configsCallback) {
-                userConfigs = configsCallback;
+                userConfigs = configsCallback.userConfigs;
                 _.forEach(userConfigs, function (config) {
                     if(config.name.toLowerCase() === name.toLowerCase()){
                         isNameUnique = false;
@@ -230,7 +231,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     var newConfig = {"name": name, "columnCategories": columnCategories};
                     userConfigs.push(newConfig);
                     localStorageHandler.setConfigs(userConfigs);
-                    $scope.userConfigs = localStorageHandler.getConfigs();
+                    $scope.userConfigs = userConfigs;
                     Notification.success('Config saved!');
                 }
             });
@@ -241,7 +242,9 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
      * Loads a chosen user config.
      */
     $scope.loadConfig = function (name) {
-        var config = localStorageHandler.getSelectedConfig(name);
+        var config = {};
+
+        localStorageHandler.getSelectedConfig(name);
 
         if(haveSameColumnStructure($scope.columns, config.columnCategories)){
             $scope.loadedConfig = localStorageHandler.getSelectedConfig(name).name;
