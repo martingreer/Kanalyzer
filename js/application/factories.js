@@ -90,6 +90,7 @@ application.factory('Base64', function () {
 
 /**
  * Session storage for API info and "logged in" status.
+ * These variables are not meant to be used while logged out, so they don't need to be in local storage.
  */
 application.factory('apiServerData', function(){
     var data = {
@@ -133,10 +134,10 @@ application.factory('apiServerData', function(){
 application.factory('previousLogin', function(){
     return {
         getPreviousLogin: function (callback) {
-            chrome.storage.sync.get(['url', 'userName'], callback);
+            chrome.storage.local.get(['url', 'userName'], callback);
         },
         setPreviousLogin: function (urlToSet, userNameToSet) {
-            chrome.storage.sync.set({url: urlToSet, userName: userNameToSet});
+            chrome.storage.local.set({url: urlToSet, userName: userNameToSet});
         }
     }
 });
@@ -147,14 +148,10 @@ application.factory('previousLogin', function(){
 application.factory('previousLoadData', function(){
     return {
         getPreviousLoadData: function (callback) {
-            chrome.storage.sync.get(['boardId', 'projectKey', 'maxResults'], callback)
+            chrome.storage.local.get(['boardId', 'projectKey', 'maxResults'], callback)
         },
         setPreviousLoadData: function (boardIdToSet, projectKeyToSet, maxResultsToSet) {
-            if (maxResultsToSet === '-1') {
-                chrome.storage.sync.set({boardId: boardIdToSet, projectKey: projectKeyToSet, maxResults: ''});
-            } else {
-                chrome.storage.sync.set({boardId: boardIdToSet, projectKey: projectKeyToSet, maxResults: maxResultsToSet});
-            }
+            chrome.storage.local.set({boardId: boardIdToSet, projectKey: projectKeyToSet, maxResults: maxResultsToSet});
         }
     }
 });
@@ -165,40 +162,40 @@ application.factory('previousLoadData', function(){
 application.factory('localStorageHandler', function(){
     return {
         getBoardDesign: function (callback) {
-            chrome.storage.sync.get('boardDesign', callback);
+            chrome.storage.local.get('boardDesign', callback);
         },
         setBoardDesign: function (boardDesignToSet) {
-            chrome.storage.sync.set({boardDesign: boardDesignToSet});
+            chrome.storage.local.set({boardDesign: boardDesignToSet});
         },
         removeBoardDesign: function () {
-            chrome.storage.sync.remove('boardDesign');
+            chrome.storage.local.remove('boardDesign');
         },
         getLoadedProject: function (callback) {
-            return chrome.storage.sync.get('loadedProject', callback);
+            return chrome.storage.local.get('loadedProject', callback);
         },
         setLoadedProject: function (loadedProjectToSet) {
-            chrome.storage.sync.set({loadedProject: loadedProjectToSet});
+            chrome.storage.local.set({loadedProject: loadedProjectToSet});
         },
         getIssues: function (callback) {
-            chrome.storage.sync.get('issues', callback);
+            chrome.storage.local.get('issues', callback);
         },
         setIssues: function (issuesToSet) {
-            chrome.storage.sync.set({issues: issuesToSet});
+            chrome.storage.local.set({issues: issuesToSet});
         },
         removeIssues: function () {
             StorageArea.sync.remove('issues');
         },
         getConfigs: function (callback) {
-            chrome.storage.sync.get('userConfigs', callback);
+            chrome.storage.local.get('userConfigs', callback);
         },
         setConfigs: function (userConfigsToSet) {
-            chrome.storage.sync.set({userConfigs: userConfigsToSet});
+            chrome.storage.local.set({userConfigs: userConfigsToSet});
         },
         removeConfigs: function () {
             StorageArea.sync.remove('userConfigs');
         },
         getSelectedConfig: function () {
-            return chrome.storage.sync.get('userConfigs', function (data) {
+            return chrome.storage.local.get('userConfigs', function (data) {
                 var configs = data;
                 var selectedConfig = {};
                 if (configs) {

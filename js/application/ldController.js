@@ -25,7 +25,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     // The config that is currently selected.
     $scope.loadedConfig = '';
 
-    function setPreviousLoadData(previousLoadData) {
+    function setPreviousLoadDataOnScope (previousLoadData) {
         $scope.apiProject = previousLoadData.projectKey;
         // The max results to be returned from API (-1 is unlimited results).
         $scope.maxResults = previousLoadData.maxResults;
@@ -33,41 +33,58 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         $scope.boardId = previousLoadData.boardId;
     }
 
-    function setBoardDesign(boardDesign) {
+    function setBoardDesignOnScope (boardDesign) {
         // Assign columns to scope if local storage already exists.
         $scope.columns = boardDesign.columns;
         $scope.loadedBoardName = boardDesign.name;
     }
 
-    console.log("Get previousLoadData attempt...");
+    function toggleMaxResultsForApiCall (maxResults) {
+        if(maxResults === '' || maxResults.toLowerCase() === 'all' || !maxResults){
+            $scope.maxResults = '-1';
+        }
+        console.log("Toggled max results from " + maxResults + " to " + $scope.maxResults);
+    }
+
+    function setMaxResultsForUserInterface (maxResults) {
+        if (maxResults === '-1' || maxResults.toLowerCase() === 'all' || !maxResults) {
+            $scope.maxResults = '';
+        }
+        console.log("Toggled max results from " + maxResults + " to " + $scope.maxResults);
+    }
+
+    // The following 4 get calls from chrome.storage are independent from one another,
+    // So they don't need to be nested.
+    if(DEBUG){console.log("Get previousLoadData attempt...");}
     previousLoadData.getPreviousLoadData(function (previousLoadData) {
-        setPreviousLoadData(previousLoadData);
-        console.log("Get previousLoadData success!");
+        setPreviousLoadDataOnScope(previousLoadData);
+        if(DEBUG){console.log("Get previousLoadData success!");}
     });
 
-    console.log("Get boardDesign attempt...");
+    if(DEBUG){console.log("Get boardDesign attempt...");}
     localStorageHandler.getBoardDesign(function (boardDesign) {
-        setBoardDesign(boardDesign);
-        console.log("Get boardDesign success!");
+        setBoardDesignOnScope(boardDesign.boardDesign);
+        if(DEBUG){console.log("Get boardDesign success!");}
     });
 
-    console.log("Get loadedProject attempt...");
+    if(DEBUG){console.log("Get loadedProject attempt...");}
     localStorageHandler.getLoadedProject(function (loadedProject) {
         $scope.loadedProject = loadedProject;
-        console.log("Get loadedProject success!");
+        if(DEBUG){console.log("Get loadedProject success!");}
     });
 
-    console.log("Get configs attempt...");
+    if(DEBUG){console.log("Get configs attempt...");}
     localStorageHandler.getConfigs(function (configs) {
         // Assign user configs to scope if local storage already exists.
-        $scope.userConfigs = configs;
-        console.log("Get configs success!");
+        $scope.userConfigs = configs.userConfigs;
+        if(DEBUG){console.log("Get configs success!");}
     });
 
     /**
      * Get issues for the project.
      */
     $scope.getAllIssues = function () {
+        setMaxResultsForUserInterface($scope.maxResults);
         previousLoadData.setPreviousLoadData($scope.boardId, $scope.apiProject, $scope.maxResults);
 
         if(!$scope.isLoggedIn){
@@ -82,6 +99,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             Notification.primary('Attempting to get data from server...');
             if(DEBUG){console.log("Attempting to get board design for board with ID: " + $scope.boardId + "...");}
 
+            // Commented out the old rest call which nowadays is forbidden (private API).
             /*var requestBoardDesign = $http({
                 method: "GET",
                 url: $scope.apiRoot + "rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=" + $scope.boardId + "&selectedProjectKey=" + $scope.apiProject
@@ -90,6 +108,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                 method: "GET",
                 url: $scope.apiRoot + "rest/agile/1.0/board/" + $scope.boardId + "/configuration"
             });
+
             requestBoardDesign.success(function (data) {
                 if(DEBUG){console.log("Get board design from API: SUCCESS!");}
                 try{
@@ -105,6 +124,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     if(DEBUG){console.log("Parsing of board data ERROR: " + error);}
                 }
             });
+
             requestBoardDesign.error(function (data) {
                 getBoardDesignBeforeIssues.reject();
                 Notification.error('Failed to load board data from source.');
@@ -113,33 +133,31 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
             getBoardDesignBeforeIssues.promise.then(function() {
                 if(DEBUG){console.log("Attempting to get issues for project " + $scope.apiProject + " from server " + $scope.apiRoot + "...");}
-                if($scope.maxResults === ''){
-                    $scope.maxResults = '-1';
-                }
-                /*var requestIssues = $http({
-                    method: "GET",
-                    url: $scope.apiRoot + "rest/api/2/search?jql=project=" + $scope.apiProject + "&expand=changelog" + "&maxResults=" + $scope.maxResults
-                });*/
+                toggleMaxResultsForApiCall($scope.maxResults);
                 var requestIssues = $http({
                     method: "GET",
-                    url: $scope.apiRoot + "rest/agile/1.0/board/" + $scope.boardId + "/issue?maxResults=" + $scope.maxResults + "&expand=changelog"
+                    url: $scope.apiRoot + "rest/api/2/search?jql=project=" + $scope.apiProject + "&expand=changelog" + "&maxResults=" + $scope.maxResults
                 });
-                if($scope.maxResults === '-1'){
-                    $scope.maxResults = '';
-                }
+                /*var requestIssues = $http({
+                    method: "GET",
+                    url: $scope.apiRoot + "rest/agile/1.0/board/" + $scope.boardId + "/issue?maxResults=" + $scope.maxResults + "&expand=changelog"
+                });*/
+                setMaxResultsForUserInterface($scope.maxResults);
+
                 requestIssues.success(function (data) {
                     if(DEBUG){console.log("Get issues from API: SUCCESS!");}
                     apiIssuesMinimal = parseMultipleApiIssues(data);
                     try{
                         issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
+                        localStorageHandler.setIssues(issues);
                         Notification.success('Issue data successfully loaded!');
                         if(DEBUG){console.log("Parse issue data SUCCESS!");}
                     } catch(error) {
                         Notification.error('Something went wrong when parsing the issue data. Check your board configuration for abnormalities.');
                         if(DEBUG){console.log("Parsing of issues data ERROR: " + error);}
                     }
-                    localStorageHandler.setIssues(issues);
                 });
+
                 requestIssues.error(function (data) {
                     Notification.error('Failed to load issue data from source.');
                     if(DEBUG){console.log("Get issues from API: ERROR");}
@@ -152,14 +170,19 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
      * Update the column categories to the user defined values.
      */
     $scope.updateColumnCategories = function (columnCategories) {
-        var oldBoardDesign,
-            oldIssues,
-            updatedBoardDesign,
-            updatedIssues;
+        var oldBoardDesign = {},
+            oldIssues = [],
+            updatedBoardDesign = {},
+            updatedIssues = [];
 
         try{
-            oldBoardDesign = createBoardDesign(localStorageHandler.getBoardDesign());
-            oldIssues = createIssuesFromArray(localStorageHandler.getIssues(), oldBoardDesign);
+            localStorageHandler.getBoardDesign(function (boardDesignCallback) {
+                oldBoardDesign = createBoardDesign(boardDesignCallback);
+
+                localStorageHandler.getIssues(function (issuesCallback) {
+                    oldIssues = createIssuesFromArray(parseMultipleApiIssues(issuesCallback), oldBoardDesign);
+                });
+            });
 
             _.forEach(oldBoardDesign.columns, function (columnOutput) {
                 _.forEach(columnCategories, function (columnInput) {
@@ -172,8 +195,6 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             updatedBoardDesign = createBoardDesign(oldBoardDesign);
             updatedIssues = createIssuesFromArray(oldIssues, updatedBoardDesign);
 
-            localStorageHandler.removeBoardDesign();
-            localStorageHandler.removeIssues();
             localStorageHandler.setBoardDesign(updatedBoardDesign);
             localStorageHandler.setIssues(updatedIssues);
             Notification.success('Column categories have been updated.');
@@ -195,22 +216,24 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             console.log("Input name is empty. Not adding config.");
         } else {
             console.log("Adding config.");
-            userConfigs = localStorageHandler.getConfigs();
-            _.forEach(userConfigs, function (config) {
-                if(config.name.toLowerCase() === name.toLowerCase()){
-                    isNameUnique = false;
-                    return false;
+            localStorageHandler.getConfigs(function (configsCallback) {
+                userConfigs = configsCallback;
+                _.forEach(userConfigs, function (config) {
+                    if(config.name.toLowerCase() === name.toLowerCase()){
+                        isNameUnique = false;
+                        return false;
+                    }
+                });
+                if(!isNameUnique){
+                    Notification.error('Config was not saved. Please choose a unique name.');
+                } else {
+                    var newConfig = {"name": name, "columnCategories": columnCategories};
+                    userConfigs.push(newConfig);
+                    localStorageHandler.setConfigs(userConfigs);
+                    $scope.userConfigs = localStorageHandler.getConfigs();
+                    Notification.success('Config saved!');
                 }
             });
-            if(!isNameUnique){
-                Notification.error('Config was not saved. Please choose a unique name.');
-            } else {
-                var newConfig = {"name": name, "columnCategories": columnCategories};
-                userConfigs.push(newConfig);
-                localStorageHandler.setConfigs(userConfigs);
-                $scope.userConfigs = localStorageHandler.getConfigs();
-                Notification.success('Config saved!');
-            }
         }
     };
 

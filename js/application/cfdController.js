@@ -9,28 +9,40 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
 
     var DEBUG = true;
 
-    var issues = localStorageHandler.getIssues(),
-        boardDesign = localStorageHandler.getBoardDesign(),
+    var issues = [],
+        boardDesign = {},
         allCfdData = [],
         allCfdDataDoneColumnInitialValue = 0,
         doneColumnPreviousInitialValue = 0,
         doneColumnInitialValue = 0;
 
-    try{
-        allCfdData = createCfdData(issues, boardDesign);
-        allCfdDataDoneColumnInitialValue = (_.first(_.first(allCfdData).values).y);
-    } catch (error) {
-        allCfdData = [];
-    }
+    // First get issues from chrome.storage
+    localStorageHandler.getIssues(function (issuesCallback) {
+        // Since only objects can be stored in chrome.storage, parse out the issues array from the stored object.
+        issues = parseMultipleApiIssues(issuesCallback);
 
-    $scope.data = allCfdData;
-    $scope.startFromZero = false;
+        // Datepicker variables.
+        $scope.minDate = $scope.startDate = getFirstHistoryDate(issues);
+        $scope.maxDate = $scope.endDate = getLastHistoryDate(issues);
 
-    // Datepicker variables.
-    $scope.minDate = getFirstHistoryDate(issues);
-    $scope.maxDate = getLastHistoryDate(issues);
-    $scope.startDate = getFirstHistoryDate(issues);
-    $scope.endDate = getLastHistoryDate(issues);
+        // Then get board design from chrome.storage
+        localStorageHandler.getBoardDesign(function (boardDesignCallback) {
+            boardDesign = boardDesignCallback;
+
+            // Finally operate on the set variables
+            try{
+                allCfdData = createCfdData(issues, boardDesign);
+                allCfdDataDoneColumnInitialValue = (_.first(_.first(allCfdData).values).y);
+            } catch (error) {
+                allCfdData = [];
+            }
+
+            $scope.data = allCfdData;
+            $scope.startFromZero = false;
+        });
+    });
+
+    // Datepicker options.
     $scope.dateFormat = 'yyyy-MM-dd';
     $scope.startDateStatus = {
         opened: false

@@ -2038,4 +2038,4 @@ var newBoardDesignFromJira = {
     "ranking": {
         "rankCustomFieldId": 10200
     }
-}
+};

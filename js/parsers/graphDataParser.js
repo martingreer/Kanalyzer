@@ -82,7 +82,7 @@ function CfdColumnItem(columnName){
 
 /**
  * For each date, calculate the amount of issues in the given column.
- * Column will be the key in CFD data array.
+ * Column name is the key in CFD data array.
  */
 function CfdColumnValuesArray(dates, issues, boardDesign, columnName){
     var valuesArray = [],
