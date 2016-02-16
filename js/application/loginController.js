@@ -91,8 +91,16 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
         });
         login.error(function (error) {
             apiServerData.setIsLoggedIn(false);
-            Notification.error('Login failed, please try again.');
-            if(DEBUG){console.log("Login failed: " + error);}
+            if (error === null) {
+                Notification.error("Login failed: invalid address.");
+                if(DEBUG){console.log("Login failed: invalid address");}
+            } else if (_.first(error.errorMessages) === "Login failed") {
+                Notification.error("Login failed, invalid credentials.");
+                if(DEBUG){console.log("Login failed: invalid credentials");}
+            } else {
+                Notification.error("Login failed: unknown error.");
+                if(DEBUG){console.log("Login failed: unknown error");}
+            }
         });
     };
 

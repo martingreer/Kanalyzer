@@ -43,14 +43,12 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         if(maxResults === '' || maxResults.toLowerCase() === 'all' || !maxResults){
             $scope.maxResults = '-1';
         }
-        console.log("Toggled max results from " + maxResults + " to " + $scope.maxResults);
     }
 
     function setMaxResultsForUserInterface (maxResults) {
         if (maxResults === '-1' || maxResults.toLowerCase() === 'all' || !maxResults) {
             $scope.maxResults = '';
         }
-        console.log("Toggled max results from " + maxResults + " to " + $scope.maxResults);
     }
 
     // The following 4 get calls from chrome.storage are independent from one another,
@@ -218,15 +216,22 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         } else {
             console.log("Adding config.");
             localStorageHandler.getConfigs(function (configsCallback) {
-                userConfigs = configsCallback.userConfigs;
+                // Set userConfigs only if chrome storage exists.
+                if (configsCallback.userConfigs) {
+                    userConfigs = configsCallback.userConfigs;
+                }
+
+                // Search for a config with matching name
                 _.forEach(userConfigs, function (config) {
                     if(config.name.toLowerCase() === name.toLowerCase()){
                         isNameUnique = false;
-                        return false;
+                        return false; // break loop if a matching name is found
                     }
                 });
+
                 if(!isNameUnique){
                     Notification.error('Config was not saved. Please choose a unique name.');
+                    console.log("Config was not saved (duplicate name).");
                 } else {
                     var newConfig = {"name": name, "columnCategories": columnCategories};
                     userConfigs.push(newConfig);
@@ -239,42 +244,43 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     };
 
     /**
-     * Loads a chosen user config.
+     * Finds the currently selected config.
      */
-    $scope.loadConfig = function (name) {
-        var config = {};
-
-        localStorageHandler.getSelectedConfig(name);
-
-        if(haveSameColumnStructure($scope.columns, config.columnCategories)){
-            $scope.loadedConfig = localStorageHandler.getSelectedConfig(name).name;
-            $scope.columns = config.columnCategories;
-            if(DEBUG){console.log("Config was successfully loaded.");}
+    function getSelectedConfig (name, data) {
+        var configs = data;
+        var selectedConfig = {};
+        if (configs) {
+            _.forEach(configs, function (config) {
+                if (config.name === name) {
+                    selectedConfig = config;
+                    return false;
+                }
+            });
+            return selectedConfig;
         } else {
-            Notification.error("The selected config is not compatible with the current board.");
-            if(DEBUG){console.log("Config was not loaded.");}
+            return {};
         }
-    };
+    }
 
     /**
      * Checks if the given column arrays have the same structure.
      */
-    function haveSameColumnStructure(columnsToConfig, columns){
-        if (columnsToConfig === columns){
+    function haveSameColumnStructure(columnsToConfigurate, columns){
+        if (columnsToConfigurate === columns){
             if(DEBUG){console.log("Columns are exactly equal!");}
             return true;
         }
-        if (columnsToConfig == null || columns == null) {
+        if (columnsToConfigurate == null || columns == null) {
             if(DEBUG){console.log("At least one column array is null!");}
             return false;
         }
-        if (columnsToConfig.length != columns.length) {
+        if (columnsToConfigurate.length != columns.length) {
             if(DEBUG){console.log("Lengths are not the same!");}
             return false;
         }
 
-        for (var i = 0; i < columnsToConfig.length; ++i) {
-            if (columnsToConfig[i].name !== columns[i].name) {
+        for (var i = 0; i < columnsToConfigurate.length; ++i) {
+            if (columnsToConfigurate[i].name !== columns[i].name) {
                 if(DEBUG){console.log("Column names are not equal!");}
                 return false;
             }
@@ -284,11 +290,52 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     }
 
     /**
+     * Loads a chosen user config.
+     */
+    $scope.loadConfig = function (name) {
+        var userConfigs = [];
+        var selectedConfig = {};
+
+        localStorageHandler.getConfigs(function (configsCallback) {
+            if (configsCallback.userConfigs) {
+                userConfigs = configsCallback.userConfigs;
+            }
+
+            selectedConfig = getSelectedConfig(name, userConfigs);
+
+            if (haveSameColumnStructure($scope.columns, selectedConfig.columnCategories)) {
+                $scope.loadedConfig = selectedConfig.name; // FIXME: in old code, this was fetched from local storage
+                $scope.columns = selectedConfig.columnCategories;
+                Notification.success("Config loaded.");
+                if(DEBUG){console.log("Config was successfully loaded.");}
+            } else {
+                Notification.error("The selected config is not compatible with the current board.");
+                if(DEBUG){console.log("Config was not loaded.");}
+            }
+        });
+    };
+    // OLD CODE
+    //$scope.loadConfig = function (name) {
+    //    var config = {};
+    //
+    //    localStorageHandler.getSelectedConfig(name);
+    //
+    //    if(haveSameColumnStructure($scope.columns, config.columnCategories)){
+    //        $scope.loadedConfig = localStorageHandler.getSelectedConfig(name).name;
+    //        $scope.columns = config.columnCategories;
+    //        if(DEBUG){console.log("Config was successfully loaded.");}
+    //    } else {
+    //        Notification.error("The selected config is not compatible with the current board.");
+    //        if(DEBUG){console.log("Config was not loaded.");}
+    //    }
+    //};
+
+    /**
      * Clears all configs.
      */
     $scope.clearConfigs = function () {
         localStorageHandler.removeConfigs();
-        $scope.userConfigs = localStorageHandler.getConfigs();
+        $scope.userConfigs = [];
         Notification.primary('All configs removed.');
         console.log("All configs removed.");
     };

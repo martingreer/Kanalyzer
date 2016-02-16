@@ -160,22 +160,6 @@ application.factory('previousLoadData', function(){
  * Local storage helper for board design, issues and configs.
  */
 application.factory('localStorageHandler', function(){
-    function getSelectedConfig (name, data) {
-        var configs = data;
-        var selectedConfig = {};
-        if (configs) {
-            _.forEach(configs, function (config) {
-                if (config.name === name) {
-                    selectedConfig = config;
-                    return false;
-                }
-            });
-            return selectedConfig;
-        } else {
-            return {};
-        }
-    }
-
     return {
         getBoardDesign: function (callback) {
             chrome.storage.local.get('boardDesign', callback);
@@ -187,7 +171,7 @@ application.factory('localStorageHandler', function(){
             chrome.storage.local.remove('boardDesign');
         },
         getLoadedProject: function (callback) {
-            return chrome.storage.local.get('loadedProject', callback);
+            chrome.storage.local.get('loadedProject', callback);
         },
         setLoadedProject: function (loadedProjectToSet) {
             chrome.storage.local.set({loadedProject: loadedProjectToSet});
@@ -199,7 +183,7 @@ application.factory('localStorageHandler', function(){
             chrome.storage.local.set({issues: issuesToSet});
         },
         removeIssues: function () {
-            StorageArea.sync.remove('issues');
+            chrome.storage.local.remove('issues');
         },
         getConfigs: function (callback) {
             chrome.storage.local.get('userConfigs', callback);
@@ -208,12 +192,7 @@ application.factory('localStorageHandler', function(){
             chrome.storage.local.set({userConfigs: userConfigsToSet});
         },
         removeConfigs: function () {
-            StorageArea.sync.remove('userConfigs');
-        },
-        getSelectedConfig: function (name) {
-            return chrome.storage.local.get('userConfigs', function (data) {
-                return getSelectedConfig(name, data);
-            });
+            chrome.storage.local.remove('userConfigs');
         }
     }
 });
