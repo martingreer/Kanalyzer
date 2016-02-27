@@ -1,4 +1,136 @@
 var columnsData = {
+    "id": 12,
+    "name": "Kanalyzes Delivery Board",
+    "self": "https://softhousegbg.atlassian.net/rest/agile/1.0/board/12/configuration",
+    "filter": {
+        "id": "10603",
+        "self": "https://softhousegbg.atlassian.net/rest/api/2/filter/10603"
+    },
+    "columnConfig": {
+        "columns": [
+            {
+                "name": "Ready to Refine",
+                "statuses": [
+                    {
+                        "id": "10000",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10000"
+                    }
+                ]
+            },
+            {
+                "name": "Refine Backlog",
+                "statuses": [
+                    {
+                        "id": "10213",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10213"
+                    }
+                ],
+                "min": 2,
+                "max": 2
+            },
+            {
+                "name": "Ready to Analyze",
+                "statuses": [
+                    {
+                        "id": "10204",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10204"
+                    }
+                ]
+            },
+            {
+                "name": "Analyze",
+                "statuses": [
+                    {
+                        "id": "10205",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10205"
+                    }
+                ]
+            },
+            {
+                "name": "Ready for Development",
+                "statuses": [
+                    {
+                        "id": "10212",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10212"
+                    }
+                ]
+            },
+            {
+                "name": "In Progress",
+                "statuses": [
+                    {
+                        "id": "3",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/3"
+                    },
+                    {
+                        "id": "10203",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10203"
+                    }
+                ]
+            },
+            {
+                "name": "Under Review",
+                "statuses": [
+                    {
+                        "id": "10211",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10211"
+                    }
+                ]
+            },
+            {
+                "name": "Ready for Test",
+                "statuses": [
+                    {
+                        "id": "10206",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10206"
+                    }
+                ]
+            },
+            {
+                "name": "Under Test",
+                "statuses": [
+                    {
+                        "id": "10207",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10207"
+                    }
+                ]
+            },
+            {
+                "name": "Ready to Accept",
+                "statuses": [
+                    {
+                        "id": "10208",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10208"
+                    }
+                ]
+            },
+            {
+                "name": "Accept",
+                "statuses": [
+                    {
+                        "id": "10209",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10209"
+                    }
+                ]
+            },
+            {
+                "name": "Ready for Release",
+                "statuses": [
+                    {
+                        "id": "10001",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10001"
+                    }
+                ]
+            }
+        ],
+        "constraintType": "issueCountExclSubs"
+    },
+    "ranking": {
+        "rankCustomFieldId": 10200
+    }
+};
+
+var columnsDataOldApi = {
     "rapidViewId": 2,
     "columns": [
         {
@@ -1905,137 +2037,5 @@ var apiIssueWithHistoryButNoStatusChange = {
                 ]
             }
         ]
-    }
-};
-
-var newBoardDesignFromJira = {
-    "id": 12,
-    "name": "Kanalyzes Delivery Board",
-    "self": "https://softhousegbg.atlassian.net/rest/agile/1.0/board/12/configuration",
-    "filter": {
-        "id": "10603",
-        "self": "https://softhousegbg.atlassian.net/rest/api/2/filter/10603"
-    },
-    "columnConfig": {
-        "columns": [
-            {
-                "name": "Ready to Refine",
-                "statuses": [
-                    {
-                        "id": "10000",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10000"
-                    }
-                ]
-            },
-            {
-                "name": "Refine Backlog",
-                "statuses": [
-                    {
-                        "id": "10213",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10213"
-                    }
-                ],
-                "min": 2,
-                "max": 2
-            },
-            {
-                "name": "Ready to Analyze",
-                "statuses": [
-                    {
-                        "id": "10204",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10204"
-                    }
-                ]
-            },
-            {
-                "name": "Analyze",
-                "statuses": [
-                    {
-                        "id": "10205",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10205"
-                    }
-                ]
-            },
-            {
-                "name": "Ready for Development",
-                "statuses": [
-                    {
-                        "id": "10212",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10212"
-                    }
-                ]
-            },
-            {
-                "name": "In Progress",
-                "statuses": [
-                    {
-                        "id": "3",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/3"
-                    },
-                    {
-                        "id": "10203",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10203"
-                    }
-                ]
-            },
-            {
-                "name": "Under Review",
-                "statuses": [
-                    {
-                        "id": "10211",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10211"
-                    }
-                ]
-            },
-            {
-                "name": "Ready for Test",
-                "statuses": [
-                    {
-                        "id": "10206",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10206"
-                    }
-                ]
-            },
-            {
-                "name": "Under Test",
-                "statuses": [
-                    {
-                        "id": "10207",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10207"
-                    }
-                ]
-            },
-            {
-                "name": "Ready to Accept",
-                "statuses": [
-                    {
-                        "id": "10208",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10208"
-                    }
-                ]
-            },
-            {
-                "name": "Accept",
-                "statuses": [
-                    {
-                        "id": "10209",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10209"
-                    }
-                ]
-            },
-            {
-                "name": "Ready for Release",
-                "statuses": [
-                    {
-                        "id": "10001",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10001"
-                    }
-                ]
-            }
-        ],
-        "constraintType": "issueCountExclSubs"
-    },
-    "ranking": {
-        "rankCustomFieldId": 10200
     }
 };
