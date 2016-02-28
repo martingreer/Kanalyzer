@@ -110,7 +110,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             requestBoardDesign.success(function (data) {
                 if(DEBUG){console.log("Get board design from API: SUCCESS!");}
                 try{
-                    boardColumnsDesign = createBoardDesign(parseBoardDesign(data));
+                    boardColumnsDesign = createBoardDesign(data);
                     localStorageHandler.setBoardDesign(boardColumnsDesign);
                     localStorageHandler.setLoadedProject($scope.apiProject);
                     $scope.columns = boardColumnsDesign.columns;

@@ -6,7 +6,7 @@ var DEBUG_COLUMNHISTORY = false;
 /**
  * Narrows down raw api board design data.
  */
-function parseBoardDesign(apiBoardDesignRaw){
+function getColumnConfigFromBoardDesign(apiBoardDesignRaw){
     "use strict";
 
     /** @namespace apiBoardDesignRaw.columnConfig */
@@ -19,7 +19,11 @@ function parseBoardDesign(apiBoardDesignRaw){
 function createBoardDesign(apiBoardDesign){
     var boardDesign;
 
-    boardDesign = new BoardDesign(apiBoardDesign);
+    console.log("apiBoardDesign below: ");
+    console.log(apiBoardDesign);
+    boardDesign = new BoardDesign(getColumnConfigFromBoardDesign(apiBoardDesign));
+    console.log("boardDesign (columnConfig only) below: ");
+    console.log(boardDesign);
 
     return boardDesign;
 }

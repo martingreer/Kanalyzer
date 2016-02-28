@@ -234,6 +234,59 @@ var columnsDataOldApi = {
 };
 
 var coachAppColumnsData = {
+    "id": 9,
+    "name": "CoachApp Board",
+    "type": "scrum",
+    "self": "https://softhousegbg.atlassian.net/rest/agile/1.0/board/9/configuration",
+    "filter": {
+        "id": "10501",
+        "self": "https://softhousegbg.atlassian.net/rest/api/2/filter/10501"
+    },
+    "columnConfig": {
+        "columns": [
+            {
+                "name": "To Do",
+                "statuses": [
+                    {
+                        "id": "10000",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10000"
+                    }
+                ]
+            },
+            {
+                "name": "In Progress",
+                "statuses": [
+                    {
+                        "id": "3",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/3"
+                    }
+                ]
+            },
+            {
+                "name": "Done",
+                "statuses": [
+                    {
+                        "id": "10001",
+                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10001"
+                    }
+                ]
+            }
+        ],
+        "constraintType": "none"
+    },
+    "estimation": {
+        "type": "field",
+        "field": {
+            "fieldId": "timeoriginalestimate",
+            "displayName": "Original Estimate"
+        }
+    },
+    "ranking": {
+        "rankCustomFieldId": 10200
+    }
+};
+
+var coachAppColumnsDataOldApi = {
     "rapidViewId": 9,
     "columns": [
         {

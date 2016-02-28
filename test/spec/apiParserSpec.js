@@ -12,7 +12,7 @@ describe("BoardDesign", function(){
         columnCategories;
 
     beforeEach(function(){
-        boardDesign = new BoardDesign(columnsData);
+        boardDesign = createBoardDesign(columnsData);
         columnCategories =  boardDesign.createColumnCategories();
     });
 
@@ -44,8 +44,8 @@ describe("BoardDesign", function(){
 describe("Issue", function(){
     "use strict";
 
-    var ktdBoardDesign = new BoardDesign(columnsData);
-    var coachAppBoardDesign = new BoardDesign(coachAppColumnsData);
+    var ktdBoardDesign = createBoardDesign(columnsData);
+    var coachAppBoardDesign = createBoardDesign(coachAppColumnsData);
 
     var issueWithoutHistory = new Issue(apiIssueWithoutHistory, ktdBoardDesign);
     var issueWithHistoryAndNotDone = new Issue(apiIssueWithHistoryAndNotDone, ktdBoardDesign, "2015-09-10T00:00:00");
@@ -83,12 +83,12 @@ describe("Issue", function(){
         });
 
         it("should create first separate issue object from issues array", function() {
-            var firstIssue = new Issue(twoIssues[0], new BoardDesign(columnsData));
+            var firstIssue = new Issue(twoIssues[0], createBoardDesign(columnsData));
             expect(firstIssue.id).toBe("10409");
         });
 
         it("should create second separate issue object from issues array", function() {
-            var secondIssue = new Issue(twoIssues[1], new BoardDesign(columnsData));
+            var secondIssue = new Issue(twoIssues[1], createBoardDesign(columnsData));
             expect(secondIssue.id).toBe("10408");
         });
 
