@@ -21,7 +21,7 @@ var columnsData = {
                 "name": "Refine Backlog",
                 "statuses": [
                     {
-                        "id": "10213",
+                        "id": "10010",
                         "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10213"
                     }
                 ],
@@ -32,7 +32,7 @@ var columnsData = {
                 "name": "Ready to Analyze",
                 "statuses": [
                     {
-                        "id": "10204",
+                        "id": "10012",
                         "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10204"
                     }
                 ]
@@ -41,7 +41,7 @@ var columnsData = {
                 "name": "Analyze",
                 "statuses": [
                     {
-                        "id": "10205",
+                        "id": "10002",
                         "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10205"
                     }
                 ]
@@ -50,7 +50,7 @@ var columnsData = {
                 "name": "Ready for Development",
                 "statuses": [
                     {
-                        "id": "10212",
+                        "id": "10003",
                         "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10212"
                     }
                 ]
@@ -63,7 +63,7 @@ var columnsData = {
                         "self": "https://softhousegbg.atlassian.net/rest/api/2/status/3"
                     },
                     {
-                        "id": "10203",
+                        "id": "10004",
                         "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10203"
                     }
                 ]
@@ -72,7 +72,7 @@ var columnsData = {
                 "name": "Under Review",
                 "statuses": [
                     {
-                        "id": "10211",
+                        "id": "10005",
                         "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10211"
                     }
                 ]
@@ -81,7 +81,7 @@ var columnsData = {
                 "name": "Ready for Test",
                 "statuses": [
                     {
-                        "id": "10206",
+                        "id": "10006",
                         "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10206"
                     }
                 ]
@@ -90,7 +90,7 @@ var columnsData = {
                 "name": "Under Test",
                 "statuses": [
                     {
-                        "id": "10207",
+                        "id": "10007",
                         "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10207"
                     }
                 ]
@@ -99,7 +99,7 @@ var columnsData = {
                 "name": "Ready to Accept",
                 "statuses": [
                     {
-                        "id": "10208",
+                        "id": "10008",
                         "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10208"
                     }
                 ]
@@ -108,7 +108,7 @@ var columnsData = {
                 "name": "Accept",
                 "statuses": [
                     {
-                        "id": "10209",
+                        "id": "10009",
                         "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10209"
                     }
                 ]

@@ -21,7 +21,7 @@ describe("BoardDesign", function(){
     });
 
     it("should return column name when status id is matching", function(){
-        expect(boardDesign.getColumnMatchingStatus("10004")).toEqual("In Progress");
+        expect(boardDesign.getColumnMatchingStatus("10203")).toEqual("In Progress");
     });
 
     it("should return null when status id is not matching any column", function(){

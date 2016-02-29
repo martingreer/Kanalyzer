@@ -27,7 +27,7 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
 
         // Then get board design from chrome.storage
         localStorageHandler.getBoardDesign(function (boardDesignCallback) {
-            boardDesign = boardDesignCallback;
+            boardDesign = boardDesignCallback.boardDesign;
 
             // Finally operate on the set variables
             try{

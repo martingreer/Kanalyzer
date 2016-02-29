@@ -42,7 +42,7 @@ describe("CFD graph", function(){
     "use strict";
 
     var fourIssues = fourParsedDoneIssues;
-    var boardDesign = createBoardDesign(columnsData);
+    var boardDesign = columnsData;
 
     describe("Dates", function(){
         it("should return the last date found in column history between the issues", function(){

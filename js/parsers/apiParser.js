@@ -49,7 +49,7 @@ function BoardDesign(apiColumnsData) {
         var columnName = null;
         _.forEach(self.columns, function (column) {
             _.forEach(column.statuses, function (columnStatus) {
-                if (columnStatus === status) {
+                if (columnStatus.id === status) {
                     columnName = column.name;
                     return false; // break loop
                 }
