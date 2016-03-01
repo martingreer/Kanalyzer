@@ -4,26 +4,20 @@
 var DEBUG_COLUMNHISTORY = false;
 
 /**
- * Narrows down raw api board design data.
- */
-function getColumnConfigFromBoardDesign(apiBoardDesignRaw){
-    "use strict";
-
-    /** @namespace apiBoardDesignRaw.columnConfig */
-    return apiBoardDesignRaw.columnConfig;
-}
-
-/**
  * Create a new instance of a board design object.
+ * Will detect whether the incoming board design is raw data from API or has already been parsed.
  */
-function createBoardDesign(apiBoardDesign){
+function createBoardDesign(boardDesignToParse){
     var boardDesign;
 
-    console.log("apiBoardDesign below: ");
-    console.log(apiBoardDesign);
-    boardDesign = new BoardDesign(getColumnConfigFromBoardDesign(apiBoardDesign));
-    console.log("boardDesign (columnConfig only) below: ");
-    console.log(boardDesign);
+    if (boardDesignToParse.columnConfig) {
+        // Incoming board design is raw data from API and contains the "columnConfig" property.
+        delete boardDesignToParse.columnConfig.constraintType; // Not interested in this property
+        boardDesign = new BoardDesign(boardDesignToParse.columnConfig, boardDesignToParse.name);
+    } else {
+        // Incomfing board design has been parsed already and instead stores the column config in a "columns" property.
+        boardDesign = new BoardDesign(boardDesignToParse, boardDesignToParse.name);
+    }
 
     return boardDesign;
 }
@@ -31,7 +25,7 @@ function createBoardDesign(apiBoardDesign){
 /**
 * Current board structure with columns and their underlying statuses.
 */
-function BoardDesign(apiColumnsData) {
+function BoardDesign(apiColumnsData, boardName) {
     "use strict";
 
     var self = _.cloneDeep(apiColumnsData);
@@ -41,7 +35,6 @@ function BoardDesign(apiColumnsData) {
         _.forEach(self.columns, function (column) {
             columnNames.push(column.name);
         });
-        console.log(columnNames);
         return columnNames;
     };
 
@@ -64,7 +57,7 @@ function BoardDesign(apiColumnsData) {
     self.createColumnCategories = function () {
         var hasCategories;
 
-        hasCategories = self.columns[0].hasOwnProperty('category');
+        hasCategories = _.first(self.columns).hasOwnProperty('category');
 
         if(!hasCategories) {
             _.forEach(self.columns, function (column) {
@@ -115,6 +108,7 @@ function BoardDesign(apiColumnsData) {
         return self.getColumnCategory(columnName) === "Done";
     };
 
+    self.name = boardName;
     self.createColumnCategories();
 
     return self;

@@ -53,29 +53,21 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
     // The following 4 get calls from chrome.storage are independent from one another,
     // So they don't need to be nested.
-    if(DEBUG){console.log("Get previousLoadData attempt...");}
     previousLoadData.getPreviousLoadData(function (previousLoadData) {
         setPreviousLoadDataOnScope(previousLoadData);
-        if(DEBUG){console.log("Get previousLoadData success!");}
     });
 
-    if(DEBUG){console.log("Get boardDesign attempt...");}
     localStorageHandler.getBoardDesign(function (boardDesign) {
         setBoardDesignOnScope(boardDesign.boardDesign);
-        if(DEBUG){console.log("Get boardDesign success!");}
     });
 
-    if(DEBUG){console.log("Get loadedProject attempt...");}
     localStorageHandler.getLoadedProject(function (loadedProject) {
         $scope.loadedProject = loadedProject;
-        if(DEBUG){console.log("Get loadedProject success!");}
     });
 
-    if(DEBUG){console.log("Get configs attempt...");}
     localStorageHandler.getConfigs(function (configs) {
         // Assign user configs to scope if local storage already exists.
         $scope.userConfigs = configs.userConfigs;
-        if(DEBUG){console.log("Get configs success!");}
     });
 
     /**
@@ -190,10 +182,8 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
                 localStorageHandler.getIssues(function (issuesCallback) {
                     oldIssues = createIssuesFromArray(issuesCallback.issues, oldBoardDesign);
-
                     updatedIssues = createIssuesFromArray(oldIssues, updatedBoardDesign);
                     localStorageHandler.setIssues(updatedIssues);
-
                     Notification.success('Column categories have been updated.');
                 });
             });
