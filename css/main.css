@@ -111,14 +111,9 @@ textarea {
     min-height:32px !important;
 }
 
-
-
-
-
-
-
-
-
+html, body {
+    overflow-y: visible;
+}
 
 /* ==========================================================================
    Helper classes

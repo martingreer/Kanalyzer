@@ -9,13 +9,16 @@ application.controller('etdtController', function ($scope, localStorageHandler, 
 
     var DEBUG = true;
 
-    var issues = localStorageHandler.getIssues();
+    var issues = [];
 
-    try{
-        $scope.data = createEtDtData("All issues", issues);
-    } catch (error) {
-        $scope.data = [];
-    }
+    localStorageHandler.getIssues(function (issuesCallback) {
+        issues = issuesCallback.issues;
+        try{
+            $scope.data = createEtDtData("All issues", issues);
+        } catch (error) {
+            $scope.data = [];
+        }
+    });
 
     /**
      * Graph structure.
@@ -60,33 +63,37 @@ application.controller('etdtController', function ($scope, localStorageHandler, 
      * Filters the issues to be shown in the graph up to the max Cycle Time value.
      */
     $scope.applyCycleTimeFilter = function (maxCycleTime) {
-        var allIssues = localStorageHandler.getIssues(),
+        var allIssues = [],
             filteredIssues = [];
 
-        if(maxCycleTime === '' || maxCycleTime === null || maxCycleTime === ' ' || maxCycleTime === undefined){
-            try{
-                $scope.data = createEtDtData("All issues", allIssues);
-                Notification.success("Filter removed.");
-                if(DEBUG){console.log("Filter removed.");}
-            } catch (error) {
-                Notification.error("Removing filter failed.");
-                $scope.data = [];
-            }
-        } else {
-            _.forEach(allIssues, function(issue){
-                if(timeUtil.msToHours(issue.cycleTime) <= maxCycleTime && issue.cycleTime !== null){
-                    filteredIssues.push(issue);
-                }
-            });
+        localStorageHandler.getIssues(function (issuesCallback) {
+            allIssues = issuesCallback.issues;
 
-            try{
-                $scope.data = createEtDtData("All issues", filteredIssues);
-                if(DEBUG){console.log("Graph data updated according to filter.");}
-                Notification.success("Filter applied.");
-            } catch (error) {
-                Notification.error("Filter failed.");
-                $scope.data = [];
+            if(maxCycleTime === '' || maxCycleTime === null || maxCycleTime === ' ' || maxCycleTime === undefined){
+                try{
+                    $scope.data = createEtDtData("All issues", allIssues);
+                    Notification.success("Filter removed.");
+                    if(DEBUG){console.log("Filter removed.");}
+                } catch (error) {
+                    Notification.error("Removing filter failed.");
+                    $scope.data = [];
+                }
+            } else {
+                _.forEach(allIssues, function(issue){
+                    if(timeUtil.msToHours(issue.cycleTime) <= maxCycleTime && issue.cycleTime !== null){
+                        filteredIssues.push(issue);
+                    }
+                });
+
+                try{
+                    $scope.data = createEtDtData("All issues", filteredIssues);
+                    if(DEBUG){console.log("Graph data updated according to filter.");}
+                    Notification.success("Filter applied.");
+                } catch (error) {
+                    Notification.error("Filter failed.");
+                    $scope.data = [];
+                }
             }
-        }
+        });
     }
 });
