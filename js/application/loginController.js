@@ -24,13 +24,11 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
         $scope.isLoggedIn = apiServerData.getIsLoggedIn();
     }
 
-    if(DEBUG){console.log("Get previousLogin attempt...");}
     /**
      * Fetches previous values (except password) from previous login attempt.
      */
     previousLogin.getPreviousLogin(function (previousLogin) {
         setPreviousLoginValues(previousLogin);
-        if(DEBUG){console.log("Get previousLogin success!");}
     });
 
     /**
