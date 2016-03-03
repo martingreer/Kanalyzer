@@ -1,10 +1,10 @@
 var columnsData = {
     "id": 12,
     "name": "Kanalyzes Delivery Board",
-    "self": "https://softhousegbg.atlassian.net/rest/agile/1.0/board/12/configuration",
+    "self": "https://dummy_domain.atlassian.net/rest/agile/1.0/board/12/configuration",
     "filter": {
         "id": "10603",
-        "self": "https://softhousegbg.atlassian.net/rest/api/2/filter/10603"
+        "self": "https://dummy_domain.atlassian.net/rest/api/2/filter/10603"
     },
     "columnConfig": {
         "columns": [
@@ -13,7 +13,7 @@ var columnsData = {
                 "statuses": [
                     {
                         "id": "10000",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10000"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10000"
                     }
                 ]
             },
@@ -22,7 +22,7 @@ var columnsData = {
                 "statuses": [
                     {
                         "id": "10010",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10213"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10213"
                     }
                 ],
                 "min": 2,
@@ -33,7 +33,7 @@ var columnsData = {
                 "statuses": [
                     {
                         "id": "10012",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10204"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10204"
                     }
                 ]
             },
@@ -42,7 +42,7 @@ var columnsData = {
                 "statuses": [
                     {
                         "id": "10002",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10205"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10205"
                     }
                 ]
             },
@@ -51,7 +51,7 @@ var columnsData = {
                 "statuses": [
                     {
                         "id": "10003",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10212"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10212"
                     }
                 ]
             },
@@ -60,11 +60,11 @@ var columnsData = {
                 "statuses": [
                     {
                         "id": "3",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/3"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/3"
                     },
                     {
                         "id": "10004",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10203"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10203"
                     }
                 ]
             },
@@ -73,7 +73,7 @@ var columnsData = {
                 "statuses": [
                     {
                         "id": "10005",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10211"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10211"
                     }
                 ]
             },
@@ -82,7 +82,7 @@ var columnsData = {
                 "statuses": [
                     {
                         "id": "10006",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10206"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10206"
                     }
                 ]
             },
@@ -91,7 +91,7 @@ var columnsData = {
                 "statuses": [
                     {
                         "id": "10007",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10207"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10207"
                     }
                 ]
             },
@@ -100,7 +100,7 @@ var columnsData = {
                 "statuses": [
                     {
                         "id": "10008",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10208"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10208"
                     }
                 ]
             },
@@ -109,7 +109,7 @@ var columnsData = {
                 "statuses": [
                     {
                         "id": "10009",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10209"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10209"
                     }
                 ]
             },
@@ -118,7 +118,7 @@ var columnsData = {
                 "statuses": [
                     {
                         "id": "10001",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10001"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10001"
                     }
                 ]
             }
@@ -237,10 +237,10 @@ var coachAppColumnsData = {
     "id": 9,
     "name": "CoachApp Board",
     "type": "scrum",
-    "self": "https://softhousegbg.atlassian.net/rest/agile/1.0/board/9/configuration",
+    "self": "https://dummy_domain.atlassian.net/rest/agile/1.0/board/9/configuration",
     "filter": {
         "id": "10501",
-        "self": "https://softhousegbg.atlassian.net/rest/api/2/filter/10501"
+        "self": "https://dummy_domain.atlassian.net/rest/api/2/filter/10501"
     },
     "columnConfig": {
         "columns": [
@@ -249,7 +249,7 @@ var coachAppColumnsData = {
                 "statuses": [
                     {
                         "id": "10000",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10000"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10000"
                     }
                 ]
             },
@@ -258,7 +258,7 @@ var coachAppColumnsData = {
                 "statuses": [
                     {
                         "id": "3",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/3"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/3"
                     }
                 ]
             },
@@ -267,7 +267,7 @@ var coachAppColumnsData = {
                 "statuses": [
                     {
                         "id": "10001",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10001"
+                        "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10001"
                     }
                 ]
             }
@@ -385,7 +385,7 @@ var apiIssueWithHistoryAndNotDone = {
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
                 "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                 "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -428,7 +428,7 @@ var apiIssueWithHistoryAndNotDone = {
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
                 "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                 "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -446,7 +446,7 @@ var apiIssueWithHistoryAndNotDone = {
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
                 "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                 "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -489,7 +489,7 @@ var apiIssueWithHistoryAndNotDone = {
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -518,7 +518,7 @@ var apiIssueWithHistoryAndNotDone = {
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -547,7 +547,7 @@ var apiIssueWithHistoryAndNotDone = {
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -576,7 +576,7 @@ var apiIssueWithHistoryAndNotDone = {
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -605,7 +605,7 @@ var apiIssueWithHistoryAndNotDone = {
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -634,7 +634,7 @@ var apiIssueWithHistoryAndNotDone = {
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -763,7 +763,7 @@ var apiIssueWithoutHistory =
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
                 "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                 "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -781,7 +781,7 @@ var apiIssueWithoutHistory =
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
                 "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                 "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -937,7 +937,7 @@ var apiIssueIsDone =
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
                 "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                 "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -980,7 +980,7 @@ var apiIssueIsDone =
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
                 "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                 "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -998,7 +998,7 @@ var apiIssueIsDone =
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
                 "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                 "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1041,7 +1041,7 @@ var apiIssueIsDone =
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1070,7 +1070,7 @@ var apiIssueIsDone =
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1099,7 +1099,7 @@ var apiIssueIsDone =
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1128,7 +1128,7 @@ var apiIssueIsDone =
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1157,7 +1157,7 @@ var apiIssueIsDone =
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1186,7 +1186,7 @@ var apiIssueIsDone =
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1215,7 +1215,7 @@ var apiIssueIsDone =
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1244,7 +1244,7 @@ var apiIssueIsDone =
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1385,7 +1385,7 @@ var apiTwoIssues = {
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1426,7 +1426,7 @@ var apiTwoIssues = {
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1442,7 +1442,7 @@ var apiTwoIssues = {
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1485,7 +1485,7 @@ var apiTwoIssues = {
                             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                             "name": "martin.w.greer",
                             "key": "martin.w.greer",
-                            "emailAddress": "martin.w.greer@gmail.com",
+                            "emailAddress": "dummy@dummy.com",
                             "avatarUrls": {
                                 "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                                 "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1514,7 +1514,7 @@ var apiTwoIssues = {
                             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                             "name": "martin.w.greer",
                             "key": "martin.w.greer",
-                            "emailAddress": "martin.w.greer@gmail.com",
+                            "emailAddress": "dummy@dummy.com",
                             "avatarUrls": {
                                 "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                                 "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1645,7 +1645,7 @@ var apiTwoIssues = {
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1686,7 +1686,7 @@ var apiTwoIssues = {
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1702,7 +1702,7 @@ var apiTwoIssues = {
                     "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                     "name": "martin.w.greer",
                     "key": "martin.w.greer",
-                    "emailAddress": "martin.w.greer@gmail.com",
+                    "emailAddress": "dummy@dummy.com",
                     "avatarUrls": {
                         "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                         "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1745,7 +1745,7 @@ var apiTwoIssues = {
                             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                             "name": "martin.w.greer",
                             "key": "martin.w.greer",
-                            "emailAddress": "martin.w.greer@gmail.com",
+                            "emailAddress": "dummy@dummy.com",
                             "avatarUrls": {
                                 "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                                 "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1774,7 +1774,7 @@ var apiTwoIssues = {
                             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                             "name": "martin.w.greer",
                             "key": "martin.w.greer",
-                            "emailAddress": "martin.w.greer@gmail.com",
+                            "emailAddress": "dummy@dummy.com",
                             "avatarUrls": {
                                 "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                                 "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1803,7 +1803,7 @@ var apiTwoIssues = {
                             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
                             "name": "martin.w.greer",
                             "key": "martin.w.greer",
-                            "emailAddress": "martin.w.greer@gmail.com",
+                            "emailAddress": "dummy@dummy.com",
                             "avatarUrls": {
                                 "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
                                 "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -1843,29 +1843,29 @@ var apiTwoIssues = {
 var apiIssueWithHistoryButNoStatusChange = {
     "expand": "operations,versionedRepresentations,editmeta,changelog,transitions,renderedFields",
     "id": "12008",
-    "self": "https://softhousegbg.atlassian.net/rest/api/2/issue/12008",
+    "self": "https://dummy_domain.atlassian.net/rest/api/2/issue/12008",
     "key": "COAC-71",
     "fields": {
         "issuetype": {
-            "self": "https://softhousegbg.atlassian.net/rest/api/2/issuetype/7",
+            "self": "https://dummy_domain.atlassian.net/rest/api/2/issuetype/7",
             "id": "7",
             "description": "Created by JIRA Agile - do not edit or delete. Issue type for a user story.",
-            "iconUrl": "https://softhousegbg.atlassian.net/secure/viewavatar?size=xsmall&avatarId=10615&avatarType=issuetype",
+            "iconUrl": "https://dummy_domain.atlassian.net/secure/viewavatar?size=xsmall&avatarId=10615&avatarType=issuetype",
             "name": "Story",
             "subtask": false,
             "avatarId": 10615
         },
         "timespent": null,
         "project": {
-            "self": "https://softhousegbg.atlassian.net/rest/api/2/project/10500",
+            "self": "https://dummy_domain.atlassian.net/rest/api/2/project/10500",
             "id": "10500",
             "key": "COAC",
             "name": "CoachApp",
             "avatarUrls": {
-                "48x48": "https://softhousegbg.atlassian.net/secure/projectavatar?avatarId=10703",
-                "24x24": "https://softhousegbg.atlassian.net/secure/projectavatar?size=small&avatarId=10703",
-                "16x16": "https://softhousegbg.atlassian.net/secure/projectavatar?size=xsmall&avatarId=10703",
-                "32x32": "https://softhousegbg.atlassian.net/secure/projectavatar?size=medium&avatarId=10703"
+                "48x48": "https://dummy_domain.atlassian.net/secure/projectavatar?avatarId=10703",
+                "24x24": "https://dummy_domain.atlassian.net/secure/projectavatar?size=small&avatarId=10703",
+                "16x16": "https://dummy_domain.atlassian.net/secure/projectavatar?size=xsmall&avatarId=10703",
+                "32x32": "https://dummy_domain.atlassian.net/secure/projectavatar?size=medium&avatarId=10703"
             }
         },
         "fixVersions": [
@@ -1877,7 +1877,7 @@ var apiIssueWithHistoryButNoStatusChange = {
         "workratio": 0,
         "lastViewed": null,
         "watches": {
-            "self": "https://softhousegbg.atlassian.net/rest/api/2/issue/COAC-71/watchers",
+            "self": "https://dummy_domain.atlassian.net/rest/api/2/issue/COAC-71/watchers",
             "watchCount": 1,
             "isWatching": false
         },
@@ -1885,8 +1885,8 @@ var apiIssueWithHistoryButNoStatusChange = {
         "customfield_10020": null,
         "customfield_10021": "Not started",
         "priority": {
-            "self": "https://softhousegbg.atlassian.net/rest/api/2/priority/3",
-            "iconUrl": "https://softhousegbg.atlassian.net/images/icons/priorities/major.svg",
+            "self": "https://dummy_domain.atlassian.net/rest/api/2/priority/3",
+            "iconUrl": "https://dummy_domain.atlassian.net/images/icons/priorities/major.svg",
             "name": "Major",
             "id": "3"
         },
@@ -1910,13 +1910,13 @@ var apiIssueWithHistoryButNoStatusChange = {
         "assignee": null,
         "updated": "2015-10-26T13:47:39.000+0100",
         "status": {
-            "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10000",
+            "self": "https://dummy_domain.atlassian.net/rest/api/2/status/10000",
             "description": "",
-            "iconUrl": "https://softhousegbg.atlassian.net/images/icons/subtask.gif",
+            "iconUrl": "https://dummy_domain.atlassian.net/images/icons/subtask.gif",
             "name": "To Do",
             "id": "10000",
             "statusCategory": {
-                "self": "https://softhousegbg.atlassian.net/rest/api/2/statuscategory/2",
+                "self": "https://dummy_domain.atlassian.net/rest/api/2/statuscategory/2",
                 "id": 2,
                 "key": "new",
                 "colorName": "blue-gray",
@@ -1940,17 +1940,17 @@ var apiIssueWithHistoryButNoStatusChange = {
         "aggregatetimeestimate": 10800,
         "summary": "Retro",
         "creator": {
-            "self": "https://softhousegbg.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
-            "name": "Jonas Jaconelli",
-            "key": "jonas jaconelli",
-            "emailAddress": "jonas.jaconelli@softhouse.se",
+            "self": "https://dummy_domain.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
+            "name": "Some Person",
+            "key": "some person",
+            "emailAddress": "dummy2@dummy.com",
             "avatarUrls": {
-                "48x48": "https://softhousegbg.atlassian.net/secure/useravatar?ownerId=jonas+jaconelli&avatarId=10800",
-                "24x24": "https://softhousegbg.atlassian.net/secure/useravatar?size=small&ownerId=jonas+jaconelli&avatarId=10800",
-                "16x16": "https://softhousegbg.atlassian.net/secure/useravatar?size=xsmall&ownerId=jonas+jaconelli&avatarId=10800",
-                "32x32": "https://softhousegbg.atlassian.net/secure/useravatar?size=medium&ownerId=jonas+jaconelli&avatarId=10800"
+                "48x48": "https://dummy_domain.atlassian.net/secure/useravatar?ownerId=some+person&avatarId=10800",
+                "24x24": "https://dummy_domain.atlassian.net/secure/useravatar?size=small&ownerId=some+person&avatarId=10800",
+                "16x16": "https://dummy_domain.atlassian.net/secure/useravatar?size=xsmall&ownerId=some+person&avatarId=10800",
+                "32x32": "https://dummy_domain.atlassian.net/secure/useravatar?size=medium&ownerId=some+person&avatarId=10800"
             },
-            "displayName": "Jonas Jaconelli",
+            "displayName": "Some Person",
             "active": true,
             "timeZone": "Europe/Stockholm"
         },
@@ -1958,17 +1958,17 @@ var apiIssueWithHistoryButNoStatusChange = {
 
         ],
         "reporter": {
-            "self": "https://softhousegbg.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
-            "name": "Jonas Jaconelli",
-            "key": "jonas jaconelli",
-            "emailAddress": "jonas.jaconelli@softhouse.se",
+            "self": "https://dummy_domain.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
+            "name": "Some Person",
+            "key": "some person",
+            "emailAddress": "dummy2@dummy.com",
             "avatarUrls": {
-                "48x48": "https://softhousegbg.atlassian.net/secure/useravatar?ownerId=jonas+jaconelli&avatarId=10800",
-                "24x24": "https://softhousegbg.atlassian.net/secure/useravatar?size=small&ownerId=jonas+jaconelli&avatarId=10800",
-                "16x16": "https://softhousegbg.atlassian.net/secure/useravatar?size=xsmall&ownerId=jonas+jaconelli&avatarId=10800",
-                "32x32": "https://softhousegbg.atlassian.net/secure/useravatar?size=medium&ownerId=jonas+jaconelli&avatarId=10800"
+                "48x48": "https://dummy_domain.atlassian.net/secure/useravatar?ownerId=some+person&avatarId=10800",
+                "24x24": "https://dummy_domain.atlassian.net/secure/useravatar?size=small&ownerId=some+person&avatarId=10800",
+                "16x16": "https://dummy_domain.atlassian.net/secure/useravatar?size=xsmall&ownerId=some+person&avatarId=10800",
+                "32x32": "https://dummy_domain.atlassian.net/secure/useravatar?size=medium&ownerId=some+person&avatarId=10800"
             },
-            "displayName": "Jonas Jaconelli",
+            "displayName": "Some Person",
             "active": true,
             "timeZone": "Europe/Stockholm"
         },
@@ -1992,7 +1992,7 @@ var apiIssueWithHistoryButNoStatusChange = {
             "percent": 0
         },
         "votes": {
-            "self": "https://softhousegbg.atlassian.net/rest/api/2/issue/COAC-71/votes",
+            "self": "https://dummy_domain.atlassian.net/rest/api/2/issue/COAC-71/votes",
             "votes": 0,
             "hasVoted": false
         }
@@ -2005,17 +2005,17 @@ var apiIssueWithHistoryButNoStatusChange = {
             {
                 "id": "13752",
                 "author": {
-                    "self": "https://softhousegbg.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
-                    "name": "Jonas Jaconelli",
-                    "key": "jonas jaconelli",
-                    "emailAddress": "jonas.jaconelli@softhouse.se",
+                    "self": "https://dummy_domain.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
+                    "name": "Some Person",
+                    "key": "some person",
+                    "emailAddress": "dummy2@dummy.com",
                     "avatarUrls": {
-                        "48x48": "https://softhousegbg.atlassian.net/secure/useravatar?ownerId=jonas+jaconelli&avatarId=10800",
-                        "24x24": "https://softhousegbg.atlassian.net/secure/useravatar?size=small&ownerId=jonas+jaconelli&avatarId=10800",
-                        "16x16": "https://softhousegbg.atlassian.net/secure/useravatar?size=xsmall&ownerId=jonas+jaconelli&avatarId=10800",
-                        "32x32": "https://softhousegbg.atlassian.net/secure/useravatar?size=medium&ownerId=jonas+jaconelli&avatarId=10800"
+                        "48x48": "https://dummy_domain.atlassian.net/secure/useravatar?ownerId=some+person&avatarId=10800",
+                        "24x24": "https://dummy_domain.atlassian.net/secure/useravatar?size=small&ownerId=some+person&avatarId=10800",
+                        "16x16": "https://dummy_domain.atlassian.net/secure/useravatar?size=xsmall&ownerId=some+person&avatarId=10800",
+                        "32x32": "https://dummy_domain.atlassian.net/secure/useravatar?size=medium&ownerId=some+person&avatarId=10800"
                     },
-                    "displayName": "Jonas Jaconelli",
+                    "displayName": "Some Person",
                     "active": true,
                     "timeZone": "Europe/Stockholm"
                 },
@@ -2034,17 +2034,17 @@ var apiIssueWithHistoryButNoStatusChange = {
             {
                 "id": "13755",
                 "author": {
-                    "self": "https://softhousegbg.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
-                    "name": "Jonas Jaconelli",
-                    "key": "jonas jaconelli",
-                    "emailAddress": "jonas.jaconelli@softhouse.se",
+                    "self": "https://dummy_domain.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
+                    "name": "Some Person",
+                    "key": "some person",
+                    "emailAddress": "dummy2@dummy.com",
                     "avatarUrls": {
-                        "48x48": "https://softhousegbg.atlassian.net/secure/useravatar?ownerId=jonas+jaconelli&avatarId=10800",
-                        "24x24": "https://softhousegbg.atlassian.net/secure/useravatar?size=small&ownerId=jonas+jaconelli&avatarId=10800",
-                        "16x16": "https://softhousegbg.atlassian.net/secure/useravatar?size=xsmall&ownerId=jonas+jaconelli&avatarId=10800",
-                        "32x32": "https://softhousegbg.atlassian.net/secure/useravatar?size=medium&ownerId=jonas+jaconelli&avatarId=10800"
+                        "48x48": "https://dummy_domain.atlassian.net/secure/useravatar?ownerId=some+person&avatarId=10800",
+                        "24x24": "https://dummy_domain.atlassian.net/secure/useravatar?size=small&ownerId=some+person&avatarId=10800",
+                        "16x16": "https://dummy_domain.atlassian.net/secure/useravatar?size=xsmall&ownerId=some+person&avatarId=10800",
+                        "32x32": "https://dummy_domain.atlassian.net/secure/useravatar?size=medium&ownerId=some+person&avatarId=10800"
                     },
-                    "displayName": "Jonas Jaconelli",
+                    "displayName": "Some Person",
                     "active": true,
                     "timeZone": "Europe/Stockholm"
                 },
@@ -2063,17 +2063,17 @@ var apiIssueWithHistoryButNoStatusChange = {
             {
                 "id": "13756",
                 "author": {
-                    "self": "https://softhousegbg.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
-                    "name": "Jonas Jaconelli",
-                    "key": "jonas jaconelli",
-                    "emailAddress": "jonas.jaconelli@softhouse.se",
+                    "self": "https://dummy_domain.atlassian.net/rest/api/2/user?username=Jonas+Jaconelli",
+                    "name": "Some Person",
+                    "key": "some person",
+                    "emailAddress": "dummy2@dummy.com",
                     "avatarUrls": {
-                        "48x48": "https://softhousegbg.atlassian.net/secure/useravatar?ownerId=jonas+jaconelli&avatarId=10800",
-                        "24x24": "https://softhousegbg.atlassian.net/secure/useravatar?size=small&ownerId=jonas+jaconelli&avatarId=10800",
-                        "16x16": "https://softhousegbg.atlassian.net/secure/useravatar?size=xsmall&ownerId=jonas+jaconelli&avatarId=10800",
-                        "32x32": "https://softhousegbg.atlassian.net/secure/useravatar?size=medium&ownerId=jonas+jaconelli&avatarId=10800"
+                        "48x48": "https://dummy_domain.atlassian.net/secure/useravatar?ownerId=some+person&avatarId=10800",
+                        "24x24": "https://dummy_domain.atlassian.net/secure/useravatar?size=small&ownerId=some+person&avatarId=10800",
+                        "16x16": "https://dummy_domain.atlassian.net/secure/useravatar?size=xsmall&ownerId=some+person&avatarId=10800",
+                        "32x32": "https://dummy_domain.atlassian.net/secure/useravatar?size=medium&ownerId=some+person&avatarId=10800"
                     },
-                    "displayName": "Jonas Jaconelli",
+                    "displayName": "Some Person",
                     "active": true,
                     "timeZone": "Europe/Stockholm"
                 },

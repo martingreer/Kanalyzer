@@ -75,7 +75,7 @@
         "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
         "name": "martin.w.greer",
         "key": "martin.w.greer",
-        "emailAddress": "martin.w.greer@gmail.com",
+        "emailAddress": "dummy@dummy.com",
         "avatarUrls": {
           "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
           "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -120,7 +120,7 @@
         "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
         "name": "martin.w.greer",
         "key": "martin.w.greer",
-        "emailAddress": "martin.w.greer@gmail.com",
+        "emailAddress": "dummy@dummy.com",
         "avatarUrls": {
           "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
           "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -211,7 +211,7 @@
         "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
         "name": "martin.w.greer",
         "key": "martin.w.greer",
-        "emailAddress": "martin.w.greer@gmail.com",
+        "emailAddress": "dummy@dummy.com",
         "avatarUrls": {
           "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
           "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -254,7 +254,7 @@
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
               "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
               "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -283,7 +283,7 @@
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
               "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
               "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -312,7 +312,7 @@
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
               "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
               "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -341,7 +341,7 @@
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
               "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
               "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -370,7 +370,7 @@
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
               "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
               "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -476,7 +476,7 @@
         "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
         "name": "martin.w.greer",
         "key": "martin.w.greer",
-        "emailAddress": "martin.w.greer@gmail.com",
+        "emailAddress": "dummy@dummy.com",
         "avatarUrls": {
           "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
           "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -519,7 +519,7 @@
         "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
         "name": "martin.w.greer",
         "key": "martin.w.greer",
-        "emailAddress": "martin.w.greer@gmail.com",
+        "emailAddress": "dummy@dummy.com",
         "avatarUrls": {
           "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
           "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -537,7 +537,7 @@
         "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
         "name": "martin.w.greer",
         "key": "martin.w.greer",
-        "emailAddress": "martin.w.greer@gmail.com",
+        "emailAddress": "dummy@dummy.com",
         "avatarUrls": {
           "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
           "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -580,7 +580,7 @@
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
               "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
               "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -609,7 +609,7 @@
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
               "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
               "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -638,7 +638,7 @@
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
               "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
               "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -667,7 +667,7 @@
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
               "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
               "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -696,7 +696,7 @@
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
               "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
               "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
@@ -725,7 +725,7 @@
             "self": "https://kanalyzer.atlassian.net/rest/api/2/user?username=martin.w.greer",
             "name": "martin.w.greer",
             "key": "martin.w.greer",
-            "emailAddress": "martin.w.greer@gmail.com",
+            "emailAddress": "dummy@dummy.com",
             "avatarUrls": {
               "48x48": "https://kanalyzer.atlassian.net/secure/useravatar?avatarId=10346",
               "24x24": "https://kanalyzer.atlassian.net/secure/useravatar?size=small&avatarId=10346",
