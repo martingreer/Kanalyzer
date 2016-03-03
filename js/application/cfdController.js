@@ -16,30 +16,44 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
         doneColumnPreviousInitialValue = 0,
         doneColumnInitialValue = 0;
 
-    // First get issues from chrome.storage
-    localStorageHandler.getIssues(function (issuesCallback) {
-        issues = issuesCallback.issues;
-
-        // Datepicker variables.
-        $scope.minDate = $scope.startDate = getFirstHistoryDate(issues);
-        $scope.maxDate = $scope.endDate = getLastHistoryDate(issues);
-
-        // Then get board design from chrome.storage
-        localStorageHandler.getBoardDesign(function (boardDesignCallback) {
-            boardDesign = boardDesignCallback.boardDesign;
-
-            // Finally operate on the set variables
-            try{
-                allCfdData = createCfdData(issues, boardDesign);
-                allCfdDataDoneColumnInitialValue = (_.first(_.first(allCfdData).values).y);
-            } catch (error) {
-                allCfdData = [];
-            }
-
+    // Get eventual CFD data from local storage
+    localStorageHandler.getCfdData(function (cfdDataCallback) {
+        if (cfdDataCallback.cfdData) {
+            allCfdData = cfdDataCallback.cfdData.cfdData;
             $scope.data = allCfdData;
-            $scope.startFromZero = false;
-        });
+            $scope.minDate = $scope.startDate = cfdDataCallback.cfdData.startDate;
+            $scope.maxDate = $scope.endDate = cfdDataCallback.cfdData.endDate;
+        } else {
+            // If CFD data has not already been parsed, proceed with parsing
+            // First get issues from chrome.storage
+            localStorageHandler.getIssues(function (issuesCallback) {
+                issues = issuesCallback.issues;
+
+                // Datepicker variables.
+                $scope.minDate = $scope.startDate = getFirstHistoryDate(issues);
+                $scope.maxDate = $scope.endDate = getLastHistoryDate(issues);
+
+                // Then get board design from chrome.storage
+                localStorageHandler.getBoardDesign(function (boardDesignCallback) {
+                    boardDesign = boardDesignCallback.boardDesign;
+
+                    // Finally operate on the set variables
+                    try{
+                        allCfdData = createCfdData(issues, boardDesign);
+                        allCfdDataDoneColumnInitialValue = (_.first(_.first(allCfdData).values).y);
+                    } catch (error) {
+                        allCfdData = [];
+                    }
+
+                    // Save the parsed CFD data to local storage for quick loading of tab next time
+                    localStorageHandler.setCfdData(allCfdData, $scope.startDate, $scope.endDate);
+                    $scope.data = allCfdData;
+                });
+            });
+        }
     });
+
+    $scope.startFromZero = false;
 
     // Datepicker options.
     $scope.dateFormat = 'yyyy-MM-dd';

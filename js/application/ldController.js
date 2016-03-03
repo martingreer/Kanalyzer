@@ -140,6 +140,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     try{
                         issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
                         localStorageHandler.setIssues(issues);
+                        localStorageHandler.removeCfdData(); // Previously parsed CFD data is likely irrelevant when new source data is loaded, so remove it
                         Notification.success('Issue data successfully loaded!');
                         if(DEBUG){console.log("Parse issue data SUCCESS!");}
                     } catch(error) {

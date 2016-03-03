@@ -193,6 +193,15 @@ application.factory('localStorageHandler', function(){
         },
         removeConfigs: function () {
             chrome.storage.local.remove('userConfigs');
+        },
+        getCfdData: function (callback) {
+            chrome.storage.local.get('cfdData', callback);
+        },
+        setCfdData: function (cfdDataToSet, startDateToSet, endDateToSet) {
+            chrome.storage.local.set({cfdData: {cfdData: cfdDataToSet, startDate: startDateToSet, endDate: endDateToSet}});
+        },
+        removeCfdData: function () {
+            chrome.storage.local.remove('cfdData');
         }
     }
 });
