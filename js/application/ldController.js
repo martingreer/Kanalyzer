@@ -297,7 +297,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             if (haveSameColumnStructure($scope.columns, selectedConfig.columnCategories)) {
                 $scope.loadedConfig = selectedConfig.name; // FIXME: in old code, this was fetched from local storage
                 $scope.columns = selectedConfig.columnCategories;
-                Notification.success("Config loaded.");
+                $scope.updateColumnCategories(selectedConfig.columnCategories); // Apply changes when config is loaded
                 if(DEBUG){console.log("Config was successfully loaded.");}
             } else {
                 Notification.error("The selected config is not compatible with the current board.");
@@ -320,6 +320,12 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     //        if(DEBUG){console.log("Config was not loaded.");}
     //    }
     //};
+
+    $scope.clearIssueAndBoardDesignData = function () {
+        localStorageHandler.clearIssueAndBoardDesignData();
+        Notification.primary('All issue and board design data removed from local storage.');
+        console.log("All issue and board design data removed from local storage.");
+    };
 
     /**
      * Clears all configs.

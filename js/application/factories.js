@@ -161,6 +161,12 @@ application.factory('previousLoadData', function(){
  */
 application.factory('localStorageHandler', function(){
     return {
+        clearIssueAndBoardDesignData: function () {
+            chrome.storage.local.remove('boardDesign');
+            chrome.storage.local.remove('issues');
+            chrome.storage.local.remove('loadedProject');
+            chrome.storage.local.remove('cfdData');
+        },
         getBoardDesign: function (callback) {
             chrome.storage.local.get('boardDesign', callback);
         },
