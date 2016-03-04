@@ -26,17 +26,25 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     $scope.loadedConfig = '';
 
     function setPreviousLoadDataOnScope (previousLoadData) {
-        $scope.apiProject = previousLoadData.projectKey;
-        // The max results to be returned from API (-1 is unlimited results).
-        $scope.maxResults = previousLoadData.maxResults;
-        // Board ID to get column & status structure from.
-        $scope.boardId = previousLoadData.boardId;
+        if (previousLoadData.projectKey) {
+            $scope.apiProject = previousLoadData.projectKey;
+        }
+        if (previousLoadData.maxResults) {
+            // The max results to be returned from API (-1 is unlimited results).
+            $scope.maxResults = previousLoadData.maxResults;
+        }
+        if (previousLoadData.boardId) {
+            // Board ID to get column & status structure from.
+            $scope.boardId = previousLoadData.boardId;
+        }
     }
 
     function setBoardDesignOnScope (boardDesign) {
-        // Assign columns to scope if local storage already exists.
-        $scope.columns = boardDesign.columns;
-        $scope.loadedBoardName = boardDesign.name;
+        if (boardDesign) {
+            // Assign columns to scope if local storage already exists.
+            $scope.columns = boardDesign.columns;
+            $scope.loadedBoardName = boardDesign.name;
+        }
     }
 
     function toggleMaxResultsForApiCall (maxResults) {
