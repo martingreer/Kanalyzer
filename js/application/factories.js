@@ -166,6 +166,7 @@ application.factory('localStorageHandler', function(){
             chrome.storage.local.remove('issues');
             chrome.storage.local.remove('loadedProject');
             chrome.storage.local.remove('cfdData');
+            chrome.storage.local.remove('colDistData');
         },
         getBoardDesign: function (callback) {
             chrome.storage.local.get('boardDesign', callback);
@@ -208,6 +209,15 @@ application.factory('localStorageHandler', function(){
         },
         removeCfdData: function () {
             chrome.storage.local.remove('cfdData');
+        },
+        getColDistData: function (callback) {
+            chrome.storage.local.get('colDistData', callback);
+        },
+        setColDistData: function (colDistDataToSet) {
+            chrome.storage.local.set({colDistData: colDistDataToSet});
+        },
+        removeColDistData: function () {
+            chrome.storage.local.remove('colDistData');
         }
     }
 });

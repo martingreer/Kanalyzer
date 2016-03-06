@@ -149,6 +149,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                         issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
                         localStorageHandler.setIssues(issues);
                         localStorageHandler.removeCfdData(); // Previously parsed CFD data is likely irrelevant when new source data is loaded, so remove it
+                        localStorageHandler.removeColDistData();
                         Notification.success('Issue data successfully loaded!');
                         if(DEBUG){console.log("Parse issue data SUCCESS!");}
                     } catch(error) {
@@ -193,6 +194,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     oldIssues = createIssuesFromArray(issuesCallback.issues, oldBoardDesign);
                     updatedIssues = createIssuesFromArray(oldIssues, updatedBoardDesign);
                     localStorageHandler.setIssues(updatedIssues);
+                    localStorageHandler.removeColDistData();
                     Notification.success('Column categories have been updated.');
                 });
             });

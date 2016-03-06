@@ -150,9 +150,6 @@ function ColDistItem (columnName) {
 
 /**
  * Contained in the values property in a ColDistItem.
- *
- * PSEUDO:
- * For each column that an issue was in, calculate highest time spent.
  */
 function ColDistValuesArray (_issues, columnName, columnCategory) {
     var valuesArray = [];
@@ -164,10 +161,12 @@ function ColDistValuesArray (_issues, columnName, columnCategory) {
     issues.reverse(); // Reverse array in order to show oldest->newest issues from left to right in graph
 
     _.forEach(issues, function (issue) {
-        timeSpentInColumn = getTimeSpentInColumn(issue, columnName);
-        percentInColumn = convertTimeToPercent(timeSpentInColumn, issue.cycleTime, columnCategory);
-        valuesItem = new ColDistValuesItem(issue.key, percentInColumn);
-        valuesArray.push(valuesItem);
+        if (issue.currentStatus.name === "Done" || issue.currentStatus.name === "Closed") {
+            timeSpentInColumn = getTimeSpentInColumn(issue, columnName);
+            percentInColumn = convertTimeToPercent(timeSpentInColumn, issue.cycleTime, columnCategory);
+            valuesItem = new ColDistValuesItem(issue.key, percentInColumn);
+            valuesArray.push(valuesItem);
+        }
     });
 
     return valuesArray;
@@ -214,17 +213,13 @@ function setHighestTime (time, highestTime) {
  */
 function convertTimeToPercent (timeSpentInColumn, cycleTime, columnCategory) {
     var percent = 0;
-    // Only consider columns that are not defined as ignored or done, since an
-    // issue's cycleTime also don't include these.
-    if (columnCategory !== ("Ignore" || "Done") && cycleTime !== (0 || null)) {
+    // Only consider columns that are not defined as ignored or done, since an issue's cycleTime also don't include these.
+    // Also don't try to divide by null or zero :))
+    if (columnCategory !== "Ignore" && columnCategory !== "Done" && cycleTime !== 0 && cycleTime !== null) {
         percent = ((timeSpentInColumn/cycleTime)*100);
-        if (percent !== 0) {
-            return percent.toFixed(2);
-        } else {
-            return percent;
-        }
+        return Math.round(percent * 100)/100; // Round to two decimals
     } else {
-        return percent;
+        return 0;
     }
 }
 
@@ -254,12 +249,13 @@ function createColDistData (issues, boardDesign) {
     var graphArray = [],
         columnData;
 
-    _.forEach(boardDesign.columns, function (column) {
-        columnData = new ColDistItem(column.name);
-        columnData.values = ColDistValuesArray(issues, column.name, column.category);
-        graphArray.push(columnData);
-    });
+    if (issues && boardDesign) {
+        _.forEach(boardDesign.columns, function (column) {
+            columnData = new ColDistItem(column.name);
+            columnData.values = ColDistValuesArray(issues, column.name, column.category);
+            graphArray.push(columnData);
+        });
+    }
 
-    console.log(graphArray);
     return graphArray;
 }

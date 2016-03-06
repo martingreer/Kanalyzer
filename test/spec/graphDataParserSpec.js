@@ -103,64 +103,115 @@ describe("CFD graph", function(){
 describe("Column Distribution Graph", function(){
     "use strict";
 
-    var oneDoneIssue = oneParsedDoneIssue;
-    var fourDoneIssues = fourParsedDoneIssues;
+    var oneDoneIssue = oneParsedDoneIssueForColDistGraph;
+    var fourDoneIssues = fourParsedDoneIssuesForColDistGraph;
     var oneNotDoneIssue = oneParsedNotDoneIssue;
     var twoIssuesDoneAndNotDone = twoParsedIssuesOneDoneAndOneNotDone;
-    var boardDesign = createBoardDesign(columnsData);
+    var boardDesign = boardDesignForColDistGraph;
 
     describe("Get time spent", function(){
-        it("should return the total time spent in In Progress column when it was moved back to the column", function(){
-            expect(getTimeSpentInColumn(oneDoneIssue, "In Progress")).toBe(5099000);
+        it("should return the total time spent in column when it has been in column more than once", function(){
+            expect(getTimeSpentInColumn(oneDoneIssue, "Ready for Development")).toBe(224090000);
         });
 
         it("should return the total time spent in the Ready for Release column", function(){
-            expect(getTimeSpentInColumn(oneDoneIssue, "Ready for Release")).toBe(7409000);
+            expect(getTimeSpentInColumn(oneDoneIssue, "Ready for Release")).toBe(49000);
         });
 
         it("should return the total time spent in the Ready to Analyze column", function(){
-            expect(getTimeSpentInColumn(oneDoneIssue, "Ready to Analyze")).toBe(0);
+            expect(getTimeSpentInColumn(oneDoneIssue, "Ready for Test")).toBe(0);
         });
     });
 
     describe("Convert time spent to percent", function(){
-        it("should be 0 percent because issue is not done", function(){
+        it("should round correctly to two decimals", function(){
+            expect(Math.round(100.13999999999999 * 100)/100).toBe(100.14);
+        });
+
+        it("should be 0 percent if issue is not done", function(){
             var timeSpentInColumn = getTimeSpentInColumn(oneNotDoneIssue, "In Progress");
             expect(convertTimeToPercent(timeSpentInColumn, oneNotDoneIssue.cycleTime, "Execution")).toBe(0);
         });
 
-        it("should be 0 percent because issue was never in column", function(){
+        it("should be 0 percent if issue was never in column", function(){
+            var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Under Test");
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution")).toBe(0);
+        });
+
+        it("should be 0 percent if column is ignore category", function(){
+            var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready to Refine");
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Ignore")).toBe(0);
+        });
+
+        it("should be 0 percent if column is done category", function(){
+            var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready for Release");
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Done")).toBe(0);
+            timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[3], "Ready for Release");
+            expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[3].cycleTime, "Done")).toBe(0);
+        });
+
+        it("should be 0 percent if column doesn't exist", function(){
+            var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Herpaderp");
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution")).toBe(0);
+        });
+
+        it("should calculate percentage of time spent in given column for a done issue", function(){
             var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready to Analyze");
-            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Delay")).toBe(0);
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Delay")).toBe(0.75);
+            timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready for Development");
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution")).toBe(2.25);
+            timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "In Progress");
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution")).toBe(96.11);
         });
 
-        it("should calculate percentage of time spent in given column", function(){
-            var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "In Progress");
-            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution")).toBe("39.33");
-            timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Refine Backlog");
-            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution")).toBe("0.21");
+        it("should calculate percentage of time spent in given column for another done issue", function(){
+            var timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[1], "Ready to Analyze");
+            expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[1].cycleTime, "Delay")).toBe(3.24);
+            timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[1], "In Progress");
+            expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[1].cycleTime, "Execution")).toBe(20.04);
+            timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[1], "Under Test");
+            expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[1].cycleTime, "Execution")).toBe(73.42);
         });
 
-        it("should calculate percentage of time spent in In Progress column", function(){
-            var timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[1], "In Progress");
-            expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[1].cycleTime, "Execution")).toBe("39.33");
+        it("percentages should add upp to roughly 100 for a done issue", function(){
+            var timeSpentInColumn = 0;
+            var totalPercent = 0;
+            _.forEach(boardDesign.columns, function (column) {
+                timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, column.name);
+                totalPercent += convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, column.category);
+            });
+            expect(Math.round(totalPercent)).toBe(100);
+        });
+
+        it("percentages should add upp to roughly 100 for another done issue", function(){
+            var timeSpentInColumn = 0;
+            var totalPercent = 0;
+            _.forEach(boardDesign.columns, function (column) {
+                timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[2], column.name);
+                totalPercent += convertTimeToPercent(timeSpentInColumn, fourDoneIssues[2].cycleTime, column.category);
+            });
+            expect(Math.round(totalPercent)).toBe(100);
+        });
+
+        it("percentages should add upp to roughly 100 for a third done issue", function(){
+            var timeSpentInColumn = 0;
+            var totalPercent = 0;
+            _.forEach(boardDesign.columns, function (column) {
+                timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[3], column.name);
+                totalPercent += convertTimeToPercent(timeSpentInColumn, fourDoneIssues[3].cycleTime, column.category);
+            });
+            expect(Math.round(totalPercent)).toBe(100);
         });
     });
 
-    describe("Values array constructor", function(){
-        //approveIt("should return an array of issues with key and the percentage of time spent in the In Progress column", function (approvals) {
-        //    var valuesArray = new ColDistValuesArray(fourDoneIssues, "In Progress", "Execution");
-        //    valuesArray = JSON.stringify(valuesArray);
-        //    approvals.verify(valuesArray);
-        //});
-        //
-        //approveIt("should return an array of issues with key and the percentage of time spent in the Ready for Test column", function (approvals) {
-        //    var valuesArray = new ColDistValuesArray(fourDoneIssues, "Ready for Test", "Delay");
-        //    valuesArray = JSON.stringify(valuesArray);
-        //    approvals.verify(valuesArray);
-        //});
-        approveIt("should return an array of issues with key and the percentage of time spent in the Ready for Test column", function (approvals) {
+    describe("Column Distribution graph data constructor", function(){
+        approveIt("should return correct graph data for four done issues", function (approvals) {
             var result = createColDistData(fourDoneIssues, boardDesign);
+            approvals.verify(result);
+        });
+
+        approveIt("should return correct graph data for two issues one done and one not done", function (approvals) {
+            var result = createColDistData(twoIssuesDoneAndNotDone, boardDesign);
             approvals.verify(result);
         });
     });
