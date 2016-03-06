@@ -300,7 +300,7 @@ function Issue(apiIssue, boardDesign, time){
             columnHistory = _.cloneDeep(self.columnHistory);
 
         if(self.isDone()){
-            columnHistory.pop();
+            columnHistory.pop(); // Remove done column from calculation
             _.forEach(columnHistory, function(item){
                 if(!self.isIgnored(item.columnName)){
                     cycleTime += item.timeSpentInColumn();
@@ -317,7 +317,7 @@ function Issue(apiIssue, boardDesign, time){
             columnHistory = _.cloneDeep(self.columnHistory);
 
         if(self.isDone()) {
-            columnHistory.pop();
+            columnHistory.pop(); // Remove done column from calculation
         }
 
         _.forEach(columnHistory, function (item) {

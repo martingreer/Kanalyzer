@@ -103,38 +103,65 @@ describe("CFD graph", function(){
 describe("Column Distribution Graph", function(){
     "use strict";
 
-    var oneIssue = oneParsedDoneIssue;
-    var fourIssues = fourParsedDoneIssues;
+    var oneDoneIssue = oneParsedDoneIssue;
+    var fourDoneIssues = fourParsedDoneIssues;
+    var oneNotDoneIssue = oneParsedNotDoneIssue;
+    var twoIssuesDoneAndNotDone = twoParsedIssuesOneDoneAndOneNotDone;
     var boardDesign = createBoardDesign(columnsData);
-    var highestTime = new HighestTime();
 
     describe("Get time spent", function(){
         it("should return the total time spent in In Progress column when it was moved back to the column", function(){
-            expect(getTimeSpentInColumn(oneIssue, "In Progress", highestTime)).toBe(5099000);
+            expect(getTimeSpentInColumn(oneDoneIssue, "In Progress")).toBe(5099000);
         });
 
         it("should return the total time spent in the Ready for Release column", function(){
-            expect(getTimeSpentInColumn(oneIssue, "Ready for Release", highestTime)).toBe(7409000);
+            expect(getTimeSpentInColumn(oneDoneIssue, "Ready for Release")).toBe(7409000);
         });
 
-        it("should return the highest time found when only one issue is given", function(){
-            expect(highestTime.time).toBe(7409000);
+        it("should return the total time spent in the Ready to Analyze column", function(){
+            expect(getTimeSpentInColumn(oneDoneIssue, "Ready to Analyze")).toBe(0);
+        });
+    });
+
+    describe("Convert time spent to percent", function(){
+        it("should be 0 percent because issue is not done", function(){
+            var timeSpentInColumn = getTimeSpentInColumn(oneNotDoneIssue, "In Progress");
+            expect(convertTimeToPercent(timeSpentInColumn, oneNotDoneIssue.cycleTime, "Execution")).toBe(0);
         });
 
-        it("should return the highest time found when multiple issues and columns are given", function(){
-            _.forEach(fourIssues, function(issue){
-                getTimeSpentInColumn(issue, "In Progress", highestTime);
-                getTimeSpentInColumn(issue, "Ready for Release", highestTime);
-            });
-            expect(highestTime.time).toBe(337139000);
+        it("should be 0 percent because issue was never in column", function(){
+            var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready to Analyze");
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Delay")).toBe(0);
+        });
+
+        it("should calculate percentage of time spent in given column", function(){
+            var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "In Progress");
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution")).toBe("39.33");
+            timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Refine Backlog");
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution")).toBe("0.21");
+        });
+
+        it("should calculate percentage of time spent in In Progress column", function(){
+            var timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[1], "In Progress");
+            expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[1].cycleTime, "Execution")).toBe("39.33");
         });
     });
 
     describe("Values array constructor", function(){
-        approveIt("should return an issue number and the amount of time spent in the given column", function (approvals) {
-            var valuesArray = new ColDistValuesArray(fourParsedDoneIssues, "In Progress", highestTime);
-            valuesArray = JSON.stringify(valuesArray);
-            approvals.verify(valuesArray);
+        //approveIt("should return an array of issues with key and the percentage of time spent in the In Progress column", function (approvals) {
+        //    var valuesArray = new ColDistValuesArray(fourDoneIssues, "In Progress", "Execution");
+        //    valuesArray = JSON.stringify(valuesArray);
+        //    approvals.verify(valuesArray);
+        //});
+        //
+        //approveIt("should return an array of issues with key and the percentage of time spent in the Ready for Test column", function (approvals) {
+        //    var valuesArray = new ColDistValuesArray(fourDoneIssues, "Ready for Test", "Delay");
+        //    valuesArray = JSON.stringify(valuesArray);
+        //    approvals.verify(valuesArray);
+        //});
+        approveIt("should return an array of issues with key and the percentage of time spent in the Ready for Test column", function (approvals) {
+            var result = createColDistData(fourDoneIssues, boardDesign);
+            approvals.verify(result);
         });
     });
 });

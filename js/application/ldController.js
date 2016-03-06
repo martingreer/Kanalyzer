@@ -48,13 +48,13 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     }
 
     function toggleMaxResultsForApiCall (maxResults) {
-        if(maxResults === '' || maxResults.toLowerCase() === 'all' || !maxResults){
+        if(!maxResults || maxResults === '' || maxResults.toLowerCase() === 'all'){
             $scope.maxResults = '-1';
         }
     }
 
     function setMaxResultsForUserInterface (maxResults) {
-        if (maxResults === '-1' || maxResults.toLowerCase() === 'all' || !maxResults) {
+        if (!maxResults || maxResults === '-1' || maxResults.toLowerCase() === 'all') {
             $scope.maxResults = '';
         }
     }

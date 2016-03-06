@@ -9,6 +9,9 @@ application.controller('coldistController', function ($scope, localStorageHandle
 
     var DEBUG = true;
 
+    var issues = [];
+    var boardDesign = [];
+
     /**
      * Graph structure.
      */
@@ -26,7 +29,10 @@ application.controller('coldistController', function ($scope, localStorageHandle
             },
             yAxis: {
                 axisLabel: 'Time Spent (%)',
-                axisLabelDistance: '0'
+                axisLabelDistance: '0',
+                tickFormat: function (d) {
+                    return d3.format(',.0d')(d);
+                }
             }
         },
         title: {
@@ -35,8 +41,23 @@ application.controller('coldistController', function ($scope, localStorageHandle
         }
     };
 
-    $scope.data = generateData();
-    //console.log(JSON.stringify($scope.data));
+    var coldistTestData =
+        [
+            {"key": "Ready to Refine", "values": [{"x": "KTD-1", "y": 50}, {"x": "KTD-2", "y": 70}, {"x": "KTD-3", "y": 10}]},
+            {"key": "In Progress",     "values": [{"x": "KTD-1", "y": 30}, {"x": "KTD-2", "y": 20}, {"x": "KTD-3", "y": 30}]},
+            {"key": "In Test",         "values": [{"x": "KTD-1", "y": 20}, {"x": "KTD-2", "y": 10}, {"x": "KTD-3", "y": 60}]}
+        ];
+
+    $scope.data = coldistTestData;
+
+    localStorageHandler.getIssues(function (issuesCallback) {
+        boardDesign = issuesCallback.boardDesign;
+        localStorageHandler.getBoardDesign(function (boardDesignCallback) {
+            issues = boardDesignCallback.issues;
+            // $scope.data = createColDistData(issues, boardDesign);
+            // console.log($scope.data);
+        });
+    });
 
     /* Random Data Generator (took from nvd3.org) */
     function generateData() {

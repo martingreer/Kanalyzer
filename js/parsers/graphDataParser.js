@@ -136,6 +136,9 @@ function createCfdData(issues, boardDesign){
  * Below is the parsing for the Column Distribution view. *
  **********************************************************/
 
+/**
+ * One entry of this in the graph array for each column in board design.
+ */
 function ColDistItem (columnName) {
     var self = this;
 
@@ -145,35 +148,47 @@ function ColDistItem (columnName) {
     return self;
 }
 
-function ColDistValuesArray (issues, columnName, highestTime) {
+/**
+ * Contained in the values property in a ColDistItem.
+ *
+ * PSEUDO:
+ * For each column that an issue was in, calculate highest time spent.
+ */
+function ColDistValuesArray (_issues, columnName, columnCategory) {
     var valuesArray = [];
     var valuesItem = {};
-    var issueNumber = 0;
+    var timeSpentInColumn = 0;
+    var percentInColumn = 0;
+    var issues = _.cloneDeep(_issues);
 
-    if(issues.constructor === Array) {
-        _.forEach(issues, function (issue) {
-            valuesItem = new ColDistValuesItem(issueNumber, getTimeSpentInColumn(issue, columnName, highestTime));
-            issueNumber++;
-            valuesArray.push(valuesItem);
-        });
-    } else {
-        valuesItem = new ColDistValuesItem(issueNumber, getTimeSpentInColumn(issues, columnName, highestTime));
-        issueNumber++;
+    issues.reverse(); // Reverse array in order to show oldest->newest issues from left to right in graph
+
+    _.forEach(issues, function (issue) {
+        timeSpentInColumn = getTimeSpentInColumn(issue, columnName);
+        percentInColumn = convertTimeToPercent(timeSpentInColumn, issue.cycleTime, columnCategory);
+        valuesItem = new ColDistValuesItem(issue.key, percentInColumn);
         valuesArray.push(valuesItem);
-    }
+    });
 
     return valuesArray;
 }
 
+/**
+ * One instance for each issue contained in ColDistValuesArray
+ */
 function ColDistValuesItem (x, y) {
     var self = this;
 
-    self.x = x;
-    self.y = y;
+    self.x = x; // Issue key
+    self.y = y; // Percent of max value for issue in column
 
     return self;
 }
 
+/**
+ * Highest time spent that an issue spent in a column. This is used in order to determine percentages.
+ * FIXME: REMOVE?
+ */
 function HighestTime () {
     var self = this;
 
@@ -182,6 +197,10 @@ function HighestTime () {
     return self;
 }
 
+/**
+ * Set new highest time found if needed.
+ * FIXME: REMOVE?
+ */
 function setHighestTime (time, highestTime) {
     //console.log(time + " > " + highestTime.time + " = " + (time > highestTime.time));
     if(time > highestTime.time){
@@ -189,32 +208,58 @@ function setHighestTime (time, highestTime) {
     }
 }
 
-function getTimeSpentInColumn (issue, columnName, highestTime) {
+/**
+ * Converts the time spent in a column to a percentage of the total time
+ * an issue spent on the board excluding ignored and done columns.
+ */
+function convertTimeToPercent (timeSpentInColumn, cycleTime, columnCategory) {
+    var percent = 0;
+    // Only consider columns that are not defined as ignored or done, since an
+    // issue's cycleTime also don't include these.
+    if (columnCategory !== ("Ignore" || "Done") && cycleTime !== (0 || null)) {
+        percent = ((timeSpentInColumn/cycleTime)*100);
+        if (percent !== 0) {
+            return percent.toFixed(2);
+        } else {
+            return percent;
+        }
+    } else {
+        return percent;
+    }
+}
+
+/**
+ * Iterate through an issue's column history and return total time spent in the given column.
+ */
+function getTimeSpentInColumn (issue, columnName) {
     var time = 0;
 
-    _.forEach(issue.columnHistory, function(columnHistoryItem){
+    _.forEach(issue.columnHistory, function (columnHistoryItem) {
         if(columnHistoryItem.columnName === columnName){
             time += Date.parse(columnHistoryItem.exitTime) - Date.parse(columnHistoryItem.enterTime);
         }
     });
 
-    setHighestTime(time, highestTime);
-
     return time;
 }
 
-// Example: [{"key":"Ready to Refine", "values":[{"key":"Ready to Refine","x":40,"y":0},{"key":"Ready to Refine","x":20,"y":1}]}]
-//          [{"key":"In Progress", "values":[{"key":"In Progress","x":60,"y":0},{"key":"In Progress","x":80,"y":1}]}]
+// Example structure:
+//
+//  [
+//      {"key": "Ready to Refine", "values": [{"x": "KTD-1", "y": 50}, {"x": "KTD-2", "y": 70}, {"x": "KTD-3", "y": 10}]},
+//      {"key": "In Progress",     "values": [{"x": "KTD-1", "y": 30}, {"x": "KTD-2", "y": 20}, {"x": "KTD-3", "y": 30}]},
+//      {"key": "In Test",         "values": [{"x": "KTD-1", "y": 20}, {"x": "KTD-2", "y": 10}, {"x": "KTD-3", "y": 60}]}
+//  ];
 function createColDistData (issues, boardDesign) {
     var graphArray = [],
-        columnData,
-        highestTime = new HighestTime;
+        columnData;
 
-    _.forEach(boardDesign.columns, function(column){
+    _.forEach(boardDesign.columns, function (column) {
         columnData = new ColDistItem(column.name);
-        columnData.values = ColDistValuesArray(issues, column.name, highestTime);
+        columnData.values = ColDistValuesArray(issues, column.name, column.category);
         graphArray.push(columnData);
     });
 
+    console.log(graphArray);
     return graphArray;
 }
