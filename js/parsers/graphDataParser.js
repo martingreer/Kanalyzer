@@ -251,9 +251,12 @@ function createColDistData (issues, boardDesign) {
 
     if (issues && boardDesign) {
         _.forEach(boardDesign.columns, function (column) {
-            columnData = new ColDistItem(column.name);
-            columnData.values = ColDistValuesArray(issues, column.name, column.category);
-            graphArray.push(columnData);
+            console.log(column.category);
+            if (column.category !== "Done" && column.category !== "Ignore") {
+                columnData = new ColDistItem(column.name);
+                columnData.values = ColDistValuesArray(issues, column.name, column.category);
+                graphArray.push(columnData);
+            }
         });
     }
 

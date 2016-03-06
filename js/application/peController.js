@@ -69,7 +69,7 @@ application.controller('peController', function ($scope, localStorageHandler) {
         });
 
         _.forEach(issuesNotDoneOrBadlyTracked, function(issue){
-            issue.processEfficiencyConverted = "Issue is not done";
+            issue.processEfficiencyConverted = "Not done or badly tracked";
         });
 
         issues = _.sortByOrder(issues, ['processEfficiency', 'cycleTime'], ['asc', 'desc']);
