@@ -185,29 +185,6 @@ function ColDistValuesItem (x, y) {
 }
 
 /**
- * Highest time spent that an issue spent in a column. This is used in order to determine percentages.
- * FIXME: REMOVE?
- */
-function HighestTime () {
-    var self = this;
-
-    self.time = 0;
-
-    return self;
-}
-
-/**
- * Set new highest time found if needed.
- * FIXME: REMOVE?
- */
-function setHighestTime (time, highestTime) {
-    //console.log(time + " > " + highestTime.time + " = " + (time > highestTime.time));
-    if(time > highestTime.time){
-        highestTime.time = time;
-    }
-}
-
-/**
  * Converts the time spent in a column to a percentage of the total time
  * an issue spent on the board excluding ignored and done columns.
  */
@@ -251,7 +228,6 @@ function createColDistData (issues, boardDesign) {
 
     if (issues && boardDesign) {
         _.forEach(boardDesign.columns, function (column) {
-            console.log(column.category);
             if (column.category !== "Done" && column.category !== "Ignore") {
                 columnData = new ColDistItem(column.name);
                 columnData.values = ColDistValuesArray(issues, column.name, column.category);
