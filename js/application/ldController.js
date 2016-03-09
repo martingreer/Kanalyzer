@@ -315,24 +315,15 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             }
         });
     };
-    // OLD CODE
-    //$scope.loadConfig = function (name) {
-    //    var config = {};
-    //
-    //    localStorageHandler.getSelectedConfig(name);
-    //
-    //    if(haveSameColumnStructure($scope.columns, config.columnCategories)){
-    //        $scope.loadedConfig = localStorageHandler.getSelectedConfig(name).name;
-    //        $scope.columns = config.columnCategories;
-    //        if(DEBUG){console.log("Config was successfully loaded.");}
-    //    } else {
-    //        Notification.error("The selected config is not compatible with the current board.");
-    //        if(DEBUG){console.log("Config was not loaded.");}
-    //    }
-    //};
 
+    /**
+     * Clears local storage of issues, board design and pre-parsed data.
+     * Also clears scope variables in controller to immediately change viewed content.
+     */
     $scope.clearIssueAndBoardDesignData = function () {
         localStorageHandler.clearIssueAndBoardDesignData();
+        $scope.columns = [];
+        $scope.loadedBoardName = "";
         Notification.primary('All issue and board design data removed from local storage.');
         console.log("All issue and board design data removed from local storage.");
     };
@@ -345,29 +336,5 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         $scope.userConfigs = [];
         Notification.primary('All configs removed.');
         console.log("All configs removed.");
-    };
-
-    /**
-     * Print board design directly in the application (for debugging).
-     */
-    $scope.boardDesignString = null;
-    $scope.printBoardDesign = function () {
-        if ($scope.boardDesignString === null) {
-            $scope.boardDesignString = localStorageHandler.getBoardDesign();
-        } else {
-            $scope.boardDesignString = null;
-        }
-    };
-
-    /**
-     * Print all issues directly in the application (for debugging).
-     */
-    $scope.allIssuesString = null;
-    $scope.printAllIssues = function () {
-        if ($scope.allIssuesString === null) {
-            $scope.allIssuesString = localStorageHandler.getIssues();
-        } else {
-            $scope.allIssuesString = null;
-        }
     };
 });
