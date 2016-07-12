@@ -198,6 +198,10 @@ application.factory('localStorageHandler', function(){
         setConfigs: function (userConfigsToSet) {
             chrome.storage.local.set({userConfigs: userConfigsToSet});
         },
+        removeConfig: function (userConfigToRemove, userConfigs) {
+            userConfigs = userConfigs.filter(element=>element.name !== userConfigToRemove);
+            chrome.storage.local.set({userConfigs: userConfigs});
+        },
         removeConfigs: function () {
             chrome.storage.local.remove('userConfigs');
         },

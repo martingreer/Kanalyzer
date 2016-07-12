@@ -75,6 +75,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
     localStorageHandler.getConfigs(function (configs) {
         // Assign user configs to scope if local storage already exists.
+        console.log(configs);
         $scope.userConfigs = configs.userConfigs;
     });
 
@@ -207,40 +208,59 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     /**
      * Save the user choices for a set of columns for quick re-use.
      */
-    $scope.saveConfig = function (name, columnCategories) {
+    $scope.saveConfig = function (name, columnCategories, updateExistingConfig) {
         var userConfigs = [],
-            isNameUnique = true;
+            nameIsUnique = true;
 
-        if (name === '' || !name || !name.replace(/\s/g, '').length) {
-            Notification.error('Config was not saved. You must choose a name.');
-            console.log("Input name is empty. Not adding config.");
+        if (!$scope.loadedConfig && updateExistingConfig) {
+            Notification.error('There is currently no loaded config to update.');
+            console.log("There is currently no loaded config to update.");
         } else {
-            console.log("Adding config.");
-            localStorageHandler.getConfigs(function (configsCallback) {
-                // Set userConfigs only if chrome storage exists.
-                if (configsCallback.userConfigs) {
-                    userConfigs = configsCallback.userConfigs;
-                }
+            if (name === '' || !name || !name.replace(/\s/g, '').length) {
+                Notification.error('Config was not saved. You must choose a name.');
+                console.log("Input name is empty. Not adding config.");
+            } else {
+                console.log("Adding config.");
+                localStorageHandler.getConfigs(function (configsCallback) {
+                    // Set userConfigs only if chrome storage exists.
+                    if (configsCallback.userConfigs) {
+                        userConfigs = configsCallback.userConfigs;
+                    }
 
-                // Search for a config with matching name
-                _.forEach(userConfigs, function (config) {
-                    if(config.name.toLowerCase() === name.toLowerCase()){
-                        isNameUnique = false;
-                        return false; // break loop if a matching name is found
+                    // Search for a config with matching name
+                    _.forEach(userConfigs, function (config) {
+                        if(config.name.toLowerCase() === name.toLowerCase()){
+                            nameIsUnique = false;
+                            return false; // break loop if a matching name is found
+                        }
+                    });
+
+                    if(updateExistingConfig) {
+                        if (!nameIsUnique) {
+                            var config = {"name": name, "columnCategories": columnCategories};
+                            var userConfigsRemovedExisting = userConfigs.filter(element=>element.name !== name);
+                            userConfigsRemovedExisting.push(config);
+                            localStorageHandler.setConfigs(userConfigsRemovedExisting);
+                            $scope.userConfigs = userConfigsRemovedExisting;
+                            Notification.success('Config saved!');
+                        } else {
+                            Notification.error('Currently loaded config could not be updated because it does not exist any more.');
+                            console.log("Config could not be updated because it does not exist.");
+                        }
+                    } else {
+                        if (nameIsUnique) {
+                            var newConfig = {"name": name, "columnCategories": columnCategories};
+                            userConfigs.push(newConfig);
+                            localStorageHandler.setConfigs(userConfigs);
+                            $scope.userConfigs = userConfigs;
+                            Notification.success('Config saved!');
+                        } else {
+                            Notification.error('Config was not saved. Please choose a unique name.');
+                            console.log("Config was not saved (duplicate name).");
+                        }
                     }
                 });
-
-                if(!isNameUnique){
-                    Notification.error('Config was not saved. Please choose a unique name.');
-                    console.log("Config was not saved (duplicate name).");
-                } else {
-                    var newConfig = {"name": name, "columnCategories": columnCategories};
-                    userConfigs.push(newConfig);
-                    localStorageHandler.setConfigs(userConfigs);
-                    $scope.userConfigs = userConfigs;
-                    Notification.success('Config saved!');
-                }
-            });
+            }
         }
     };
 
@@ -271,11 +291,11 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             if(DEBUG){console.log("Columns are exactly equal!");}
             return true;
         }
-        if (columnsToConfigurate == null || columns == null) {
+        if (columnsToConfigurate === null || columns === null) {
             if(DEBUG){console.log("At least one column array is null!");}
             return false;
         }
-        if (columnsToConfigurate.length != columns.length) {
+        if (columnsToConfigurate.length !== columns.length) {
             if(DEBUG){console.log("Lengths are not the same!");}
             return false;
         }
@@ -326,6 +346,19 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         $scope.loadedBoardName = "";
         Notification.primary('All issue and board design data removed from local storage.');
         console.log("All issue and board design data removed from local storage.");
+    };
+
+    /**
+     * Deletes the currently selected config from local storage and scope.
+     */
+    $scope.deleteConfig = function (configName) {
+        localStorageHandler.removeConfig(configName, $scope.userConfigs);
+
+        $scope.userConfigs = $scope.userConfigs.filter(element=>element.name !== configName);
+
+        if (configName === $scope.loadedConfig) {
+            $scope.loadedConfig = "";
+        }
     };
 
     /**
