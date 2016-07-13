@@ -161,11 +161,13 @@ function ColDistValuesArray (_issues, columnName, columnCategory) {
     issues.reverse(); // Reverse array in order to show oldest->newest issues from left to right in graph
 
     _.forEach(issues, function (issue) {
-        if (issue.currentStatus.name === "Done" || issue.currentStatus.name === "Closed") {
-            timeSpentInColumn = getTimeSpentInColumn(issue, columnName);
-            percentInColumn = convertTimeToPercent(timeSpentInColumn, issue.cycleTime, columnCategory);
-            valuesItem = new ColDistValuesItem(issue.key, percentInColumn);
-            valuesArray.push(valuesItem);
+        if (issue.columnHistory.length > 1) {
+            if (issue.currentStatus.name === "Done" || issue.currentStatus.name === "Closed") {
+                timeSpentInColumn = getTimeSpentInColumn(issue, columnName);
+                percentInColumn = convertTimeToPercent(timeSpentInColumn, issue.cycleTime, columnCategory);
+                valuesItem = new ColDistValuesItem(issue.key, percentInColumn);
+                valuesArray.push(valuesItem);
+            }
         }
     });
 

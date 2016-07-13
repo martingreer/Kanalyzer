@@ -65,9 +65,7 @@ function BoardDesign(apiColumnsData, boardName) {
                     column.category = "Delay";
                 } else if (column.name.toLowerCase().indexOf("backlog") >= 0) {
                     column.category = "Ignore";
-                } else if (column.name.toLowerCase().indexOf("to do") >= 0) {
-                    column.category = "Ignore";
-                } else if (column.name.toLowerCase().indexOf("todo") >= 0) {
+                } else if (column.name.toLowerCase().trim().indexOf("todo") >= 0) {
                     column.category = "Ignore";
                 } else {
                     column.category = "Execution";
@@ -86,10 +84,21 @@ function BoardDesign(apiColumnsData, boardName) {
         _.forEach(self.columns, function (column) {
             if (column.name === columnName) {
                 category = column.category;
-                return false;
+                return false; // break here, assuming there are no duplicate column names
             }
         });
         return category;
+    };
+
+    self.isIncludedInBoardDesign = function (columnName) {
+        var result = false;
+        _.forEach(self.columns, function (column) {
+            if (column.name === columnName) {
+                result = true;
+                return false; // break here, column match found
+            }
+        });
+        return result;
     };
 
     self.isIgnoreColumn = function (columnName) {
@@ -105,7 +114,11 @@ function BoardDesign(apiColumnsData, boardName) {
     };
 
     self.isDoneColumn = function (columnName) {
-        return self.getColumnCategory(columnName) === "Done";
+        var result = false;
+        if (columnName) {
+            result = self.getColumnCategory(columnName) === "Done";
+        }
+        return result;
     };
 
     self.name = boardName;
@@ -174,7 +187,10 @@ function createIssuesFromArray(apiIssues, boardDesign){
     var issues = [];
 
     _.forEach(apiIssues, function(issue){
-        issues.push(new Issue(issue, boardDesign));
+        var parsedIssue = new Issue(issue, boardDesign);
+        if (parsedIssue.columnHistory.length > 0) {
+            issues.push(parsedIssue);
+        }
     });
 
     return issues;
@@ -235,7 +251,10 @@ function Issue(apiIssue, boardDesign, time){
 
         if(!issueHasHistory || !issueHasStatusChangeInHistory){
             //console.log(apiIssue.key + " ||| History: " + issueHasHistory + " | StatusChange: " + issueHasStatusChangeInHistory + " | FirstColumn: " + boardDesign.getColumnMatchingStatus(apiIssue.fields.status.id));
-            columnHistory.push(getStartColumn(apiIssue));
+            var startColumn = getStartColumn(apiIssue);
+            if (isIncludedInBoardDesign(startColumn.columnName)) {
+                columnHistory.push(startColumn);
+            }
         } else {
             columnHistory = parseMoves(parseApiIssueHistories(apiIssue.changelog.histories));
         }
@@ -253,27 +272,41 @@ function Issue(apiIssue, boardDesign, time){
             columnsWithEnterExit = [];
 
         // First item is a special case because we need to set the time which the issue was created as enter time.
-        columnsWithEnterExit.push(new ColumnHistoryItem(columnHistory[0].fromColumn, createdTime, columnHistory[0].moveTime));
-        if(DEBUG_COLUMNHISTORY){console.log("ITERATION: 0 - " + columnHistory[0].fromColumn + " | " + createdTime + " | " + columnHistory[0].moveTime);}
+        if (isIncludedInBoardDesign(columnHistory[0].fromColumn)) {
+            columnsWithEnterExit.push(new ColumnHistoryItem(columnHistory[0].fromColumn, createdTime, columnHistory[0].moveTime));
+            if(DEBUG_COLUMNHISTORY){console.log("ITERATION: 0 - " + columnHistory[0].fromColumn + " | " + createdTime + " | " + columnHistory[0].moveTime);}
+        }
 
         // Events in the middle.
         for(i = 1; i < columnHistory.length; i++){
-            columnsWithEnterExit.push(new ColumnHistoryItem(columnHistory[i].fromColumn, columnHistory[i-1].moveTime, columnHistory[i].moveTime));
-            if(DEBUG_COLUMNHISTORY){console.log("ITERATION: " + i + " - " + columnHistory[i].fromColumn + " | " + columnHistory[i-1].moveTime + " | " + columnHistory[i].moveTime);}
+            if (isIncludedInBoardDesign(columnHistory[i].fromColumn)) {
+                columnsWithEnterExit.push(new ColumnHistoryItem(columnHistory[i].fromColumn, columnHistory[i-1].moveTime, columnHistory[i].moveTime));
+                if(DEBUG_COLUMNHISTORY){console.log("ITERATION: " + i + " - " + columnHistory[i].fromColumn + " | " + columnHistory[i-1].moveTime + " | " + columnHistory[i].moveTime);}
+            }
         }
 
         // Last item is a special case because toColumn must become its own object and has no real exit time.
-        columnsWithEnterExit.push(new ColumnHistoryItem(columnHistory[columnHistory.length-1].toColumn, columnHistory[columnHistory.length-1].moveTime, time));
-        if(DEBUG_COLUMNHISTORY){console.log("ITERATION: " + columnHistory.length + " - " + columnHistory[columnHistory.length-1].toColumn + " | " + columnHistory[columnHistory.length-1].moveTime + " | " + time);}
+        if (isIncludedInBoardDesign(columnHistory[columnHistory.length-1].toColumn)) {
+            columnsWithEnterExit.push(new ColumnHistoryItem(columnHistory[columnHistory.length-1].toColumn, columnHistory[columnHistory.length-1].moveTime, time));
+            if(DEBUG_COLUMNHISTORY){console.log("ITERATION: " + columnHistory.length + " - " + columnHistory[columnHistory.length-1].toColumn + " | " + columnHistory[columnHistory.length-1].moveTime + " | " + time);}
+        }
 
         return columnsWithEnterExit;
     }
 
-    function isExecutionColumn (columnName) {
+    function isIncludedInBoardDesign(columnName){
+        var result = false;
+        if (columnName) {
+            result = boardDesign.isIncludedInBoardDesign(columnName);
+        }
+        return result;
+    }
+
+    function isExecutionColumn(columnName){
         return boardDesign.isExecutionColumn(columnName);
     }
 
-    function isDelayColumn (columnName) {
+    function isDelayColumn(columnName){
         return boardDesign.isDelayColumn(columnName);
     }
 
@@ -281,8 +314,12 @@ function Issue(apiIssue, boardDesign, time){
      * Check if issue is in a column which is Done category.
      */
     self.isDone = function(){
-        var columnName = _.last(self.columnHistory).columnName;
-        return boardDesign.isDoneColumn(columnName);
+        var result = false;
+        if (self.columnHistory.length > 0) {
+            var columnName = _.last(self.columnHistory).columnName;
+            result = boardDesign.isDoneColumn(columnName);
+        }
+        return result;
     };
 
     /**
@@ -353,7 +390,7 @@ function Issue(apiIssue, boardDesign, time){
         }
     }
 
-    self.isInBetween = function (x, startValue, endValue) {
+    self.isInBetween = function(x, startValue, endValue){
         return x >= startValue && x <= endValue;
     };
 
@@ -375,7 +412,7 @@ function Issue(apiIssue, boardDesign, time){
     /**
      * Checks which column this issue was in at a given time.
      */
-    self.wasInColumn = function (time, column) {
+    self.wasInColumn = function(time, column){
         return self.isInBetween(time, Date.parse(column.enterTime), Date.parse(column.exitTime));
     };
 
