@@ -1,21 +1,23 @@
 {
-    "manifest_version": 2,
-    "name": "Kanalyzer",
-    "short_name": "Kanalyzer",
-    "version": "0.2.1",
-    "icons": {
-        "32": "img/k_logo_32.png",
-        "64": "img/k_logo_64.png",
-        "128": "img/k_logo_128.png"
-    },
-    "permissions": [
-        "storage",
-        "*://*/"
-    ],
-    "app": {
-        "background": {
-            "scripts": ["background.js"]
-        }
-    },
-    "minimum_chrome_version": "40"
+  "manifest_version": 2,
+  "name": "Kanalyzer",
+  "short_name": "Kanalyzer",
+  "version": "0.2.1",
+  "icons": {
+    "32": "img/k_logo_32.png",
+    "64": "img/k_logo_64.png",
+    "128": "img/k_logo_128.png"
+  },
+  "permissions": [
+    "storage",
+    "*://*/"
+  ],
+  "app": {
+    "background": {
+      "scripts": [
+        "background.js"
+      ]
+    }
+  },
+  "minimum_chrome_version": "40"
 }

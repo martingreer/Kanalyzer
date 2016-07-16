@@ -3,51 +3,52 @@
     <title>Kanalyzer: Process Efficiency</title>
 </head>
 <body>
-    <div style="margin-left: 20%">
-        <div>
-            <b>Average Process Efficiency:</b>
-            <div style="width:190px">
-                <uib-progressbar style="margin-bottom: 0" animate="false" value="avgPeBarValue" type="{{avgPeBarType}}">
-                    <p style="color: black; font-weight: bold"> &nbsp;{{ averageProcessEfficiency }} </p>
-                </uib-progressbar>
-            </div>
-        </div>
-        <br />
-        <div>
-            <b>Average Cycle Time:</b> {{ averageCycleTime }}
-        </div>
-        <div>
-            <b>Average Execution Time:</b> {{ averageExecutionTime }}
-        </div>
-        <div>
-            <b>Average Delay Time:</b> {{ averageDelayTime }}
-        </div>
-    </div>
-    <br />
+<div style="margin-left: 20%">
     <div>
-        <h3>Cycle Times and Process Efficiency</h3>
-        <table class="table table-condensed table-hover" style="width:1140px">
-            <thead>
-            <tr>
-                <th style="width:100px">Issue</th>
-                <th style="width:580px">Summary</th>
-                <th style="width:220px">Cycle Time</th>
-                <th style="width:160px">Process Efficiency</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="issue in issues">
-                <td>{{ issue.key }}</td>
-                <td>{{ issue.summary }}</td>
-                <td>{{ issue.cycleTimeConverted }}</td>
-                <td>
-                    <uib-progressbar style="margin-bottom: 0" animate="false" value="issue.barDynamic" type="{{issue.barType}}"><p style="color: black; font-weight: bold">
-                        &nbsp;{{ issue.processEfficiencyConverted }} </p>
-                    </uib-progressbar>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <b>Average Process Efficiency:</b>
+        <div style="width:190px">
+            <uib-progressbar style="margin-bottom: 0" animate="false" value="avgPeBarValue" type="{{avgPeBarType}}">
+                <p style="color: black; font-weight: bold"> &nbsp;{{ averageProcessEfficiency }} </p>
+            </uib-progressbar>
+        </div>
     </div>
+    <br/>
+    <div>
+        <b>Average Cycle Time:</b> {{ averageCycleTime }}
+    </div>
+    <div>
+        <b>Average Execution Time:</b> {{ averageExecutionTime }}
+    </div>
+    <div>
+        <b>Average Delay Time:</b> {{ averageDelayTime }}
+    </div>
+</div>
+<br/>
+<div>
+    <h3>Cycle Times and Process Efficiency</h3>
+    <table class="table table-condensed table-hover" style="width:1140px">
+        <thead>
+        <tr>
+            <th style="width:100px">Issue</th>
+            <th style="width:580px">Summary</th>
+            <th style="width:220px">Cycle Time</th>
+            <th style="width:160px">Process Efficiency</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="issue in issues">
+            <td>{{ issue.key }}</td>
+            <td>{{ issue.summary }}</td>
+            <td>{{ issue.cycleTimeConverted }}</td>
+            <td>
+                <uib-progressbar style="margin-bottom: 0" animate="false" value="issue.barDynamic" type="{{issue.barType}}"><p
+                        style="color: black; font-weight: bold">
+                    &nbsp;{{ issue.processEfficiencyConverted }} </p>
+                </uib-progressbar>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

@@ -9,8 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Web page icon -->
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
 
     <!-- CSS Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -27,77 +27,77 @@
 
     <!-- D3 and NVD3 graph libs -->
     <script type="text/javascript" src="js/libraries/d3.min.js"></script>
-        <script type="text/javascript" src="js/libraries/nv.d3.min.js"></script>
+    <script type="text/javascript" src="js/libraries/nv.d3.min.js"></script>
 
     <!-- AngularJS library and dependent libraries -->
     <script type="text/javascript" src="js/libraries/angular.min.js"></script>
-        <script type="text/javascript" src="js/libraries/angular-ui-router.min.js"></script>
-        <script type="text/javascript" src="js/libraries/ui-bootstrap-tpls.min.js"></script>
-        <script type="text/javascript" src="js/libraries/angular-nvd3.min.js"></script>
-        <script type="text/javascript" src="js/libraries/angular-ui-notification.min.js"></script>
+    <script type="text/javascript" src="js/libraries/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="js/libraries/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="js/libraries/angular-nvd3.min.js"></script>
+    <script type="text/javascript" src="js/libraries/angular-ui-notification.min.js"></script>
 
     <!-- JSON -->
     <script type="text/javascript" src="js/libraries/json2.min.js"></script>
 </head>
 <body ng-app="kanalyzerApp">
 
-    <!-- NAVIGATION -->
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container pull-left">
-            <div class="navbar-header">
-                <a ui-sref="login"><img src="img/kanalyzer_logo.png" width="60%" height="60%"></a>
-            </div>
-            <ul class="nav nav-pills">
-                <li ui-sref-active="active"><a ui-sref="login">Log In</a></li>
-                <li ui-sref-active="active"><a ui-sref="ld">Load Data</a></li>
-                <li ui-sref-active="active"><a ui-sref="cfd">CFD</a></li>
-                <li ui-sref-active="active"><a ui-sref="etdt">Execution vs Delay</a></li>
-                <li ui-sref-active="active"><a ui-sref="coldist">Column Distribution</a></li>
-                <li ui-sref-active="active"><a ui-sref="pe">Process Efficiency</a></li>
-                <li ui-sref-active="active"><a ui-sref="about">About</a></li>
-            </ul>
+<!-- NAVIGATION -->
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container pull-left">
+        <div class="navbar-header">
+            <a ui-sref="login"><img src="img/kanalyzer_logo.png" width="60%" height="60%"></a>
         </div>
-    </nav>
-
-    <!-- MAIN CONTENT -->
-    <div id="main">
-        <div class="container-fluid" style="margin-top: 70px; margin-left: 50px;">
-
-            <!-- INJECT VIEWS HERE -->
-            <div ui-view></div>
-
-        </div>
+        <ul class="nav nav-pills">
+            <li ui-sref-active="active"><a ui-sref="login">Log In</a></li>
+            <li ui-sref-active="active"><a ui-sref="ld">Load Data</a></li>
+            <li ui-sref-active="active"><a ui-sref="cfd">CFD</a></li>
+            <li ui-sref-active="active"><a ui-sref="etdt">Execution vs Delay</a></li>
+            <li ui-sref-active="active"><a ui-sref="coldist">Column Distribution</a></li>
+            <li ui-sref-active="active"><a ui-sref="pe">Process Efficiency</a></li>
+            <li ui-sref-active="active"><a ui-sref="about">About</a></li>
+        </ul>
     </div>
+</nav>
 
-    <!-- jQuery lib and bootstrap -->
-    <script src="js/libraries/jquery.min.js"></script>
-    <script src="js/libraries/bootstrap.min.js"></script>
+<!-- MAIN CONTENT -->
+<div id="main">
+    <div class="container-fluid" style="margin-top: 70px; margin-left: 50px;">
 
-    <!-- Angular application scripts -->
-    <script type="text/javascript" src="js/application/main.js"></script>
-    <script type="text/javascript" src="js/application/configurations.js"></script>
-    <script type="text/javascript" src="js/application/loginController.js"></script>
-    <script type="text/javascript" src="js/application/ldController.js"></script>
-    <script type="text/javascript" src="js/application/cfdController.js"></script>
-    <script type="text/javascript" src="js/application/etdtController.js"></script>
-    <script type="text/javascript" src="js/application/coldistController.js"></script>
-    <script type="text/javascript" src="js/application/peController.js"></script>
-    <script type="text/javascript" src="js/application/aboutController.js"></script>
-    <script type="text/javascript" src="js/application/factories.js"></script>
+        <!-- INJECT VIEWS HERE -->
+        <div ui-view></div>
 
-    <!-- Utilities -->
-    <script src="js/utils/plugins.js"></script>
-    <script src="js/utils/datePrototypes.js"></script>
-    <script src="js/utils/utils.js"></script>
-    <script src="js/libraries/lodash.min.js"></script>
-    <script src="js/libraries/filesaver.js"></script>
+    </div>
+</div>
 
-    <!-- Parsers -->
-    <script src="js/parsers/apiParser.js"></script>
-    <script src="js/parsers/graphDataParser.js"></script>
+<!-- jQuery lib and bootstrap -->
+<script src="js/libraries/jquery.min.js"></script>
+<script src="js/libraries/bootstrap.min.js"></script>
 
-    <!-- Data for testing GUI functions -->
-    <!-- <script src="test/data/apiParserTestData.js"></script> -->
+<!-- Angular application scripts -->
+<script type="text/javascript" src="js/application/main.js"></script>
+<script type="text/javascript" src="js/application/configurations.js"></script>
+<script type="text/javascript" src="js/application/loginController.js"></script>
+<script type="text/javascript" src="js/application/ldController.js"></script>
+<script type="text/javascript" src="js/application/cfdController.js"></script>
+<script type="text/javascript" src="js/application/etdtController.js"></script>
+<script type="text/javascript" src="js/application/coldistController.js"></script>
+<script type="text/javascript" src="js/application/peController.js"></script>
+<script type="text/javascript" src="js/application/aboutController.js"></script>
+<script type="text/javascript" src="js/application/factories.js"></script>
+
+<!-- Utilities -->
+<script src="js/utils/plugins.js"></script>
+<script src="js/utils/datePrototypes.js"></script>
+<script src="js/utils/utils.js"></script>
+<script src="js/libraries/lodash.min.js"></script>
+<script src="js/libraries/filesaver.js"></script>
+
+<!-- Parsers -->
+<script src="js/parsers/apiParser.js"></script>
+<script src="js/parsers/graphDataParser.js"></script>
+
+<!-- Data for testing GUI functions -->
+<!-- <script src="test/data/apiParserTestData.js"></script> -->
 
 </body>
 </html>

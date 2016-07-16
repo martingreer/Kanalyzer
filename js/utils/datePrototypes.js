@@ -36,7 +36,7 @@ Date.prototype.customFormat = function (formatString) {
 /**
  * Adds a specified amount of days to a date.
  */
-Date.prototype.addDays = function(days) {
+Date.prototype.addDays = function (days) {
     var dat = new Date(this.valueOf());
     dat.setDate(dat.getDate() + days);
     return dat;

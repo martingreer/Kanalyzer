@@ -92,7 +92,7 @@ application.factory('Base64', function () {
  * Session storage for API info and "logged in" status.
  * These variables are not meant to be used while logged out, so they don't need to be in local storage.
  */
-application.factory('apiServerData', function(){
+application.factory('apiServerData', function () {
     var data = {
         apiRoot: '',
         apiProject: '',
@@ -113,7 +113,7 @@ application.factory('apiServerData', function(){
             data.apiProject = apiProject;
         },
         getApiServer: function (apiType) {
-            if(apiType === 'jira'){
+            if (apiType === 'jira') {
                 return data.apiRoot + 'rest/api/2/issue/createmeta';
             } else {
                 return '';
@@ -131,7 +131,7 @@ application.factory('apiServerData', function(){
 /**
  * Local storage helper for remembering a users previous login username and URL.
  */
-application.factory('previousLogin', function(){
+application.factory('previousLogin', function () {
     return {
         getPreviousLogin: function (callback) {
             chrome.storage.local.get(['url', 'userName'], callback);
@@ -145,7 +145,7 @@ application.factory('previousLogin', function(){
 /**
  * Local storage helper for remembering a users previous Load Data choices.
  */
-application.factory('previousLoadData', function(){
+application.factory('previousLoadData', function () {
     return {
         getPreviousLoadData: function (callback) {
             chrome.storage.local.get(['boardId', 'projectKey', 'maxResults'], callback)
@@ -159,7 +159,7 @@ application.factory('previousLoadData', function(){
 /**
  * Local storage helper for board design, issues and configs.
  */
-application.factory('localStorageHandler', function(){
+application.factory('localStorageHandler', function () {
     return {
         clearIssueAndBoardDesignData: function () {
             chrome.storage.local.remove('boardDesign');

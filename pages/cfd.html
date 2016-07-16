@@ -3,50 +3,52 @@
     <title>Kanalyzer: CFD</title>
 </head>
 <body>
-    <div class="row" style="float: top; margin-bottom: 40px">
-        <div class="chart" style="height: 500px; margin-left: 30px">
-            <nvd3 options="options" data="data"></nvd3>
-        </div>
+<div class="row" style="float: top; margin-bottom: 40px">
+    <div class="chart" style="height: 500px; margin-left: 30px">
+        <nvd3 options="options" data="data"></nvd3>
     </div>
-    <div class="row" style="float: top; margin-left: 80px">
-        <div style="float: left">
-            <label for="startDate">Start date:</label>
-        </div>
-        <div style="float: left; margin-left: 172px">
-            <label for="endDate">End date:</label>
-        </div>
+</div>
+<div class="row" style="float: top; margin-left: 80px">
+    <div style="float: left">
+        <label for="startDate">Start date:</label>
     </div>
-    <div class="row" style="float: top; height: 350px">
-        <form class="form-inline" role="form" style="margin-left: 90px" name="cfdDateFilterForm" novalidate>
-            <div style="float: left; margin-right: 35px">
-                <p class="input-group" id="startDate">
-                    <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" ng-model="startDate" is-open="startDateStatus.opened" min-date="minDate" max-date="maxDate"
-                           datepicker-options="datepickerOptions" ng-required="true" close-text="Close" style="width:170px"/>
-                    <span class="input-group-btn">
+    <div style="float: left; margin-left: 172px">
+        <label for="endDate">End date:</label>
+    </div>
+</div>
+<div class="row" style="float: top; height: 350px">
+    <form class="form-inline" role="form" style="margin-left: 90px" name="cfdDateFilterForm" novalidate>
+        <div style="float: left; margin-right: 35px">
+            <p class="input-group" id="startDate">
+                <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" ng-model="startDate" is-open="startDateStatus.opened"
+                       min-date="minDate" max-date="maxDate"
+                       datepicker-options="datepickerOptions" ng-required="true" close-text="Close" style="width:170px"/>
+                <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="openStartDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
-                </p>
-            </div>
-            <div style="float: left; margin-right: 35px">
-                <p class="input-group" id="endDate">
-                    <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" ng-model="endDate" is-open="endDateStatus.opened" min-date="minDate" max-date="maxDate"
-                           datepicker-options="datepickerOptions" ng-required="true" close-text="Close" style="width:170px" />
-                    <span class="input-group-btn">
+            </p>
+        </div>
+        <div style="float: left; margin-right: 35px">
+            <p class="input-group" id="endDate">
+                <input type="text" class="form-control" uib-datepicker-popup="{{dateFormat}}" ng-model="endDate" is-open="endDateStatus.opened"
+                       min-date="minDate" max-date="maxDate"
+                       datepicker-options="datepickerOptions" ng-required="true" close-text="Close" style="width:170px"/>
+                <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="openEndDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
-                </p>
-            </div>
-            <div style="float: left; margin-right: 10px">
-                <button type="submit" class="btn btn-default" ng-click="applyCfdDateFilter(startDate, endDate, startFromZero)">Apply filter</button>
-            </div>
-        </form>
-        <div style="float: left; margin-right: 35px">
-            <button class="btn btn-default" ng-click="removeCfdDateFilter(startFromZero)">Remove filter</button>
+            </p>
         </div>
-        <div style="float: left; margin-top: 5px">
-            <input type="checkbox" id="startFromZero" ng-model="startFromZero" ng-click="applyStartFromZero(startFromZero)">
-            <label for="startFromZero">Done starts from 0</label>
+        <div style="float: left; margin-right: 10px">
+            <button type="submit" class="btn btn-default" ng-click="applyCfdDateFilter(startDate, endDate, startFromZero)">Apply filter</button>
         </div>
+    </form>
+    <div style="float: left; margin-right: 35px">
+        <button class="btn btn-default" ng-click="removeCfdDateFilter(startFromZero)">Remove filter</button>
     </div>
+    <div style="float: left; margin-top: 5px">
+        <input type="checkbox" id="startFromZero" ng-model="startFromZero" ng-click="applyStartFromZero(startFromZero)">
+        <label for="startFromZero">Done starts from 0</label>
+    </div>
+</div>
 </body>
 </html>

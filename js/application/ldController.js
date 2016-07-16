@@ -25,7 +25,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     // The config that is currently selected.
     $scope.loadedConfig = '';
 
-    function setPreviousLoadDataOnScope (previousLoadData) {
+    function setPreviousLoadDataOnScope(previousLoadData) {
         if (previousLoadData.projectKey) {
             $scope.apiProject = previousLoadData.projectKey;
         }
@@ -39,7 +39,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         }
     }
 
-    function setBoardDesignOnScope (boardDesign) {
+    function setBoardDesignOnScope(boardDesign) {
         if (boardDesign) {
             // Assign columns to scope if local storage already exists.
             $scope.columns = boardDesign.columns;
@@ -47,13 +47,13 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         }
     }
 
-    function toggleMaxResultsForApiCall (maxResults) {
-        if(!maxResults || maxResults === '' || maxResults.toLowerCase() === 'all'){
+    function toggleMaxResultsForApiCall(maxResults) {
+        if (!maxResults || maxResults === '' || maxResults.toLowerCase() === 'all') {
             $scope.maxResults = '-1';
         }
     }
 
-    function setMaxResultsForUserInterface (maxResults) {
+    function setMaxResultsForUserInterface(maxResults) {
         if (!maxResults || maxResults === '-1' || maxResults.toLowerCase() === 'all') {
             $scope.maxResults = '';
         }
@@ -86,7 +86,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         setMaxResultsForUserInterface($scope.maxResults);
         previousLoadData.setPreviousLoadData($scope.boardId, $scope.apiProject, $scope.maxResults);
 
-        if(!$scope.isLoggedIn){
+        if (!$scope.isLoggedIn) {
             Notification.error('You are not logged in!');
         } else {
             boardColumnsDesign = {};
@@ -96,72 +96,92 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             getBoardDesignBeforeIssues = $q.defer();
 
             Notification.primary('Attempting to get data from server...');
-            if(DEBUG){console.log("Attempting to get board design for board with ID: " + $scope.boardId + "...");}
+            if (DEBUG) {
+                console.log("Attempting to get board design for board with ID: " + $scope.boardId + "...");
+            }
 
             // Commented out the old rest call which nowadays is forbidden (private API).
             /*var requestBoardDesign = $http({
-                method: "GET",
-                url: $scope.apiRoot + "rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=" + $scope.boardId + "&selectedProjectKey=" + $scope.apiProject
-            });*/
+             method: "GET",
+             url: $scope.apiRoot + "rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=" + $scope.boardId + "&selectedProjectKey=" + $scope.apiProject
+             });*/
             var requestBoardDesign = $http({
                 method: "GET",
                 url: $scope.apiRoot + "rest/agile/1.0/board/" + $scope.boardId + "/configuration"
             });
 
             requestBoardDesign.success(function (data) {
-                if(DEBUG){console.log("Get board design from API: SUCCESS!");}
-                try{
+                if (DEBUG) {
+                    console.log("Get board design from API: SUCCESS!");
+                }
+                try {
                     boardColumnsDesign = createBoardDesign(data);
                     localStorageHandler.setBoardDesign(boardColumnsDesign);
                     localStorageHandler.setLoadedProject($scope.apiProject);
                     $scope.columns = boardColumnsDesign.columns;
                     $scope.loadedBoardName = boardColumnsDesign.name;
                     getBoardDesignBeforeIssues.resolve();
-                    if(DEBUG){console.log("Parse board design SUCCESS!");}
-                } catch(error) {
+                    if (DEBUG) {
+                        console.log("Parse board design SUCCESS!");
+                    }
+                } catch (error) {
                     Notification.error('Something went wrong when parsing the board data. Check your board configuration for abnormalities.');
-                    if(DEBUG){console.log("Parsing of board data ERROR: " + error);}
+                    if (DEBUG) {
+                        console.log("Parsing of board data ERROR: " + error);
+                    }
                 }
             });
 
             requestBoardDesign.error(function (data) {
                 getBoardDesignBeforeIssues.reject();
                 Notification.error('Failed to load board data from source.');
-                if(DEBUG){console.log("Get board design from API: ERROR.");}
+                if (DEBUG) {
+                    console.log("Get board design from API: ERROR.");
+                }
             });
 
-            getBoardDesignBeforeIssues.promise.then(function() {
-                if(DEBUG){console.log("Attempting to get issues for project " + $scope.apiProject + " from server " + $scope.apiRoot + "...");}
+            getBoardDesignBeforeIssues.promise.then(function () {
+                if (DEBUG) {
+                    console.log("Attempting to get issues for project " + $scope.apiProject + " from server " + $scope.apiRoot + "...");
+                }
                 toggleMaxResultsForApiCall($scope.maxResults);
                 var requestIssues = $http({
                     method: "GET",
                     url: $scope.apiRoot + "rest/api/2/search?jql=project=" + $scope.apiProject + "&expand=changelog" + "&maxResults=" + $scope.maxResults
                 });
                 /*var requestIssues = $http({
-                    method: "GET",
-                    url: $scope.apiRoot + "rest/agile/1.0/board/" + $scope.boardId + "/issue?maxResults=" + $scope.maxResults + "&expand=changelog"
-                });*/
+                 method: "GET",
+                 url: $scope.apiRoot + "rest/agile/1.0/board/" + $scope.boardId + "/issue?maxResults=" + $scope.maxResults + "&expand=changelog"
+                 });*/
                 setMaxResultsForUserInterface($scope.maxResults);
 
                 requestIssues.success(function (data) {
-                    if(DEBUG){console.log("Get issues from API: SUCCESS!");}
+                    if (DEBUG) {
+                        console.log("Get issues from API: SUCCESS!");
+                    }
                     apiIssuesMinimal = parseMultipleApiIssues(data);
-                    try{
+                    try {
                         issues = createIssuesFromArray(apiIssuesMinimal, boardColumnsDesign);
                         localStorageHandler.setIssues(issues);
                         localStorageHandler.removeCfdData(); // Previously parsed CFD data is likely irrelevant when new source data is loaded, so remove it
                         localStorageHandler.removeColDistData();
                         Notification.success('Issue data successfully loaded!');
-                        if(DEBUG){console.log("Parse issue data SUCCESS!");}
-                    } catch(error) {
+                        if (DEBUG) {
+                            console.log("Parse issue data SUCCESS!");
+                        }
+                    } catch (error) {
                         Notification.error('Something went wrong when parsing the issue data. Check your board configuration for abnormalities.');
-                        if(DEBUG){console.log("Parsing of issues data ERROR: " + error);}
+                        if (DEBUG) {
+                            console.log("Parsing of issues data ERROR: " + error);
+                        }
                     }
                 });
 
                 requestIssues.error(function (data) {
                     Notification.error('Failed to load issue data from source.');
-                    if(DEBUG){console.log("Get issues from API: ERROR");}
+                    if (DEBUG) {
+                        console.log("Get issues from API: ERROR");
+                    }
                 });
             });
         }
@@ -176,13 +196,13 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             updatedBoardDesign = {},
             updatedIssues = [];
 
-        try{
+        try {
             localStorageHandler.getBoardDesign(function (boardDesignCallback) {
                 oldBoardDesign = createBoardDesign(boardDesignCallback.boardDesign);
 
                 _.forEach(oldBoardDesign.columns, function (columnOutput) {
                     _.forEach(columnCategories, function (columnInput) {
-                        if(columnInput.name === columnOutput.name){
+                        if (columnInput.name === columnOutput.name) {
                             columnOutput.category = columnInput.category;
                         }
                     });
@@ -201,7 +221,9 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             });
         } catch (error) {
             Notification.error('Column categories update failed.');
-            if(DEBUG){console.log("Updating columns ERROR: " + error);}
+            if (DEBUG) {
+                console.log("Updating columns ERROR: " + error);
+            }
         }
     };
 
@@ -229,13 +251,13 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
                     // Search for a config with matching name
                     _.forEach(userConfigs, function (config) {
-                        if(config.name.toLowerCase() === name.toLowerCase()){
+                        if (config.name.toLowerCase() === name.toLowerCase()) {
                             nameIsUnique = false;
                             return false; // break loop if a matching name is found
                         }
                     });
 
-                    if(updateExistingConfig) {
+                    if (updateExistingConfig) {
                         if (!nameIsUnique) {
                             var config = {"name": name, "columnCategories": columnCategories};
                             var userConfigsRemovedExisting = userConfigs.filter(element=>element.name !== name);
@@ -267,7 +289,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     /**
      * Finds the currently selected config.
      */
-    function getSelectedConfig (name, data) {
+    function getSelectedConfig(name, data) {
         var configs = data;
         var selectedConfig = {};
         if (configs) {
@@ -286,23 +308,31 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     /**
      * Checks if the given column arrays have the same structure.
      */
-    function haveSameColumnStructure(columnsToConfigurate, columns){
-        if (columnsToConfigurate === columns){
-            if(DEBUG){console.log("Columns are exactly equal!");}
+    function haveSameColumnStructure(columnsToConfigurate, columns) {
+        if (columnsToConfigurate === columns) {
+            if (DEBUG) {
+                console.log("Columns are exactly equal!");
+            }
             return true;
         }
         if (columnsToConfigurate === null || columns === null) {
-            if(DEBUG){console.log("At least one column array is null!");}
+            if (DEBUG) {
+                console.log("At least one column array is null!");
+            }
             return false;
         }
         if (columnsToConfigurate.length !== columns.length) {
-            if(DEBUG){console.log("Lengths are not the same!");}
+            if (DEBUG) {
+                console.log("Lengths are not the same!");
+            }
             return false;
         }
 
         for (var i = 0; i < columnsToConfigurate.length; ++i) {
             if (columnsToConfigurate[i].name !== columns[i].name) {
-                if(DEBUG){console.log("Column names are not equal!");}
+                if (DEBUG) {
+                    console.log("Column names are not equal!");
+                }
                 return false;
             }
         }
@@ -328,10 +358,14 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                 $scope.loadedConfig = selectedConfig.name; // FIXME: in old code, this was fetched from local storage
                 $scope.columns = selectedConfig.columnCategories;
                 $scope.updateColumnCategories(selectedConfig.columnCategories); // Apply changes when config is loaded
-                if(DEBUG){console.log("Config was successfully loaded.");}
+                if (DEBUG) {
+                    console.log("Config was successfully loaded.");
+                }
             } else {
                 Notification.error("The selected config is not compatible with the current board.");
-                if(DEBUG){console.log("Config was not loaded.");}
+                if (DEBUG) {
+                    console.log("Config was not loaded.");
+                }
             }
         });
     };

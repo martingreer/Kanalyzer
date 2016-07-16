@@ -67,25 +67,26 @@
         </tr>
         </tbody>
     </table>
-    <button class="btn btn-default" ng-click="updateColumnCategories(columns)">Apply changes</button> &nbsp;&nbsp; Loaded config: <b>{{ loadedConfig }}</b>
-    <br /><br />
+    <button class="btn btn-default" ng-click="updateColumnCategories(columns)">Apply changes</button>
+    &nbsp;&nbsp; Loaded config: <b>{{ loadedConfig }}</b>
+    <br/><br/>
     <button class="btn btn-default" ng-click="updateColumnCategories(columns); saveConfig(loadedConfig, columns, true)">Apply changes and update config</button>
 </div>
 <div style="float:left; margin-top:45px">
     <form role="form" name="loadConfigForm">
-        <label for="loadConfigSelect">Load config:</label><br />
+        <label for="loadConfigSelect">Load config:</label><br/>
         <select class="form-control" name="loadConfigSelect" id="loadConfigSelect" ng-model="selectedConfig" ng-change="loadConfig(selectedConfig)">
             <option ng-repeat="config in userConfigs" value="{{ config.name }}">{{ config.name }}</option>
         </select>
     </form>
     <button type="submit" class="btn btn-default" ng-click="deleteConfig(selectedConfig)">Delete config</button>
-    <br /><br />
+    <br/><br/>
     <form role="form" name="userConfigForm" novalidate>
         <label for="configName">Config Name:</label>
         <input type="text" class="form-control" id="configName" ng-model="configName" style="width:250px">
         <button type="submit" class="btn btn-default" ng-click="saveConfig(configName, columns, false)">Store new config</button>
     </form>
-    <br />
+    <br/>
     <button class="btn btn-default" ng-click="clearConfigs()">Delete all configs</button>
 </div>
 </body>

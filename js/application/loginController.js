@@ -4,7 +4,7 @@
 /**
  * Controller for the Log In view.
  */
-application.controller('loginController', function($scope, Base64, $http, apiServerData, previousLogin, Notification){
+application.controller('loginController', function ($scope, Base64, $http, apiServerData, previousLogin, Notification) {
     "use strict";
 
     var DEBUG = true;
@@ -36,7 +36,7 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
      */
     $scope.login = function () {
         // If the last character of the given url does not end with a forward slash, add a forward slash to the variable.
-        if($scope.apiRoot.slice(-1) !== "/"){
+        if ($scope.apiRoot.slice(-1) !== "/") {
             $scope.apiRoot += "/";
         }
 
@@ -44,7 +44,9 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
         apiServerData.setApiRoot($scope.apiRoot);
         $scope.apiServer = apiServerData.getApiServer('jira');
         Notification.primary('Logging in...');
-        if(DEBUG){console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");}
+        if (DEBUG) {
+            console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");
+        }
 
         //// Basic auth
         //$http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
@@ -85,19 +87,27 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
             apiServerData.setIsLoggedIn(true);
             $scope.isLoggedIn = apiServerData.getIsLoggedIn();
             Notification.success('Login successful!');
-            if(DEBUG){console.log("User " + $scope.credentials.username + " is now logged in!");}
+            if (DEBUG) {
+                console.log("User " + $scope.credentials.username + " is now logged in!");
+            }
         });
         login.error(function (error) {
             apiServerData.setIsLoggedIn(false);
             if (error === null) {
                 Notification.error("Login failed: invalid address.");
-                if(DEBUG){console.log("Login failed: invalid address");}
+                if (DEBUG) {
+                    console.log("Login failed: invalid address");
+                }
             } else if (_.first(error.errorMessages) === "Login failed") {
                 Notification.error("Login failed, invalid credentials.");
-                if(DEBUG){console.log("Login failed: invalid credentials");}
+                if (DEBUG) {
+                    console.log("Login failed: invalid credentials");
+                }
             } else {
                 Notification.error("Login failed: unknown error.");
-                if(DEBUG){console.log("Login failed: unknown error");}
+                if (DEBUG) {
+                    console.log("Login failed: unknown error");
+                }
             }
         });
     };
@@ -129,6 +139,8 @@ application.controller('loginController', function($scope, Base64, $http, apiSer
         apiServerData.setIsLoggedIn(false);
         $scope.isLoggedIn = apiServerData.getIsLoggedIn(); // synchronous
         Notification.primary('You have been logged out.');
-        if(DEBUG){console.log("User " + $scope.credentials.username + " has logged out.");}
+        if (DEBUG) {
+            console.log("User " + $scope.credentials.username + " has logged out.");
+        }
     };
 });

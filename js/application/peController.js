@@ -22,23 +22,23 @@ application.controller('peController', function ($scope, localStorageHandler) {
     localStorageHandler.getIssues(function (issuesCallback) {
         allIssues = issuesCallback.issues;
 
-        issuesNotDoneOrBadlyTracked = _.filter(allIssues, function (issue){
+        issuesNotDoneOrBadlyTracked = _.filter(allIssues, function (issue) {
             return issue.cycleTime === 0 || issue.processEfficiency === 0;
         });
 
-        issues = _.filter(allIssues, function (issue){
+        issues = _.filter(allIssues, function (issue) {
             return issue.cycleTime !== 0 && issue.processEfficiency !== 0;
         });
 
         /**
          * Calculates the average values for the collection of issues.
          */
-        _.forEach(issues, function(issue) {
-            if(issue.processEfficiency > 0){
+        _.forEach(issues, function (issue) {
+            if (issue.processEfficiency > 0) {
                 var processEfficiency = convertToPercent(issue.processEfficiency);
                 var type;
 
-                issue.processEfficiencyConverted = processEfficiency+"%";
+                issue.processEfficiencyConverted = processEfficiency + "%";
                 cumulativeProcessEfficiency += processEfficiency;
                 amountOfProcessEfficiencies++;
 
@@ -53,47 +53,47 @@ application.controller('peController', function ($scope, localStorageHandler) {
                 issue.barDynamic = processEfficiency;
                 issue.barType = type;
             }
-            if(issue.cycleTime > 0){
+            if (issue.cycleTime > 0) {
                 issue.cycleTimeConverted = timeUtil.convertMsToDHM(issue.cycleTime);
                 cumulativeCycleTime += issue.cycleTime;
                 amountOfCycleTimes++;
             }
-            if(issue.executionTime > 0){
+            if (issue.executionTime > 0) {
                 cumulativeExecutionTime += issue.executionTime;
                 amountOfExecutionTimes++;
             }
-            if(issue.delayTime > 0){
+            if (issue.delayTime > 0) {
                 cumulativeDelayTime += issue.delayTime;
                 amountOfDelayTimes++;
             }
         });
 
-        _.forEach(issuesNotDoneOrBadlyTracked, function(issue){
+        _.forEach(issuesNotDoneOrBadlyTracked, function (issue) {
             issue.processEfficiencyConverted = "Not done or badly tracked";
         });
 
         issues = _.sortByOrder(issues, ['processEfficiency', 'cycleTime'], ['asc', 'desc']);
 
-        _.forEach(issuesNotDoneOrBadlyTracked, function(issue){
+        _.forEach(issuesNotDoneOrBadlyTracked, function (issue) {
             issues.push(issue);
         });
 
         $scope.issues = issues;
-        $scope.averageProcessEfficiency = Math.round(cumulativeProcessEfficiency/amountOfProcessEfficiencies)+"%";
-        $scope.averageCycleTime = timeUtil.convertMsToDHM(cumulativeCycleTime/amountOfCycleTimes);
-        $scope.averageExecutionTime = timeUtil.convertMsToDHM(cumulativeExecutionTime/amountOfExecutionTimes);
-        $scope.averageDelayTime = timeUtil.convertMsToDHM(cumulativeDelayTime/amountOfDelayTimes);
+        $scope.averageProcessEfficiency = Math.round(cumulativeProcessEfficiency / amountOfProcessEfficiencies) + "%";
+        $scope.averageCycleTime = timeUtil.convertMsToDHM(cumulativeCycleTime / amountOfCycleTimes);
+        $scope.averageExecutionTime = timeUtil.convertMsToDHM(cumulativeExecutionTime / amountOfExecutionTimes);
+        $scope.averageDelayTime = timeUtil.convertMsToDHM(cumulativeDelayTime / amountOfDelayTimes);
 
         // Build data for visual process efficiency status bars
         averageProcessEfficiencyBar();
     });
 
-    function convertToPercent (decimal){
-        return Math.round(decimal*100);
+    function convertToPercent(decimal) {
+        return Math.round(decimal * 100);
     }
 
-    function averageProcessEfficiencyBar (){
-        var barValue = Math.round(cumulativeProcessEfficiency/amountOfProcessEfficiencies);
+    function averageProcessEfficiencyBar() {
+        var barValue = Math.round(cumulativeProcessEfficiency / amountOfProcessEfficiencies);
         var barType;
 
         if (barValue < 15) {

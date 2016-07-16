@@ -13,7 +13,7 @@ application.controller('etdtController', function ($scope, localStorageHandler, 
 
     localStorageHandler.getIssues(function (issuesCallback) {
         issues = issuesCallback.issues;
-        try{
+        try {
             $scope.data = createEtDtData("All issues", issues);
         } catch (error) {
             $scope.data = [];
@@ -37,7 +37,7 @@ application.controller('etdtController', function ($scope, localStorageHandler, 
             transitionDuration: 350,
             zoom: {
                 enabled: true,
-                scaleExtent: [1,10],
+                scaleExtent: [1, 10],
                 useFixedDomain: false,
                 useNiceScale: false,
                 horizontalOff: false,
@@ -65,25 +65,29 @@ application.controller('etdtController', function ($scope, localStorageHandler, 
     $scope.applyCycleTimeFilter = function (maxCycleTime) {
         var filteredIssues = [];
 
-        if(maxCycleTime === '' || maxCycleTime === null || maxCycleTime === ' ' || maxCycleTime === undefined){
-            try{
+        if (maxCycleTime === '' || maxCycleTime === null || maxCycleTime === ' ' || maxCycleTime === undefined) {
+            try {
                 $scope.data = createEtDtData("All issues", issues);
                 Notification.success("Filter removed.");
-                if(DEBUG){console.log("Filter removed.");}
+                if (DEBUG) {
+                    console.log("Filter removed.");
+                }
             } catch (error) {
                 Notification.error("Removing filter failed.");
                 $scope.data = [];
             }
         } else {
-            _.forEach(issues, function(issue){
-                if(timeUtil.msToHours(issue.cycleTime) <= maxCycleTime && issue.cycleTime !== null){
+            _.forEach(issues, function (issue) {
+                if (timeUtil.msToHours(issue.cycleTime) <= maxCycleTime && issue.cycleTime !== null) {
                     filteredIssues.push(issue);
                 }
             });
 
-            try{
+            try {
                 $scope.data = createEtDtData("All issues", filteredIssues);
-                if(DEBUG){console.log("Graph data updated according to filter.");}
+                if (DEBUG) {
+                    console.log("Graph data updated according to filter.");
+                }
                 Notification.success("Filter applied.");
             } catch (error) {
                 Notification.error("Filter failed.");
@@ -96,10 +100,12 @@ application.controller('etdtController', function ($scope, localStorageHandler, 
      * Resets current graph filter.
      */
     $scope.resetCycleTimeFilter = function () {
-        try{
+        try {
             $scope.data = createEtDtData("All issues", issues);
             Notification.success("Filter removed.");
-            if(DEBUG){console.log("Filter removed.");}
+            if (DEBUG) {
+                console.log("Filter removed.");
+            }
         } catch (error) {
             Notification.error("Removing filter failed.");
             $scope.data = [];
