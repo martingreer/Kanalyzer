@@ -7,10 +7,8 @@
 application.controller('coldistController', function ($scope, localStorageHandler) {
     "use strict";
 
-    var DEBUG = true;
-
-    var issues = [];
-    var boardDesign = [];
+    let issues = [];
+    let boardDesign = [];
 
     /**
      * Graph structure.

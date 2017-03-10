@@ -7,7 +7,7 @@
 application.controller('loginController', function ($scope, Base64, $http, apiServerData, previousLogin, Notification) {
     "use strict";
 
-    var DEBUG = true;
+    const DEBUG = true;
 
     // Variables for logging in to API server.
     $scope.credentials = {
@@ -68,7 +68,7 @@ application.controller('loginController', function ($scope, Base64, $http, apiSe
         //});
 
         // Cookie auth. Works but is a bit slow to set the cookie.
-        var login = $http({
+        const login = $http({
             method: 'POST',
             url: $scope.apiRoot + "rest/auth/1/session",
             data: {

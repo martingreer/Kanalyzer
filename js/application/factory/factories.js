@@ -5,14 +5,14 @@ application.factory('Base64', function () {
     "use strict";
     /*jslint regexp: true*/
 
-    var keyStr = 'ABCDEFGHIJKLMNOP' +
+    const keyStr = 'ABCDEFGHIJKLMNOP' +
         'QRSTUVWXYZabcdef' +
         'ghijklmnopqrstuv' +
         'wxyz0123456789+/' +
         '=';
     return {
         encode: function (input) {
-            var output = "",
+            let output = "",
                 chr1, chr2, chr3 = "",
                 enc1, enc2, enc3, enc4 = "",
                 i = 0;
@@ -45,12 +45,12 @@ application.factory('Base64', function () {
         },
 
         decode: function (input) {
-            var output = "",
+            let output = "",
                 chr1, chr2, chr3 = "",
                 enc1, enc2, enc3, enc4 = "",
                 i = 0,
                 base64test = /[^A-Za-z0-9\+\/\=]/g,
-                alert;
+                alert = "";
 
             if (base64test.exec(input)) {
                 alert("There were invalid base64 characters in the input text.\n" +
@@ -93,7 +93,7 @@ application.factory('Base64', function () {
  * These variables are not meant to be used while logged out, so they don't need to be in local storage.
  */
 application.factory('apiServerData', function () {
-    var data = {
+    const data = {
         apiRoot: '',
         apiProject: '',
         isLoggedIn: false
@@ -105,12 +105,6 @@ application.factory('apiServerData', function () {
         },
         setApiRoot: function (apiRoot) {
             data.apiRoot = apiRoot;
-        },
-        getApiProject: function () {
-            return data.apiProject;
-        },
-        setApiProject: function (apiProject) {
-            data.apiProject = apiProject;
         },
         getApiServer: function (apiType) {
             if (apiType === 'jira') {
@@ -174,9 +168,6 @@ application.factory('localStorageHandler', function () {
         setBoardDesign: function (boardDesignToSet) {
             chrome.storage.local.set({boardDesign: boardDesignToSet});
         },
-        removeBoardDesign: function () {
-            chrome.storage.local.remove('boardDesign');
-        },
         getLoadedProject: function (callback) {
             chrome.storage.local.get('loadedProject', callback);
         },
@@ -188,9 +179,6 @@ application.factory('localStorageHandler', function () {
         },
         setIssues: function (issuesToSet) {
             chrome.storage.local.set({issues: issuesToSet});
-        },
-        removeIssues: function () {
-            chrome.storage.local.remove('issues');
         },
         getConfigs: function (callback) {
             chrome.storage.local.get('userConfigs', callback);

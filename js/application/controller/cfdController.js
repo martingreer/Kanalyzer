@@ -7,14 +7,14 @@
 application.controller('cfdController', function ($scope, localStorageHandler) {
     "use strict";
 
-    var DEBUG = true;
+    const DEBUG = true;
 
-    var issues = [],
-        boardDesign = {},
-        allCfdData = [],
-        allCfdDataDoneColumnInitialValue = 0,
-        doneColumnPreviousInitialValue = 0,
-        doneColumnInitialValue = 0;
+    let issues = [];
+    let boardDesign = {};
+    let allCfdData = [];
+    let allCfdDataDoneColumnInitialValue = 0;
+    let doneColumnPreviousInitialValue = 0;
+    let doneColumnInitialValue = 0;
 
     // Get eventual CFD data from local storage
     localStorageHandler.getCfdData(function (cfdDataCallback) {
@@ -69,12 +69,12 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
     };
 
     // Open the datepicker UI for the start date.
-    $scope.openStartDate = function ($event) {
+    $scope.openStartDate = function () {
         $scope.startDateStatus.opened = true;
     };
 
     // Open the datepicker UI for the end date.
-    $scope.openEndDate = function ($event) {
+    $scope.openEndDate = function () {
         $scope.endDateStatus.opened = true;
     };
 
@@ -110,7 +110,7 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
      * Apply a given date filter for the CFD graph.
      */
     $scope.applyCfdDateFilter = function (startDate, endDate, startFromZero) {
-        var oneDay = 86400000,
+        let oneDay = 86400000,
             _startDate = Date.parse(new Date(startDate)) - oneDay,
             _endDate = Date.parse(new Date(endDate)),
             columnArray = [],
@@ -171,7 +171,7 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
         }
 
         function filterDates(data, startFromZero) {
-            var _columnArray = [];
+            let _columnArray = [];
 
             if (startFromZero) {
                 _columnArray = filterWithDoneStartFromZero(data);
@@ -194,7 +194,7 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
             if (DEBUG) {
                 console.log("Filter removed (done from zero).");
             }
-            var _allCfdData = _.cloneDeep(allCfdData);
+            const _allCfdData = _.cloneDeep(allCfdData);
             console.log("Initial value: " + doneColumnInitialValue + " -> " + allCfdDataDoneColumnInitialValue);
             doneColumnInitialValue = allCfdDataDoneColumnInitialValue;
             _.forEach(_.first(_allCfdData).values, function (value) {
@@ -214,7 +214,7 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
      * Toggles whether the done column should start from zero for the current filter.
      */
     function toggleDoneColumnValues(data, startFromZero) {
-        var columnArray = [];
+        let columnArray = [];
 
         if (startFromZero) {
             if (DEBUG) {

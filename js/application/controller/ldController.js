@@ -7,13 +7,13 @@
 application.controller('ldController', function ($scope, $http, $q, apiServerData, localStorageHandler, previousLoadData, previousLogin, Notification) {
     "use strict";
 
-    var DEBUG = true;
+    const DEBUG = true;
 
     // Synchronization variable to make sure http requests are done in the correct order.
-    var getBoardDesignBeforeIssues = $q.defer();
+    let getBoardDesignBeforeIssues = $q.defer();
 
     // Variables that need to be visible in the entire controller.
-    var boardColumnsDesign,
+    let boardColumnsDesign,
         apiIssuesMinimal,
         issues;
 
@@ -105,7 +105,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
              method: "GET",
              url: $scope.apiRoot + "rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=" + $scope.boardId + "&selectedProjectKey=" + $scope.apiProject
              });*/
-            var requestBoardDesign = $http({
+            const requestBoardDesign = $http({
                 method: "GET",
                 url: $scope.apiRoot + "rest/agile/1.0/board/" + $scope.boardId + "/configuration"
             });
@@ -145,7 +145,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     console.log("Attempting to get issues for project " + $scope.apiProject + " from server " + $scope.apiRoot + "...");
                 }
                 toggleMaxResultsForApiCall($scope.maxResults);
-                var requestIssues = $http({
+                const requestIssues = $http({
                     method: "GET",
                     url: $scope.apiRoot + "rest/api/2/search?jql=project=" + $scope.apiProject + "&expand=changelog" + "&maxResults=" + $scope.maxResults
                 });
@@ -191,7 +191,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
      * Update the column categories to the user defined values.
      */
     $scope.updateColumnCategories = function (columnCategories) {
-        var oldBoardDesign = {},
+        let oldBoardDesign = {},
             oldIssues = [],
             updatedBoardDesign = {},
             updatedIssues = [];
@@ -231,7 +231,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
      * Save the user choices for a set of columns for quick re-use.
      */
     $scope.saveConfig = function (name, columnCategories, updateExistingConfig) {
-        var userConfigs = [],
+        let userConfigs = [],
             nameIsUnique = true;
 
         if (!$scope.loadedConfig && updateExistingConfig) {
@@ -259,8 +259,8 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
                     if (updateExistingConfig) {
                         if (!nameIsUnique) {
-                            var config = {"name": name, "columnCategories": columnCategories};
-                            var userConfigsRemovedExisting = userConfigs.filter(element=>element.name !== name);
+                            const config = {"name": name, "columnCategories": columnCategories};
+                            const userConfigsRemovedExisting = userConfigs.filter(element => element.name !== name);
                             userConfigsRemovedExisting.push(config);
                             localStorageHandler.setConfigs(userConfigsRemovedExisting);
                             $scope.userConfigs = userConfigsRemovedExisting;
@@ -271,7 +271,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                         }
                     } else {
                         if (nameIsUnique) {
-                            var newConfig = {"name": name, "columnCategories": columnCategories};
+                            const newConfig = {"name": name, "columnCategories": columnCategories};
                             userConfigs.push(newConfig);
                             localStorageHandler.setConfigs(userConfigs);
                             $scope.userConfigs = userConfigs;
@@ -290,8 +290,8 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
      * Finds the currently selected config.
      */
     function getSelectedConfig(name, data) {
-        var configs = data;
-        var selectedConfig = {};
+        const configs = data;
+        let selectedConfig = {};
         if (configs) {
             _.forEach(configs, function (config) {
                 if (config.name === name) {
@@ -328,7 +328,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             return false;
         }
 
-        for (var i = 0; i < columnsToConfigurate.length; ++i) {
+        for (let i = 0; i < columnsToConfigurate.length; ++i) {
             if (columnsToConfigurate[i].name !== columns[i].name) {
                 if (DEBUG) {
                     console.log("Column names are not equal!");
@@ -344,8 +344,8 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
      * Loads a chosen user config.
      */
     $scope.loadConfig = function (name) {
-        var userConfigs = [];
-        var selectedConfig = {};
+        let userConfigs = [];
+        let selectedConfig = {};
 
         localStorageHandler.getConfigs(function (configsCallback) {
             if (configsCallback.userConfigs) {

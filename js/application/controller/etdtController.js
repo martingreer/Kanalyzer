@@ -7,9 +7,9 @@
 application.controller('etdtController', function ($scope, localStorageHandler, Notification) {
     "use strict";
 
-    var DEBUG = true;
+    const DEBUG = true;
 
-    var issues = [];
+    let issues = [];
 
     localStorageHandler.getIssues(function (issuesCallback) {
         issues = issuesCallback.issues;
@@ -63,7 +63,7 @@ application.controller('etdtController', function ($scope, localStorageHandler, 
      * Filters the issues to be shown in the graph up to the max Cycle Time value.
      */
     $scope.applyCycleTimeFilter = function (maxCycleTime) {
-        var filteredIssues = [];
+        const filteredIssues = [];
 
         if (maxCycleTime === '' || maxCycleTime === null || maxCycleTime === ' ' || maxCycleTime === undefined) {
             try {
