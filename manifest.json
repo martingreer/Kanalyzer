@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Kanalyzer",
   "short_name": "Kanalyzer",
-  "version": "0.2.2-SNAPSHOT",
+  "version": "0.2.2",
   "icons": {
     "32": "img/k_logo_32.png",
     "64": "img/k_logo_64.png",
