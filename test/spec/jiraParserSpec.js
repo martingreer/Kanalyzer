@@ -1,5 +1,5 @@
 /**
- * Tests for apiParser.js
+ * Tests for jiraParser.js
  */
 
 /*global describe, it, expect, beforeEach, beforeAll, module, inject, BoardDesign, approveIt, Issue*/
