@@ -456,6 +456,5 @@ function Issue(apiIssue, boardDesign, time) {
     self.executionTime = getExecutionTime();
     self.delayTime = getDelayTime();
     self.processEfficiency = getProcessEfficiency(self.executionTime, self.cycleTime);
-    if (self.key === "KAN-40") { console.log(JSON.stringify(self)) }
     return self;
 }
