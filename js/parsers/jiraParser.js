@@ -13,7 +13,7 @@ const CATEGORY_DONE = "Done";
  * Will detect whether the incoming board design is raw data from API or has already been parsed.
  */
 function createBoardDesign(boardDesignToParse) {
-    var boardDesign;
+    let boardDesign;
 
     if (boardDesignToParse.columnConfig) {
         // Incoming board design is raw data from API and contains the "columnConfig" property.
@@ -33,10 +33,10 @@ function createBoardDesign(boardDesignToParse) {
 function BoardDesign(apiColumnsData, boardName) {
     "use strict";
 
-    var self = _.cloneDeep(apiColumnsData);
+    let self = _.cloneDeep(apiColumnsData);
 
     self.getColumnNames = function () {
-        var columnNames = [];
+        let columnNames = [];
         _.forEach(self.columns, function (column) {
             columnNames.push(column.name);
         });
@@ -44,7 +44,7 @@ function BoardDesign(apiColumnsData, boardName) {
     };
 
     self.getColumnMatchingStatus = function (status) {
-        var columnName = null;
+        let columnName = null;
         _.forEach(self.columns, function (column) {
             _.forEach(column.statuses, function (columnStatus) {
                 if (columnStatus.id === status) {
@@ -60,7 +60,7 @@ function BoardDesign(apiColumnsData, boardName) {
      * Try to guess initial values of the column categories based on the column name.
      */
     self.createColumnCategories = function () {
-        var hasCategories;
+        let hasCategories;
 
         hasCategories = _.first(self.columns).hasOwnProperty('category');
 
@@ -85,7 +85,7 @@ function BoardDesign(apiColumnsData, boardName) {
     };
 
     self.getColumnCategory = function (columnName) {
-        var category = "";
+        let category = "";
         _.forEach(self.columns, function (column) {
             if (column.name === columnName) {
                 category = column.category;
@@ -96,7 +96,7 @@ function BoardDesign(apiColumnsData, boardName) {
     };
 
     self.isIncludedInBoardDesign = function (columnName) {
-        var result = false;
+        let result = false;
         _.forEach(self.columns, function (column) {
             if (column.name === columnName) {
                 result = true;
@@ -119,7 +119,7 @@ function BoardDesign(apiColumnsData, boardName) {
     };
 
     self.isDoneColumn = function (columnName) {
-        var result = false;
+        let result = false;
         if (columnName) {
             result = self.getColumnCategory(columnName) === CATEGORY_DONE;
         }
@@ -135,13 +135,13 @@ function BoardDesign(apiColumnsData, boardName) {
 function Moves(histories, boardDesign) {
     "use strict";
 
-    var moves = [];
+    let moves = [];
 
     _.forEach(histories, function (event) {
-        var moveTime = event.created.substr(0, event.created.indexOf('.'));
+        let moveTime = event.created.substr(0, event.created.indexOf('.'));
         _.forEach(event.items, function (eventItem) {
             if (eventItem.field === "status") {
-                var fromColumn = boardDesign.getColumnMatchingStatus(eventItem.from),
+                let fromColumn = boardDesign.getColumnMatchingStatus(eventItem.from),
                     toColumn = boardDesign.getColumnMatchingStatus(eventItem.to);
                 moves.push(new MoveItem(fromColumn, toColumn, moveTime));
             }
@@ -154,7 +154,7 @@ function Moves(histories, boardDesign) {
 function MoveItem(fromColumn, toColumn, moveTime) {
     "use strict";
 
-    var self = this;
+    let self = this;
     self.fromColumn = fromColumn;
     self.toColumn = toColumn;
     self.moveTime = moveTime;
@@ -164,7 +164,7 @@ function MoveItem(fromColumn, toColumn, moveTime) {
 function ColumnHistoryItem(columnName, enterTime, exitTime) {
     "use strict";
 
-    var self = this;
+    let self = this;
     self.columnName = columnName;
     self.enterTime = enterTime;
     self.exitTime = exitTime;
@@ -189,10 +189,10 @@ function parseMultipleApiIssues(apiIssuesRaw) {
  * Constructs new issues from an array of issue data.
  */
 function createIssuesFromArray(apiIssues, boardDesign) {
-    var issues = [];
+    let issues = [];
 
     _.forEach(apiIssues, function (issue) {
-        var parsedIssue = new Issue(issue, boardDesign);
+        let parsedIssue = new Issue(issue, boardDesign);
         if (parsedIssue.columnHistory.length > 0) {
             issues.push(parsedIssue);
         }
@@ -207,7 +207,7 @@ function createIssuesFromArray(apiIssues, boardDesign) {
 function Issue(apiIssue, boardDesign, time) {
     "use strict";
 
-    var self = {},
+    let self = {},
         isAlreadyParsed = apiIssue.changelog == null;
 
     if (!time) {
@@ -215,7 +215,7 @@ function Issue(apiIssue, boardDesign, time) {
     }
 
     function parseCurrentStatus(currentStatus) {
-        var status = {};
+        let status = {};
         status.id = currentStatus.id;
         status.name = currentStatus.name;
         return status;
@@ -230,7 +230,7 @@ function Issue(apiIssue, boardDesign, time) {
     }
 
     function createColumnHistoryAlreadyParsed(parsedIssue) {
-        var columnHistory = [];
+        let columnHistory = [];
 
         _.forEach(parsedIssue.columnHistory, function (item) {
             columnHistory.push(new ColumnHistoryItem(item.columnName, item.enterTime, item.exitTime));
@@ -240,7 +240,7 @@ function Issue(apiIssue, boardDesign, time) {
     }
 
     function createColumnHistory(apiIssue) {
-        var columnHistory = [],
+        let columnHistory = [],
             issueHasHistory = !(apiIssue.changelog.histories.length === 0),
             issueHasStatusChangeInHistory = false;
 
@@ -256,7 +256,7 @@ function Issue(apiIssue, boardDesign, time) {
 
         if (!issueHasHistory || !issueHasStatusChangeInHistory) {
             //console.log(apiIssue.key + " ||| History: " + issueHasHistory + " | StatusChange: " + issueHasStatusChangeInHistory + " | FirstColumn: " + boardDesign.getColumnMatchingStatus(apiIssue.fields.status.id));
-            var startColumn = getStartColumn(apiIssue);
+            let startColumn = getStartColumn(apiIssue);
             if (isIncludedInBoardDesign(startColumn.columnName)) {
                 columnHistory.push(startColumn);
             }
@@ -272,7 +272,7 @@ function Issue(apiIssue, boardDesign, time) {
      * Example: [{"columnName":"Ready to Refine", "enterTime":"2015-09-01T14:42:01", "exitTime":"2015-09-01T14:42:23"}]
      */
     function parseMoves(columnHistory) {
-        var i,
+        let i,
             createdTime = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.')),
             columnsWithEnterExit = [];
 
@@ -306,7 +306,7 @@ function Issue(apiIssue, boardDesign, time) {
     }
 
     function isIncludedInBoardDesign(columnName) {
-        var result = false;
+        let result = false;
         if (columnName) {
             result = boardDesign.isIncludedInBoardDesign(columnName);
         }
@@ -347,9 +347,9 @@ function Issue(apiIssue, boardDesign, time) {
      * Check if issue is in a column which is Done category.
      */
     self.isDone = function () {
-        var result = false;
+        let result = false;
         if (self.columnHistory.length > 0) {
-            var columnName = _.last(self.columnHistory).columnName;
+            let columnName = _.last(self.columnHistory).columnName;
             result = boardDesign.isDoneColumn(columnName);
         }
         return result;
@@ -366,7 +366,7 @@ function Issue(apiIssue, boardDesign, time) {
      * Calculate Cycle Time for the issue.
      */
     function getCycleTime() {
-        var cycleTime = 0,
+        let cycleTime = 0,
             columnHistory = _.cloneDeep(self.columnHistory);
 
         if (self.isDone()) {
@@ -383,7 +383,7 @@ function Issue(apiIssue, boardDesign, time) {
     }
 
     function getExecutionTime() {
-        var executionTime = 0,
+        let executionTime = 0,
             columnHistory = _.cloneDeep(self.columnHistory);
 
         if (self.isDone()) {
@@ -400,7 +400,7 @@ function Issue(apiIssue, boardDesign, time) {
     }
 
     function getDelayTime() {
-        var delayTime = 0,
+        let delayTime = 0,
             columnHistory = _.cloneDeep(self.columnHistory);
 
         if (self.isDone()) {

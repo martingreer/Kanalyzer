@@ -1,10 +1,10 @@
 describe("Execution Time vs Delay Time graph", function () {
     "use strict";
 
-    var twoIssues = fourParsedDoneIssues;
+    let twoIssues = fourParsedDoneIssues;
 
     describe("Two done issues", function () {
-        var etDtData = [],
+        let etDtData = [],
             key,
             firstIssueData,
             secondIssueData;
@@ -41,24 +41,24 @@ describe("Execution Time vs Delay Time graph", function () {
 describe("CFD graph", function () {
     "use strict";
 
-    var fourIssues = fourParsedDoneIssues;
-    var boardDesign = columnsData;
+    let fourIssues = fourParsedDoneIssues;
+    let boardDesign = columnsData;
 
     describe("Dates", function () {
         it("should return the last date found in column history between the issues", function () {
-            var lastHistoryDay = new Date(getLastHistoryDate(fourIssues));
+            let lastHistoryDay = new Date(getLastHistoryDate(fourIssues));
             lastHistoryDay = lastHistoryDay.customFormat("#YYYY#-#MM#-#DD#");
             expect(lastHistoryDay).toBe("2015-10-27");
         });
 
         it("should return the first date found in column history between the issues", function () {
-            var firstHistoryDay = new Date(getFirstHistoryDate(fourIssues));
+            let firstHistoryDay = new Date(getFirstHistoryDate(fourIssues));
             firstHistoryDay = firstHistoryDay.customFormat("#YYYY#-#MM#-#DD#");
             expect(firstHistoryDay).toBe("2015-10-21");
         });
 
         it("should return array of all dates in interval", function () {
-            var i = 0,
+            let i = 0,
                 dates = getDates(fourIssues);
             _.forEach(dates, function (date) {
                 date = new Date(date);
@@ -70,7 +70,7 @@ describe("CFD graph", function () {
     });
 
     describe("Parser", function () {
-        var array = [1, 2, 3, 4, 5];
+        let array = [1, 2, 3, 4, 5];
 
         it("array should contain value", function () {
             expect(isInArray(4, array)).toBeTruthy();
@@ -81,19 +81,19 @@ describe("CFD graph", function () {
         });
 
         approveIt("should return an array of dates and amount of issues for the In Progress column", function (approvals) {
-            var dates = getDates(fourIssues),
+            let dates = getDates(fourIssues),
                 amountOfIssues = new CfdColumnValuesArray(dates, fourIssues, boardDesign, "In Progress");
             approvals.verify(amountOfIssues);
         });
 
         approveIt("should return an array of dates and amount of issues for the Ready for Release column", function (approvals) {
-            var dates = getDates(fourIssues),
+            let dates = getDates(fourIssues),
                 amountOfIssues = new CfdColumnValuesArray(dates, fourIssues, boardDesign, "Ready for Release");
             approvals.verify(amountOfIssues);
         });
 
         /*approveIt("should return an array of complete CFD data", function(approvals){
-         var boardDesign = new BoardDesign(columnsData),
+         let boardDesign = new BoardDesign(columnsData),
          graphArray = createCfdData(fourIssues, boardDesign);
          approvals.verify(graphArray);
          });*/
@@ -103,13 +103,13 @@ describe("CFD graph", function () {
 describe("Column Distribution Graph", function () {
     "use strict";
 
-    var oneDoneIssue = oneParsedDoneIssueForColDistGraph;
-    var fourDoneIssues = fourParsedDoneIssuesForColDistGraph;
-    var oneNotDoneIssue = oneParsedNotDoneIssue;
-    var twoIssuesDoneAndNotDone = twoParsedIssuesOneDoneAndOneNotDone;
+    let oneDoneIssue = oneParsedDoneIssueForColDistGraph;
+    let fourDoneIssues = fourParsedDoneIssuesForColDistGraph;
+    let oneNotDoneIssue = oneParsedNotDoneIssue;
+    let twoIssuesDoneAndNotDone = twoParsedIssuesOneDoneAndOneNotDone;
     let oneDoneReopenedIssueFromNewKANProject = oneParsedDoneReopenedIssueFromNewKANProject;
     let boardDesignNewKANProject = boardDesignFromNewKANProject;
-    var boardDesign = boardDesignForColDistGraph;
+    let boardDesign = boardDesignForColDistGraph;
 
     describe("Get time spent", function () {
         it("should return the total time spent in column when it has been in column more than once", function () {
@@ -131,34 +131,34 @@ describe("Column Distribution Graph", function () {
         });
 
         it("should be 0 percent if issue is not done", function () {
-            var timeSpentInColumn = getTimeSpentInColumn(oneNotDoneIssue, "In Progress");
+            let timeSpentInColumn = getTimeSpentInColumn(oneNotDoneIssue, "In Progress");
             expect(convertTimeToPercent(timeSpentInColumn, oneNotDoneIssue.cycleTime, "Execution", false)).toBe(0);
         });
 
         it("should be 0 percent if issue was never in column", function () {
-            var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Under Test");
+            let timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Under Test");
             expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution", false)).toBe(0);
         });
 
         it("should be 0 percent if column is ignore category", function () {
-            var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready to Refine");
+            let timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready to Refine");
             expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Ignore", false)).toBe(0);
         });
 
         it("should be 0 percent if column is done category", function () {
-            var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready for Release");
+            let timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready for Release");
             expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Done", false)).toBe(0);
             timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[3], "Ready for Release");
             expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[3].cycleTime, "Done", false)).toBe(0);
         });
 
         it("should be 0 percent if column doesn't exist", function () {
-            var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Herpaderp");
+            let timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Herpaderp");
             expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution", false)).toBe(0);
         });
 
         it("should calculate percentage of time spent in given column for a done issue", function () {
-            var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready to Analyze");
+            let timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready to Analyze");
             expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Delay", false)).toBe(0.75);
             timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready for Development");
             expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution", false)).toBe(2.25);
@@ -167,7 +167,7 @@ describe("Column Distribution Graph", function () {
         });
 
         it("should calculate percentage of time spent in given column for another done issue", function () {
-            var timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[1], "Ready to Analyze");
+            let timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[1], "Ready to Analyze");
             expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[1].cycleTime, "Delay", false)).toBe(3.24);
             timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[1], "In Progress");
             expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[1].cycleTime, "Execution", false)).toBe(20.04);
@@ -176,8 +176,8 @@ describe("Column Distribution Graph", function () {
         });
 
         it("percentages should add upp to roughly 100 for a done issue", function () {
-            var timeSpentInColumn = 0;
-            var totalPercent = 0;
+            let timeSpentInColumn = 0;
+            let totalPercent = 0;
             _.forEach(boardDesign.columns, function (column) {
                 timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, column.name);
                 totalPercent += convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, column.category, false);
@@ -186,8 +186,8 @@ describe("Column Distribution Graph", function () {
         });
 
         it("percentages should add upp to roughly 100 for another done issue", function () {
-            var timeSpentInColumn = 0;
-            var totalPercent = 0;
+            let timeSpentInColumn = 0;
+            let totalPercent = 0;
             _.forEach(boardDesign.columns, function (column) {
                 timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[2], column.name);
                 totalPercent += convertTimeToPercent(timeSpentInColumn, fourDoneIssues[2].cycleTime, column.category, false);
@@ -196,8 +196,8 @@ describe("Column Distribution Graph", function () {
         });
 
         it("percentages should add upp to roughly 100 for a third done issue", function () {
-            var timeSpentInColumn = 0;
-            var totalPercent = 0;
+            let timeSpentInColumn = 0;
+            let totalPercent = 0;
             _.forEach(boardDesign.columns, function (column) {
                 timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[3], column.name);
                 totalPercent += convertTimeToPercent(timeSpentInColumn, fourDoneIssues[3].cycleTime, column.category, false);
@@ -224,12 +224,12 @@ describe("Column Distribution Graph", function () {
 
     describe("Column Distribution graph data constructor", function () {
         approveIt("should return correct graph data for four done issues", function (approvals) {
-            var result = createColDistData(fourDoneIssues, boardDesign);
+            let result = createColDistData(fourDoneIssues, boardDesign);
             approvals.verify(result);
         });
 
         approveIt("should return correct graph data for two issues one done and one not done", function (approvals) {
-            var result = createColDistData(twoIssuesDoneAndNotDone, boardDesign);
+            let result = createColDistData(twoIssuesDoneAndNotDone, boardDesign);
             approvals.verify(result);
         });
 

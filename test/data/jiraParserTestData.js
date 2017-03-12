@@ -320,7 +320,7 @@ const columnsDataOldApi = {
     ]
 };
 
-var coachAppColumnsData = {
+const coachAppColumnsData = {
     "id": 9,
     "name": "CoachApp Board",
     "type": "scrum",

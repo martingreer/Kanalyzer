@@ -1,4 +1,4 @@
-var oneParsedDoneIssue =
+const oneParsedDoneIssue =
     {
         "id": "11932",
         "key": "KTD-60",
@@ -56,7 +56,7 @@ var oneParsedDoneIssue =
         "processEfficiency": 0.2012956964368348
     };
 
-var fourParsedDoneIssues =
+const fourParsedDoneIssues =
     [
         {
             "id": "11932",
@@ -249,7 +249,7 @@ var fourParsedDoneIssues =
         }
     ];
 
-var oneParsedNotDoneIssue =
+const oneParsedNotDoneIssue =
     {
         "id": "12406",
         "key": "KTD-114",
@@ -282,7 +282,7 @@ var oneParsedNotDoneIssue =
         "processEfficiency": 0
     };
 
-var oneParsedDoneIssueForColDistGraph =
+const oneParsedDoneIssueForColDistGraph =
     {
         "id": "12133",
         "key": "KTD-102",
@@ -350,7 +350,7 @@ var oneParsedDoneIssueForColDistGraph =
         "processEfficiency": 0.9699814775032148
     };
 
-var fourParsedDoneIssuesForColDistGraph =
+const fourParsedDoneIssuesForColDistGraph =
     [
         {
             "id": "12133",
@@ -563,7 +563,7 @@ var fourParsedDoneIssuesForColDistGraph =
         }
     ];
 
-var twoParsedIssuesOneDoneAndOneNotDone =
+const twoParsedIssuesOneDoneAndOneNotDone =
     [
         {
             "id": "12406",
@@ -713,7 +713,7 @@ let boardDesignFromNewKANProject = {
     }], "name": "Kanalyzer Team Board"
 };
 
-var boardDesignForColDistGraph =
+const boardDesignForColDistGraph =
     {
         "columns": [
             {
