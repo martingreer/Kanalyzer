@@ -1,7 +1,12 @@
 /*jslint bitwise: true, plusplus: true, white: true, sub: true, nomen: true*/
 /*global timeUtil, console, self:true, _, parseHistory*/
 
-var DEBUG_COLUMNHISTORY = false;
+const DEBUG_COLUMNHISTORY = false;
+
+const CATEGORY_DELAY = "Delay";
+const CATEGORY_IGNORE = "Ignore";
+const CATEGORY_EXECUTION = "Execution";
+const CATEGORY_DONE = "Done";
 
 /**
  * Create a new instance of a board design object.
@@ -62,18 +67,18 @@ function BoardDesign(apiColumnsData, boardName) {
         if (!hasCategories) {
             _.forEach(self.columns, function (column) {
                 if (column.name.toLowerCase().indexOf("ready") >= 0) {
-                    column.category = "Delay";
+                    column.category = CATEGORY_DELAY;
                 } else if (column.name.toLowerCase().indexOf("backlog") >= 0) {
-                    column.category = "Ignore";
+                    column.category = CATEGORY_IGNORE;
                 } else if (column.name.toLowerCase().trim().indexOf("todo") >= 0) {
-                    column.category = "Ignore";
+                    column.category = CATEGORY_IGNORE;
                 } else {
-                    column.category = "Execution";
+                    column.category = CATEGORY_EXECUTION;
                 }
             });
 
-            _.first(self.columns).category = "Ignore";
-            _.last(self.columns).category = "Done";
+            _.first(self.columns).category = CATEGORY_IGNORE;
+            _.last(self.columns).category = CATEGORY_DONE;
         }
 
         return self.columns;
@@ -102,21 +107,21 @@ function BoardDesign(apiColumnsData, boardName) {
     };
 
     self.isIgnoreColumn = function (columnName) {
-        return self.getColumnCategory(columnName) === "Ignore";
+        return self.getColumnCategory(columnName) === CATEGORY_IGNORE;
     };
 
     self.isExecutionColumn = function (columnName) {
-        return self.getColumnCategory(columnName) === "Execution";
+        return self.getColumnCategory(columnName) === CATEGORY_EXECUTION;
     };
 
     self.isDelayColumn = function (columnName) {
-        return self.getColumnCategory(columnName) === "Delay";
+        return self.getColumnCategory(columnName) === CATEGORY_DELAY;
     };
 
     self.isDoneColumn = function (columnName) {
         var result = false;
         if (columnName) {
-            result = self.getColumnCategory(columnName) === "Done";
+            result = self.getColumnCategory(columnName) === CATEGORY_DONE;
         }
         return result;
     };
@@ -317,6 +322,28 @@ function Issue(apiIssue, boardDesign, time) {
     }
 
     /**
+     * Checks if issue was done and then reopened again. These issues need to be handled differently, as the time spent
+     * in the Done column is effectively delay time.
+     *
+     * @returns {boolean} true if column has been reopened, false otherwise.
+     */
+    function issueWasReopened () {
+        function historyContainsMultipleDoneColumns() {
+            let numberOfInstances = 0;
+            let columnHistory = _.cloneDeep(self.columnHistory);
+
+            _.forEach(columnHistory, function (columnHistoryItem) {
+                if (boardDesign.isDoneColumn(columnHistoryItem.columnName)) {
+                    numberOfInstances++;
+                }
+            });
+            return numberOfInstances > 1;
+        }
+
+        return historyContainsMultipleDoneColumns();
+    }
+
+    /**
      * Check if issue is in a column which is Done category.
      */
     self.isDone = function () {
@@ -343,7 +370,7 @@ function Issue(apiIssue, boardDesign, time) {
             columnHistory = _.cloneDeep(self.columnHistory);
 
         if (self.isDone()) {
-            columnHistory.pop(); // Remove done column from calculation
+            columnHistory.pop(); // Remove the last Done column from calculation
             _.forEach(columnHistory, function (item) {
                 if (!self.isIgnored(item.columnName)) {
                     cycleTime += item.timeSpentInColumn();
@@ -381,7 +408,8 @@ function Issue(apiIssue, boardDesign, time) {
         }
 
         _.forEach(columnHistory, function (item) {
-            if (isDelayColumn(item.columnName)) {
+            if (isDelayColumn(item.columnName) || self.wasReopened) {
+                // When issue has been reopened, all Done columns should also count as delay time.
                 delayTime += item.timeSpentInColumn();
             }
         });
@@ -418,10 +446,11 @@ function Issue(apiIssue, boardDesign, time) {
     /**
      * Checks which column this issue was in at a given time.
      */
-    self.wasInColumn = function (time, column) {
+    self.wasInColumnAtTimeStamp = function (time, column) {
         return self.isInBetween(time, Date.parse(column.enterTime), Date.parse(column.exitTime));
     };
 
+    self.wasReopened = issueWasReopened();
     self.cycleTime = getCycleTime();
     self.executionTime = getExecutionTime();
     self.delayTime = getDelayTime();

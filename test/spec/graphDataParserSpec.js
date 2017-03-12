@@ -107,6 +107,8 @@ describe("Column Distribution Graph", function () {
     var fourDoneIssues = fourParsedDoneIssuesForColDistGraph;
     var oneNotDoneIssue = oneParsedNotDoneIssue;
     var twoIssuesDoneAndNotDone = twoParsedIssuesOneDoneAndOneNotDone;
+    let oneDoneReopenedIssueFromNewKANProject = oneParsedDoneReopenedIssueFromNewKANProject;
+    let boardDesignNewKANProject = boardDesignFromNewKANProject;
     var boardDesign = boardDesignForColDistGraph;
 
     describe("Get time spent", function () {
@@ -130,47 +132,47 @@ describe("Column Distribution Graph", function () {
 
         it("should be 0 percent if issue is not done", function () {
             var timeSpentInColumn = getTimeSpentInColumn(oneNotDoneIssue, "In Progress");
-            expect(convertTimeToPercent(timeSpentInColumn, oneNotDoneIssue.cycleTime, "Execution")).toBe(0);
+            expect(convertTimeToPercent(timeSpentInColumn, oneNotDoneIssue.cycleTime, "Execution", false)).toBe(0);
         });
 
         it("should be 0 percent if issue was never in column", function () {
             var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Under Test");
-            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution")).toBe(0);
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution", false)).toBe(0);
         });
 
         it("should be 0 percent if column is ignore category", function () {
             var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready to Refine");
-            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Ignore")).toBe(0);
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Ignore", false)).toBe(0);
         });
 
         it("should be 0 percent if column is done category", function () {
             var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready for Release");
-            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Done")).toBe(0);
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Done", false)).toBe(0);
             timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[3], "Ready for Release");
-            expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[3].cycleTime, "Done")).toBe(0);
+            expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[3].cycleTime, "Done", false)).toBe(0);
         });
 
         it("should be 0 percent if column doesn't exist", function () {
             var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Herpaderp");
-            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution")).toBe(0);
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution", false)).toBe(0);
         });
 
         it("should calculate percentage of time spent in given column for a done issue", function () {
             var timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready to Analyze");
-            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Delay")).toBe(0.75);
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Delay", false)).toBe(0.75);
             timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "Ready for Development");
-            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution")).toBe(2.25);
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution", false)).toBe(2.25);
             timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, "In Progress");
-            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution")).toBe(96.11);
+            expect(convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, "Execution", false)).toBe(96.11);
         });
 
         it("should calculate percentage of time spent in given column for another done issue", function () {
             var timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[1], "Ready to Analyze");
-            expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[1].cycleTime, "Delay")).toBe(3.24);
+            expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[1].cycleTime, "Delay", false)).toBe(3.24);
             timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[1], "In Progress");
-            expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[1].cycleTime, "Execution")).toBe(20.04);
+            expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[1].cycleTime, "Execution", false)).toBe(20.04);
             timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[1], "Under Test");
-            expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[1].cycleTime, "Execution")).toBe(73.42);
+            expect(convertTimeToPercent(timeSpentInColumn, fourDoneIssues[1].cycleTime, "Execution", false)).toBe(73.42);
         });
 
         it("percentages should add upp to roughly 100 for a done issue", function () {
@@ -178,7 +180,7 @@ describe("Column Distribution Graph", function () {
             var totalPercent = 0;
             _.forEach(boardDesign.columns, function (column) {
                 timeSpentInColumn = getTimeSpentInColumn(oneDoneIssue, column.name);
-                totalPercent += convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, column.category);
+                totalPercent += convertTimeToPercent(timeSpentInColumn, oneDoneIssue.cycleTime, column.category, false);
             });
             expect(Math.round(totalPercent)).toBe(100);
         });
@@ -188,7 +190,7 @@ describe("Column Distribution Graph", function () {
             var totalPercent = 0;
             _.forEach(boardDesign.columns, function (column) {
                 timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[2], column.name);
-                totalPercent += convertTimeToPercent(timeSpentInColumn, fourDoneIssues[2].cycleTime, column.category);
+                totalPercent += convertTimeToPercent(timeSpentInColumn, fourDoneIssues[2].cycleTime, column.category, false);
             });
             expect(Math.round(totalPercent)).toBe(100);
         });
@@ -198,7 +200,23 @@ describe("Column Distribution Graph", function () {
             var totalPercent = 0;
             _.forEach(boardDesign.columns, function (column) {
                 timeSpentInColumn = getTimeSpentInColumn(fourDoneIssues[3], column.name);
-                totalPercent += convertTimeToPercent(timeSpentInColumn, fourDoneIssues[3].cycleTime, column.category);
+                totalPercent += convertTimeToPercent(timeSpentInColumn, fourDoneIssues[3].cycleTime, column.category, false);
+            });
+            expect(Math.round(totalPercent)).toBe(100);
+        });
+
+        it("percentages should add upp to roughly 100 for an issue that was done, reopened then done again", function () {
+            let timeSpentInColumn = 0;
+            let totalPercent = 0;
+
+            // Mock what happens in ColDistValuesArray constructor because issue was reopened.
+            let _oneDoneReopenedIssueFromNewKANProject = _.cloneDeep(oneDoneReopenedIssueFromNewKANProject);
+            _oneDoneReopenedIssueFromNewKANProject.columnHistory.pop();
+
+            _.forEach(boardDesignNewKANProject.columns, function (column) {
+                timeSpentInColumn = getTimeSpentInColumn(_oneDoneReopenedIssueFromNewKANProject, column.name);
+                totalPercent += convertTimeToPercent(timeSpentInColumn, _oneDoneReopenedIssueFromNewKANProject.cycleTime,
+                    column.category, _oneDoneReopenedIssueFromNewKANProject.wasReopened);
             });
             expect(Math.round(totalPercent)).toBe(100);
         });
@@ -212,6 +230,13 @@ describe("Column Distribution Graph", function () {
 
         approveIt("should return correct graph data for two issues one done and one not done", function (approvals) {
             var result = createColDistData(twoIssuesDoneAndNotDone, boardDesign);
+            approvals.verify(result);
+        });
+
+        approveIt("should return correct graph data for an issue that was done reopened then done again", function (approvals) {
+            let issuesArray = [];
+            issuesArray.push(oneDoneReopenedIssueFromNewKANProject);
+            let result = createColDistData(issuesArray, boardDesignNewKANProject);
             approvals.verify(result);
         });
     });

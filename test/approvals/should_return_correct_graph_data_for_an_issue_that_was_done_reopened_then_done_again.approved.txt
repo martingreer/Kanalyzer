@@ -1,0 +1,1 @@
+[{"key":"Analyzing","values":[{"x":"KAN-5","y":1.09}]},{"key":"Ready for Development","values":[{"x":"KAN-5","y":0.38}]},{"key":"In Progress","values":[{"x":"KAN-5","y":0}]},{"key":"Ready for Test","values":[{"x":"KAN-5","y":0.96}]},{"key":"Testing","values":[{"x":"KAN-5","y":0}]},{"key":"Done","values":[{"x":"KAN-5","y":97.57}]}]

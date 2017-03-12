@@ -1,3 +1,9 @@
+/*jslint bitwise: true, plusplus: true, white: true, sub: true, nomen: true*/
+/*global timeUtil, console, self:true, _, parseHistory*/
+
+const STATUS_DONE = "Done"; // Needs improvement to be fail-safe. Jira status configs might not be default.
+const STATUS_CLOSED = "Closed"; // Needs improvement to be fail-safe. Jira status configs might not be default.
+
 /*********************************************************
  * Below is the parsing for the Execution vs Delay view. *
  *********************************************************/
@@ -94,7 +100,7 @@ function CfdColumnValuesArray(dates, issues, boardDesign, columnName) {
         amountOfIssues = 0;
         _.forEach(_issues, function (issue) {
             _.forEach(issue.columnHistory, function (historyItem) {
-                if (issue.wasInColumn(date, historyItem) && historyItem.columnName === columnName) {
+                if (issue.wasInColumnAtTimeStamp(date, historyItem) && historyItem.columnName === columnName) {
                     //console.log(issue.key + " was in column " + historyItem.columnName + " at the time: " + date);
                     amountOfIssues++;
                 }
@@ -161,10 +167,13 @@ function ColDistValuesArray(_issues, columnName, columnCategory) {
     issues.reverse(); // Reverse array in order to show oldest->newest issues from left to right in graph
 
     _.forEach(issues, function (issue) {
+        if (issue.wasReopened) {
+            issue.columnHistory.pop(); // Don't calculate time spent in the last Done column.
+        }
         if (issue.columnHistory.length > 1) {
-            if (issue.currentStatus.name === "Done" || issue.currentStatus.name === "Closed") {
+            if (issue.currentStatus.name === STATUS_DONE || issue.currentStatus.name === STATUS_CLOSED) {
                 timeSpentInColumn = getTimeSpentInColumn(issue, columnName);
-                percentInColumn = convertTimeToPercent(timeSpentInColumn, issue.cycleTime, columnCategory);
+                percentInColumn = convertTimeToPercent(timeSpentInColumn, issue.cycleTime, columnCategory, issue.wasReopened);
                 valuesItem = new ColDistValuesItem(issue.key, percentInColumn);
                 valuesArray.push(valuesItem);
             }
@@ -190,11 +199,11 @@ function ColDistValuesItem(x, y) {
  * Converts the time spent in a column to a percentage of the total time
  * an issue spent on the board excluding ignored and done columns.
  */
-function convertTimeToPercent(timeSpentInColumn, cycleTime, columnCategory) {
+function convertTimeToPercent(timeSpentInColumn, cycleTime, columnCategory, issueWasReopened) {
     var percent = 0;
     // Only consider columns that are not defined as ignored or done, since an issue's cycleTime also don't include these.
     // Also don't try to divide by null or zero :))
-    if (columnCategory !== "Ignore" && columnCategory !== "Done" && cycleTime !== 0 && cycleTime !== null) {
+    if (columnCategory !== CATEGORY_IGNORE && (columnCategory !== CATEGORY_DONE || issueWasReopened) && cycleTime !== 0 && cycleTime !== null) {
         percent = ((timeSpentInColumn / cycleTime) * 100);
         return Math.round(percent * 100) / 100; // Round to two decimals
     } else {
@@ -230,7 +239,7 @@ function createColDistData(issues, boardDesign) {
 
     if (issues && boardDesign) {
         _.forEach(boardDesign.columns, function (column) {
-            if (column.category !== "Done" && column.category !== "Ignore") {
+            if (column.category !== CATEGORY_IGNORE) {
                 columnData = new ColDistItem(column.name);
                 columnData.values = ColDistValuesArray(issues, column.name, column.category);
                 graphArray.push(columnData);
