@@ -7,7 +7,7 @@
 Date.prototype.customFormat = function (formatString) {
     "use strict";
 
-    var YYYY, YY, MMMM, MMM, MM, M, DDDD, DDD, DD, D, hhhh, hhh, hh, h, mm, m, ss, s, ampm, AMPM, dMod, th;
+    let YYYY, YY, MMMM, MMM, MM, M, DDDD, DDD, DD, D, hhhh, hhh, hh, h, mm, m, ss, s, ampm, AMPM, dMod, th;
     YY = ((YYYY = String(this.getFullYear()))).slice(-2);
     MM = (M = this.getMonth() + 1) < 10 ? ('0' + M) : M;
     MMM = (MMMM = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][M - 1]).substring(0, 3);
@@ -37,7 +37,7 @@ Date.prototype.customFormat = function (formatString) {
  * Adds a specified amount of days to a date.
  */
 Date.prototype.addDays = function (days) {
-    var dat = new Date(this.valueOf());
+    let dat = new Date(this.valueOf());
     dat.setDate(dat.getDate() + days);
     return dat;
 };
