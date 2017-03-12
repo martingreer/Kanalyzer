@@ -77,7 +77,7 @@ describe("Issue", function () {
         });
 
         it("should be done", function () {
-            expect(issueIsDone.isDone()).toBe(true);
+            expect(issueIsDone.isDone).toBe(true);
         });
 
         approveIt("should parse raw api data to array of only the issues", function (approvals) {

@@ -346,14 +346,14 @@ function Issue(apiIssue, boardDesign, time) {
     /**
      * Check if issue is in a column which is Done category.
      */
-    self.isDone = function () {
+    function issueIsDone () {
         let result = false;
         if (self.columnHistory.length > 0) {
             let columnName = _.last(self.columnHistory).columnName;
             result = boardDesign.isDoneColumn(columnName);
         }
         return result;
-    };
+    }
 
     /**
      * Check if issue is in a column which should be ignored in calculations.
@@ -369,7 +369,7 @@ function Issue(apiIssue, boardDesign, time) {
         let cycleTime = 0,
             columnHistory = _.cloneDeep(self.columnHistory);
 
-        if (self.isDone()) {
+        if (self.isDone) {
             columnHistory.pop(); // Remove the last Done column from calculation
             _.forEach(columnHistory, function (item) {
                 if (!self.isIgnored(item.columnName)) {
@@ -386,7 +386,7 @@ function Issue(apiIssue, boardDesign, time) {
         let executionTime = 0,
             columnHistory = _.cloneDeep(self.columnHistory);
 
-        if (self.isDone()) {
+        if (self.isDone) {
             columnHistory.pop(); // Remove done column from calculation
         }
 
@@ -403,7 +403,7 @@ function Issue(apiIssue, boardDesign, time) {
         let delayTime = 0,
             columnHistory = _.cloneDeep(self.columnHistory);
 
-        if (self.isDone()) {
+        if (self.isDone) {
             columnHistory.pop();
         }
 
@@ -450,6 +450,7 @@ function Issue(apiIssue, boardDesign, time) {
         return self.isInBetween(time, Date.parse(column.enterTime), Date.parse(column.exitTime));
     };
 
+    self.isDone = issueIsDone();
     self.wasReopened = issueWasReopened();
     self.cycleTime = getCycleTime();
     self.executionTime = getExecutionTime();
