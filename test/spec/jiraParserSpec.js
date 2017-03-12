@@ -17,7 +17,9 @@ describe("BoardDesign", function () {
     });
 
     it("should have columns", function () {
-        expect(boardDesign.getColumnNames()).toEqual(["Ready to Refine", "Refine Backlog", "Ready to Analyze", "Analyze", "Ready for Development", "In Progress", "Under Review", "Ready for Test", "Under Test", "Ready to Accept", "Accept", "Ready for Release"]);
+        expect(boardDesign.getColumnNames()).toEqual(["Ready to Refine", "Refine Backlog", "Ready to Analyze",
+            "Analyze", "Ready for Development", "In Progress", "Under Review", "Ready for Test", "Under Test",
+            "Ready to Accept", "Accept", "Ready for Release"]);
     });
 
     it("should return column name when status id is matching", function () {

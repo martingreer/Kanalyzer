@@ -65,7 +65,8 @@ describe("CFD graph", function () {
                 dates[i] = date.customFormat("#YYYY#-#MM#-#DD#");
                 i++;
             });
-            expect(dates).toEqual(["2015-10-21", "2015-10-22", "2015-10-23", "2015-10-24", "2015-10-25", "2015-10-26", "2015-10-27"]);
+            expect(dates).toEqual(["2015-10-21", "2015-10-22", "2015-10-23", "2015-10-24", "2015-10-25", "2015-10-26",
+                "2015-10-27"]);
         });
     });
 
@@ -80,17 +81,19 @@ describe("CFD graph", function () {
             expect(isInArray(7, array)).toBeFalsy();
         });
 
-        approveIt("should return an array of dates and amount of issues for the In Progress column", function (approvals) {
-            let dates = getDates(fourIssues),
-                amountOfIssues = new CfdColumnValuesArray(dates, fourIssues, boardDesign, "In Progress");
-            approvals.verify(amountOfIssues);
-        });
+        approveIt("should return an array of dates and amount of issues for the In Progress column",
+            function (approvals) {
+                let dates = getDates(fourIssues),
+                    amountOfIssues = new CfdColumnValuesArray(dates, fourIssues, boardDesign, "In Progress");
+                approvals.verify(amountOfIssues);
+            });
 
-        approveIt("should return an array of dates and amount of issues for the Ready for Release column", function (approvals) {
-            let dates = getDates(fourIssues),
-                amountOfIssues = new CfdColumnValuesArray(dates, fourIssues, boardDesign, "Ready for Release");
-            approvals.verify(amountOfIssues);
-        });
+        approveIt("should return an array of dates and amount of issues for the Ready for Release column",
+            function (approvals) {
+                let dates = getDates(fourIssues),
+                    amountOfIssues = new CfdColumnValuesArray(dates, fourIssues, boardDesign, "Ready for Release");
+                approvals.verify(amountOfIssues);
+            });
 
         /*approveIt("should return an array of complete CFD data", function(approvals){
          let boardDesign = new BoardDesign(columnsData),
@@ -250,11 +253,12 @@ describe("Column Distribution Graph", function () {
             approvals.verify(result);
         });
 
-        approveIt("should return correct graph data for an issue that was done reopened then done again", function (approvals) {
-            let issuesArray = [];
-            issuesArray.push(oneDoneReopenedIssueFromNewKANProject);
-            let result = createColDistData(issuesArray, boardDesignNewKANProject);
-            approvals.verify(result);
-        });
+        approveIt("should return correct graph data for an issue that was done reopened then done again",
+            function (approvals) {
+                let issuesArray = [];
+                issuesArray.push(oneDoneReopenedIssueFromNewKANProject);
+                let result = createColDistData(issuesArray, boardDesignNewKANProject);
+                approvals.verify(result);
+            });
     });
 });

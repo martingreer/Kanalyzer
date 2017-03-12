@@ -25,7 +25,6 @@ application.controller("ldController", function ($scope, $http, $q, apiServerDat
     // The config that is currently selected.
     $scope.loadedConfigName = "";
     localStorageHandler.getLoadedConfig(function (response) {
-        console.log("Initial getLoadedConfig response: " + JSON.stringify(response.loadedConfig.name));
         if (response.loadedConfig) {
             $scope.loadedConfigName = response.loadedConfig.name;
             $scope.loadConfig(response.loadedConfig.name, true);
@@ -82,7 +81,6 @@ application.controller("ldController", function ($scope, $http, $q, apiServerDat
 
     localStorageHandler.getConfigs(function (configs) {
         // Assign user configs to scope if local storage already exists.
-        console.log(configs);
         $scope.userConfigs = configs.userConfigs;
     });
 
