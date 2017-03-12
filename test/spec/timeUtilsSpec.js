@@ -1,8 +1,8 @@
 /**
- * Tests for utils.js
+ * Tests for timeUtil.js
  */
 
-describe("Utils", function () {
+describe("Time Util", function () {
     "use strict";
 
     var timeUtilTest,
