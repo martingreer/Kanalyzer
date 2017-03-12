@@ -43,6 +43,8 @@ function TimeUtil() {
         if (minute === 60) {
             hour++;
             minute = 0;
+        } else if (minute === 0) {
+            minute = 1;
         }
 
         if (hour === 24) {
