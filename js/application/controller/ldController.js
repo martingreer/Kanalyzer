@@ -23,7 +23,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     $scope.isLoggedIn = apiServerData.getIsLoggedIn();
 
     // The config that is currently selected.
-    $scope.loadedConfigName = "123";
+    $scope.loadedConfigName = "";
     localStorageHandler.getLoadedConfig(function (response) {
         console.log("Initial getLoadedConfig response: " + JSON.stringify(response.loadedConfig.name));
         if (response.loadedConfig) {
