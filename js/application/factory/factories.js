@@ -159,6 +159,7 @@ application.factory('localStorageHandler', function () {
             chrome.storage.local.remove('boardDesign');
             chrome.storage.local.remove('issues');
             chrome.storage.local.remove('loadedProject');
+            chrome.storage.local.remove('loadedConfig');
             chrome.storage.local.remove('cfdData');
             chrome.storage.local.remove('colDistData');
         },
@@ -187,11 +188,18 @@ application.factory('localStorageHandler', function () {
             chrome.storage.local.set({userConfigs: userConfigsToSet});
         },
         removeConfig: function (userConfigToRemove, userConfigs) {
-            userConfigs = userConfigs.filter(element=>element.name !== userConfigToRemove);
+            userConfigs = userConfigs.filter(element => element.name !== userConfigToRemove);
             chrome.storage.local.set({userConfigs: userConfigs});
         },
         removeConfigs: function () {
             chrome.storage.local.remove('userConfigs');
+        },
+        getLoadedConfig: function (callback) {
+            chrome.storage.local.get('loadedConfig', callback);
+        },
+        setLoadedConfig: function (config) {
+            console.log("setLoadedConfig is executing with config name: " + JSON.stringify(config.name));
+            chrome.storage.local.set({loadedConfig: config});
         },
         getCfdData: function (callback) {
             chrome.storage.local.get('cfdData', callback);

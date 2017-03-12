@@ -67,15 +67,15 @@
         </tr>
         </tbody>
     </table>
-    <button class="btn btn-default" ng-click="updateColumnCategories(columns)">Apply changes</button>
-    &nbsp;&nbsp; Loaded config: <b>{{ loadedConfig }}</b>
+    <button class="btn btn-default" ng-click="updateColumnCategories(columns, false)">Apply changes</button>
+    &nbsp;&nbsp; Loaded config: <b>{{ loadedConfigName }}</b>
     <br/><br/>
-    <button class="btn btn-default" ng-click="updateColumnCategories(columns); saveConfig(loadedConfig, columns, true)">Apply changes and update config</button>
+    <button class="btn btn-default" ng-click="updateColumnCategories(columns, false); saveConfig(loadedConfigName, columns, true)">Apply changes and save to current config</button>
 </div>
 <div style="float:left; margin-top:45px">
     <form role="form" name="loadConfigForm">
         <label for="loadConfigSelect">Load config:</label><br/>
-        <select class="form-control" name="loadConfigSelect" id="loadConfigSelect" ng-model="selectedConfig" ng-change="loadConfig(selectedConfig)">
+        <select class="form-control" name="loadConfigSelect" id="loadConfigSelect" ng-model="selectedConfig" ng-change="loadConfig(selectedConfig, false)">
             <option ng-repeat="config in userConfigs" value="{{ config.name }}">{{ config.name }}</option>
         </select>
     </form>

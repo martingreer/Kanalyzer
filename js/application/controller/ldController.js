@@ -23,7 +23,14 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     $scope.isLoggedIn = apiServerData.getIsLoggedIn();
 
     // The config that is currently selected.
-    $scope.loadedConfig = '';
+    $scope.loadedConfigName = "123";
+    localStorageHandler.getLoadedConfig(function (response) {
+        console.log("Initial getLoadedConfig response: " + JSON.stringify(response.loadedConfig.name));
+        if (response.loadedConfig) {
+            $scope.loadedConfigName = response.loadedConfig.name;
+            $scope.loadConfig(response.loadedConfig.name, true);
+        }
+    });
 
     function setPreviousLoadDataOnScope(previousLoadData) {
         if (previousLoadData.projectKey) {
@@ -190,7 +197,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     /**
      * Update the column categories to the user defined values.
      */
-    $scope.updateColumnCategories = function (columnCategories) {
+    $scope.updateColumnCategories = function (columnCategories, suppressSuccessNotification) {
         let oldBoardDesign = {},
             oldIssues = [],
             updatedBoardDesign = {},
@@ -216,7 +223,9 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     updatedIssues = createIssuesFromArray(oldIssues, updatedBoardDesign);
                     localStorageHandler.setIssues(updatedIssues);
                     localStorageHandler.removeColDistData();
-                    Notification.success('Column categories have been updated.');
+                    if (!suppressSuccessNotification) {
+                        Notification.success('Column categories have been updated.');
+                    }
                 });
             });
         } catch (error) {
@@ -234,7 +243,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         let userConfigs = [],
             nameIsUnique = true;
 
-        if (!$scope.loadedConfig && updateExistingConfig) {
+        if (!$scope.loadedConfigName && updateExistingConfig) {
             Notification.error('There is currently no loaded config to update.');
             console.log("There is currently no loaded config to update.");
         } else {
@@ -264,9 +273,9 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                             userConfigsRemovedExisting.push(config);
                             localStorageHandler.setConfigs(userConfigsRemovedExisting);
                             $scope.userConfigs = userConfigsRemovedExisting;
-                            Notification.success('Config saved!');
+                            Notification.success("Config [" + name + "] updated!");
                         } else {
-                            Notification.error('Currently loaded config could not be updated because it does not exist any more.');
+                            Notification.error("Config [" + name + "] could not be updated because it doesn\'t exist any more.");
                             console.log("Config could not be updated because it does not exist.");
                         }
                     } else {
@@ -275,9 +284,9 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                             userConfigs.push(newConfig);
                             localStorageHandler.setConfigs(userConfigs);
                             $scope.userConfigs = userConfigs;
-                            Notification.success('Config saved!');
+                            Notification.success("Config [" + name + "] saved!");
                         } else {
-                            Notification.error('Config was not saved. Please choose a unique name.');
+                            Notification.error("Config [" + name + "] was not saved. Please choose a unique name.");
                             console.log("Config was not saved (duplicate name).");
                         }
                     }
@@ -289,8 +298,8 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     /**
      * Finds the currently selected config.
      */
-    function getSelectedConfig(name, data) {
-        const configs = data;
+    function getSelectedConfig(name, _configs) {
+        const configs = _configs;
         let selectedConfig = {};
         if (configs) {
             _.forEach(configs, function (config) {
@@ -299,6 +308,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     return false;
                 }
             });
+            console.log("Selected config: " + JSON.stringify(selectedConfig.name));
             return selectedConfig;
         } else {
             return {};
@@ -343,23 +353,25 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     /**
      * Loads a chosen user config.
      */
-    $scope.loadConfig = function (name) {
+    $scope.loadConfig = function (name, suppressSuccessNotification) {
         let userConfigs = [];
         let selectedConfig = {};
 
-        localStorageHandler.getConfigs(function (configsCallback) {
-            if (configsCallback.userConfigs) {
-                userConfigs = configsCallback.userConfigs;
+        localStorageHandler.getConfigs(function (result) {
+            if (result.userConfigs) {
+                userConfigs = result.userConfigs;
             }
 
             selectedConfig = getSelectedConfig(name, userConfigs);
+            localStorageHandler.setLoadedConfig(selectedConfig);
 
             if (haveSameColumnStructure($scope.columns, selectedConfig.columnCategories)) {
-                $scope.loadedConfig = selectedConfig.name; // FIXME: in old code, this was fetched from local storage
+                $scope.loadedConfigName = selectedConfig.name;
                 $scope.columns = selectedConfig.columnCategories;
-                $scope.updateColumnCategories(selectedConfig.columnCategories); // Apply changes when config is loaded
+                // The below row applies changes when config is loaded
+                $scope.updateColumnCategories(selectedConfig.columnCategories, suppressSuccessNotification);
                 if (DEBUG) {
-                    console.log("Config was successfully loaded.");
+                    console.log("Config was successfully loaded: " + selectedConfig.name);
                 }
             } else {
                 Notification.error("The selected config is not compatible with the current board.");
@@ -388,10 +400,10 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     $scope.deleteConfig = function (configName) {
         localStorageHandler.removeConfig(configName, $scope.userConfigs);
 
-        $scope.userConfigs = $scope.userConfigs.filter(element=>element.name !== configName);
+        $scope.userConfigs = $scope.userConfigs.filter(element => element.name !== configName);
 
-        if (configName === $scope.loadedConfig) {
-            $scope.loadedConfig = "";
+        if (configName === $scope.loadedConfigName) {
+            $scope.loadedConfigName = "";
         }
     };
 
