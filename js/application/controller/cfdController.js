@@ -4,7 +4,7 @@
 /**
  * Controller for the CFD view.
  */
-application.controller('cfdController', function ($scope, localStorageHandler) {
+application.controller("cfdController", function ($scope, localStorageHandler) {
     "use strict";
 
     const DEBUG = true;
@@ -56,7 +56,7 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
     $scope.startFromZero = false;
 
     // Datepicker options.
-    $scope.dateFormat = 'yyyy-MM-dd';
+    $scope.dateFormat = "yyyy-MM-dd";
     $scope.startDateStatus = {
         opened: false
     };
@@ -64,7 +64,7 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
         opened: false
     };
     $scope.datepickerOptions = {
-        formatYear: 'yyyy',
+        formatYear: "yyyy",
         startingDay: 1
     };
 
@@ -83,7 +83,7 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
      */
     $scope.options = {
         chart: {
-            type: 'stackedAreaChart',
+            type: "stackedAreaChart",
             width: 1000,
             useVoronoi: false,
             transitionDuration: 500,
@@ -91,18 +91,18 @@ application.controller('cfdController', function ($scope, localStorageHandler) {
             xAxis: {
                 showMaxMin: false,
                 tickFormat: function (d) {
-                    return d3.time.format('%Y-%m-%d')(new Date(d));
+                    return d3.time.format("%Y-%m-%d")(new Date(d));
                 }
             },
             yAxis: {
                 tickFormat: function (d) {
-                    return d3.format(',.0d')(d);
+                    return d3.format(",.0d")(d);
                 }
             }
         },
         title: {
             enable: true,
-            text: 'Cumulative Flow Diagram'
+            text: "Cumulative Flow Diagram"
         }
     };
 

@@ -4,7 +4,7 @@
 /**
  * Controller for the Load Data view.
  */
-application.controller('ldController', function ($scope, $http, $q, apiServerData, localStorageHandler, previousLoadData, previousLogin, Notification) {
+application.controller("ldController", function ($scope, $http, $q, apiServerData, localStorageHandler, previousLoadData, previousLogin, Notification) {
     "use strict";
 
     const DEBUG = true;
@@ -55,14 +55,14 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     }
 
     function toggleMaxResultsForApiCall(maxResults) {
-        if (!maxResults || maxResults === '' || maxResults.toLowerCase() === 'all') {
-            $scope.maxResults = '-1';
+        if (!maxResults || maxResults === "" || maxResults.toLowerCase() === "all") {
+            $scope.maxResults = "-1";
         }
     }
 
     function setMaxResultsForUserInterface(maxResults) {
-        if (!maxResults || maxResults === '-1' || maxResults.toLowerCase() === 'all') {
-            $scope.maxResults = '';
+        if (!maxResults || maxResults === "-1" || maxResults.toLowerCase() === "all") {
+            $scope.maxResults = "";
         }
     }
 
@@ -94,7 +94,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         previousLoadData.setPreviousLoadData($scope.boardId, $scope.apiProject, $scope.maxResults);
 
         if (!$scope.isLoggedIn) {
-            Notification.error('You are not logged in!');
+            Notification.error("You are not logged in!");
         } else {
             boardColumnsDesign = {};
             apiIssuesMinimal = {};
@@ -102,7 +102,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
             getBoardDesignBeforeIssues = $q.defer();
 
-            Notification.primary('Attempting to get data from server...');
+            Notification.primary("Attempting to get data from server...");
             if (DEBUG) {
                 console.log("Attempting to get board design for board with ID: " + $scope.boardId + "...");
             }
@@ -132,7 +132,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                         console.log("Parse board design SUCCESS!");
                     }
                 } catch (error) {
-                    Notification.error('Something went wrong when parsing the board data. Check your board configuration for abnormalities.');
+                    Notification.error("Something went wrong when parsing the board data. Check your board configuration for abnormalities.");
                     if (DEBUG) {
                         console.log("Parsing of board data ERROR: " + error);
                     }
@@ -141,7 +141,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
             requestBoardDesign.error(function (data) {
                 getBoardDesignBeforeIssues.reject();
-                Notification.error('Failed to load board data from source.');
+                Notification.error("Failed to load board data from source.");
                 if (DEBUG) {
                     console.log("Get board design from API: ERROR.");
                 }
@@ -172,12 +172,12 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                         localStorageHandler.setIssues(issues);
                         localStorageHandler.removeCfdData(); // Previously parsed CFD data is likely irrelevant when new source data is loaded, so remove it
                         localStorageHandler.removeColDistData();
-                        Notification.success('Issue data successfully loaded!');
+                        Notification.success("Issue data successfully loaded!");
                         if (DEBUG) {
                             console.log("Parse issue data SUCCESS!");
                         }
                     } catch (error) {
-                        Notification.error('Something went wrong when parsing the issue data. Check your board configuration for abnormalities.');
+                        Notification.error("Something went wrong when parsing the issue data. Check your board configuration for abnormalities.");
                         if (DEBUG) {
                             console.log("Parsing of issues data ERROR: " + error);
                         }
@@ -185,7 +185,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                 });
 
                 requestIssues.error(function (data) {
-                    Notification.error('Failed to load issue data from source.');
+                    Notification.error("Failed to load issue data from source.");
                     if (DEBUG) {
                         console.log("Get issues from API: ERROR");
                     }
@@ -224,12 +224,12 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     localStorageHandler.setIssues(updatedIssues);
                     localStorageHandler.removeColDistData();
                     if (!suppressSuccessNotification) {
-                        Notification.success('Column categories have been updated.');
+                        Notification.success("Column categories have been updated.");
                     }
                 });
             });
         } catch (error) {
-            Notification.error('Column categories update failed.');
+            Notification.error("Column categories update failed.");
             if (DEBUG) {
                 console.log("Updating columns ERROR: " + error);
             }
@@ -244,11 +244,11 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             nameIsUnique = true;
 
         if (!$scope.loadedConfigName && updateExistingConfig) {
-            Notification.error('There is currently no loaded config to update.');
+            Notification.error("There is currently no loaded config to update.");
             console.log("There is currently no loaded config to update.");
         } else {
-            if (name === '' || !name || !name.replace(/\s/g, '').length) {
-                Notification.error('Config was not saved. You must choose a name.');
+            if (name === "" || !name || !name.replace(/\s/g, "").length) {
+                Notification.error("Config was not saved. You must choose a name.");
                 console.log("Input name is empty. Not adding config.");
             } else {
                 console.log("Adding config.");
@@ -390,7 +390,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         localStorageHandler.clearIssueAndBoardDesignData();
         $scope.columns = [];
         $scope.loadedBoardName = "";
-        Notification.primary('All issue and board design data removed from local storage.');
+        Notification.primary("All issue and board design data removed from local storage.");
         console.log("All issue and board design data removed from local storage.");
     };
 
@@ -413,7 +413,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     $scope.clearConfigs = function () {
         localStorageHandler.removeConfigs();
         $scope.userConfigs = [];
-        Notification.primary('All configs removed.');
+        Notification.primary("All configs removed.");
         console.log("All configs removed.");
     };
 });

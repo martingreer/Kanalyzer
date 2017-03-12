@@ -33,7 +33,7 @@ function TimeUtil() {
             hour = Math.floor((ms - day * dayFactor) / hourFactor),
             minute = Math.round((ms - day * dayFactor - hour * hourFactor) / 60000),
             pad = function (n) {
-                return n < 10 ? '0' + n : n;
+                return n < 10 ? "0" + n : n;
             },
             days,
             hours,
@@ -87,11 +87,11 @@ function TimeUtil() {
         answer = days + hours + minutes;
         //answer = day + " days, " + pad(hour) + " hours, " + pad(minute) + " minutes.";
         return answer;
-        //return [day, pad(hour), pad(minute)].join(':');
+        //return [day, pad(hour), pad(minute)].join(":");
     };
 
     self.convertDateToEpochMidnight = function (timeString) {
-        let date = new Date(timeString.substring(0, timeString.indexOf('T'))),
+        let date = new Date(timeString.substring(0, timeString.indexOf("T"))),
             offsetInMs = date.getTimezoneOffset() * 60000;
         return Date.parse(date) + offsetInMs;
     };

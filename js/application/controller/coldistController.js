@@ -4,7 +4,7 @@
 /**
  * Controller for the Column Distribution view.
  */
-application.controller('coldistController', function ($scope, localStorageHandler) {
+application.controller("coldistController", function ($scope, localStorageHandler) {
     "use strict";
 
     let issues = [];
@@ -15,27 +15,27 @@ application.controller('coldistController', function ($scope, localStorageHandle
      */
     $scope.options = {
         chart: {
-            type: 'multiBarChart',
+            type: "multiBarChart",
             interactive: true,
             stacked: true,
             staggerLabels: true,
             duration: 400,
             transitionDuration: 350,
             xAxis: {
-                axisLabel: 'Issue',
-                axisLabelDistance: '0'
+                axisLabel: "Issue",
+                axisLabelDistance: "0"
             },
             yAxis: {
-                axisLabel: 'Time Spent (%)',
-                axisLabelDistance: '0',
+                axisLabel: "Time Spent (%)",
+                axisLabelDistance: "0",
                 tickFormat: function (d) {
-                    return d3.format(',.0d')(d);
+                    return d3.format(",.0d")(d);
                 }
             }
         },
         title: {
             enable: true,
-            text: 'Column Distribution for Issues'
+            text: "Column Distribution for Issues"
         }
     };
 

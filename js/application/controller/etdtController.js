@@ -4,7 +4,7 @@
 /**
  * Controller for the Execution Time vs Delay Time view.
  */
-application.controller('etdtController', function ($scope, localStorageHandler, Notification) {
+application.controller("etdtController", function ($scope, localStorageHandler, Notification) {
     "use strict";
 
     const DEBUG = true;
@@ -25,7 +25,7 @@ application.controller('etdtController', function ($scope, localStorageHandler, 
      */
     $scope.options = {
         chart: {
-            type: 'scatterChart',
+            type: "scatterChart",
             interactive: true,
             scatter: {
                 onlyCircles: true
@@ -45,17 +45,17 @@ application.controller('etdtController', function ($scope, localStorageHandler, 
                 unzoomEventType: "dblclick.zoom"
             },
             xAxis: {
-                axisLabel: 'Delay Time (hours)',
-                axisLabelDistance: '0'
+                axisLabel: "Delay Time (hours)",
+                axisLabelDistance: "0"
             },
             yAxis: {
-                axisLabel: 'Execution Time (hours)',
-                axisLabelDistance: '10'
+                axisLabel: "Execution Time (hours)",
+                axisLabelDistance: "10"
             }
         },
         title: {
             enable: true,
-            text: 'Execution Time vs Delay Time'
+            text: "Execution Time vs Delay Time"
         }
     };
 
@@ -65,7 +65,7 @@ application.controller('etdtController', function ($scope, localStorageHandler, 
     $scope.applyCycleTimeFilter = function (maxCycleTime) {
         const filteredIssues = [];
 
-        if (maxCycleTime === '' || maxCycleTime === null || maxCycleTime === ' ' || maxCycleTime === undefined) {
+        if (maxCycleTime === "" || maxCycleTime === null || maxCycleTime === " " || maxCycleTime === undefined) {
             try {
                 $scope.data = createEtDtData("All issues", issues);
                 Notification.success("Filter removed.");

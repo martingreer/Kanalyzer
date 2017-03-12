@@ -138,7 +138,7 @@ function Moves(histories, boardDesign) {
     let moves = [];
 
     _.forEach(histories, function (event) {
-        let moveTime = event.created.substr(0, event.created.indexOf('.'));
+        let moveTime = event.created.substr(0, event.created.indexOf("."));
         _.forEach(event.items, function (eventItem) {
             if (eventItem.field === "status") {
                 let fromColumn = boardDesign.getColumnMatchingStatus(eventItem.from),
@@ -273,7 +273,7 @@ function Issue(apiIssue, boardDesign, time) {
      */
     function parseMoves(columnHistory) {
         let i,
-            createdTime = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.')),
+            createdTime = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf(".")),
             columnsWithEnterExit = [];
 
         // First item is a special case because we need to set the time which the issue was created as enter time.
@@ -433,7 +433,7 @@ function Issue(apiIssue, boardDesign, time) {
 
     if (!isAlreadyParsed) {
         self.summary = apiIssue.fields.summary;
-        self.created = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.'));
+        self.created = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf("."));
         self.currentStatus = parseCurrentStatus(apiIssue.fields.status);
         self.columnHistory = createColumnHistory(apiIssue);
     } else {

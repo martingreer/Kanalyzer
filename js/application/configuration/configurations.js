@@ -4,48 +4,48 @@
 application.config(function ($stateProvider, $urlRouterProvider) {
     "use strict";
 
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise("/login");
 
     $stateProvider
-        .state('login', {
-            url: '/login',
-            templateUrl: 'pages/login.html',
-            controller: 'loginController'
+        .state("login", {
+            url: "/login",
+            templateUrl: "pages/login.html",
+            controller: "loginController"
         })
 
-        .state('ld', {
-            url: '/ld',
-            templateUrl: 'pages/ld.html',
-            controller: 'ldController'
+        .state("ld", {
+            url: "/ld",
+            templateUrl: "pages/ld.html",
+            controller: "ldController"
         })
 
-        .state('cfd', {
-            url: '/cfd',
-            templateUrl: 'pages/cfd.html',
-            controller: 'cfdController'
+        .state("cfd", {
+            url: "/cfd",
+            templateUrl: "pages/cfd.html",
+            controller: "cfdController"
         })
 
-        .state('etdt', {
-            url: '/etdt',
-            templateUrl: 'pages/etdt.html',
-            controller: 'etdtController'
+        .state("etdt", {
+            url: "/etdt",
+            templateUrl: "pages/etdt.html",
+            controller: "etdtController"
         })
 
-        .state('coldist', {
-            url: '/coldist',
-            templateUrl: 'pages/coldist.html',
-            controller: 'coldistController'
+        .state("coldist", {
+            url: "/coldist",
+            templateUrl: "pages/coldist.html",
+            controller: "coldistController"
         })
 
-        .state('pe', {
-            url: '/pe',
-            templateUrl: 'pages/pe.html',
-            controller: 'peController'
+        .state("pe", {
+            url: "/pe",
+            templateUrl: "pages/pe.html",
+            controller: "peController"
         })
 
-        .state('about', {
-            url: '/about',
-            templateUrl: 'pages/about.html'
+        .state("about", {
+            url: "/about",
+            templateUrl: "pages/about.html"
         });
 });
 

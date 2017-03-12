@@ -4,7 +4,7 @@
 /**
  * Controller for the Process Efficiency tab.
  */
-application.controller('peController', function ($scope, localStorageHandler) {
+application.controller("peController", function ($scope, localStorageHandler) {
 
     let cumulativeProcessEfficiency = 0;
     let amountOfProcessEfficiencies = 0;
@@ -42,11 +42,11 @@ application.controller('peController', function ($scope, localStorageHandler) {
                 amountOfProcessEfficiencies++;
 
                 if (processEfficiency < 15) {
-                    type = 'danger';
+                    type = "danger";
                 } else if (processEfficiency < 25) {
-                    type = 'warning';
+                    type = "warning";
                 } else {
-                    type = 'success';
+                    type = "success";
                 }
 
                 issue.barDynamic = processEfficiency;
@@ -71,7 +71,7 @@ application.controller('peController', function ($scope, localStorageHandler) {
             issue.processEfficiencyConverted = "Not done or badly tracked";
         });
 
-        issues = _.sortByOrder(issues, ['processEfficiency', 'cycleTime'], ['asc', 'desc']);
+        issues = _.sortByOrder(issues, ["processEfficiency", "cycleTime"], ["asc", "desc"]);
 
         _.forEach(issuesNotDoneOrBadlyTracked, function (issue) {
             issues.push(issue);
@@ -96,11 +96,11 @@ application.controller('peController', function ($scope, localStorageHandler) {
         let barType;
 
         if (barValue < 15) {
-            barType = 'danger';
+            barType = "danger";
         } else if (barValue < 25) {
-            barType = 'warning';
+            barType = "warning";
         } else {
-            barType = 'success';
+            barType = "success";
         }
 
         $scope.avgPeBarValue = barValue;

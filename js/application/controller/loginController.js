@@ -4,17 +4,17 @@
 /**
  * Controller for the Log In view.
  */
-application.controller('loginController', function ($scope, Base64, $http, apiServerData, previousLogin, Notification) {
+application.controller("loginController", function ($scope, Base64, $http, apiServerData, previousLogin, Notification) {
     "use strict";
 
     const DEBUG = true;
 
     // Variables for logging in to API server.
     $scope.credentials = {
-        username: '',
-        password: ''
+        username: "",
+        password: ""
     };
-    $scope.apiRoot = '';
+    $scope.apiRoot = "";
 
     function setPreviousLoginValues(previousLogin) {
         $scope.credentials.username = previousLogin.userName;
@@ -42,51 +42,51 @@ application.controller('loginController', function ($scope, Base64, $http, apiSe
 
         previousLogin.setPreviousLogin($scope.apiRoot, $scope.credentials.username);
         apiServerData.setApiRoot($scope.apiRoot);
-        $scope.apiServer = apiServerData.getApiServer('jira');
-        Notification.primary('Logging in...');
+        $scope.apiServer = apiServerData.getApiServer("jira");
+        Notification.primary("Logging in...");
         if (DEBUG) {
             console.log("Attempting to authenticate to server " + $scope.apiRoot + "...");
         }
 
         //// Basic auth
-        //$http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
-        //console.log($http.defaults.headers.common['Authorization']);
+        //$http.defaults.headers.common["Authorization"] = "Basic " + Base64.encode($scope.credentials.username + ":" + $scope.credentials.password);
+        //console.log($http.defaults.headers.common["Authorization"]);
         //var login = $http({
-        //    method: 'GET',
+        //    method: "GET",
         //    url: $scope.apiServer
         //});
         //login.success(function () {
         //    apiServerData.setIsLoggedIn(true);
         //    $scope.isLoggedIn = apiServerData.getIsLoggedIn();
-        //    Notification.success('Login successful!');
+        //    Notification.success("Login successful!");
         //    if(DEBUG){console.log("User " + $scope.credentials.username + " is now logged in!");}
         //});
         //login.error(function () {
         //    apiServerData.setIsLoggedIn(false);
-        //    Notification.error('Login failed, please try again.');
+        //    Notification.error("Login failed, please try again.");
         //    if(DEBUG){console.log("Login failed.");}
         //});
 
         // Cookie auth. Works but is a bit slow to set the cookie.
         const login = $http({
-            method: 'POST',
+            method: "POST",
             url: $scope.apiRoot + "rest/auth/1/session",
             data: {
-                'username': $scope.credentials.username,
-                'password': $scope.credentials.password
+                "username": $scope.credentials.username,
+                "password": $scope.credentials.password
             },
             headers: {
-                'Content-Type': "application/json",
-                'upgrade-insecure-requests': 1
+                "Content-Type": "application/json",
+                "upgrade-insecure-requests": 1
             }
         });
         login.success(function (response) {
-            //$http.defaults.headers.common['Cookie'] = response.session.name + "=" + response.session.value;
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode($scope.credentials.username + ':' + $scope.credentials.password);
+            //$http.defaults.headers.common["Cookie"] = response.session.name + "=" + response.session.value;
+            $http.defaults.headers.common["Authorization"] = "Basic " + Base64.encode($scope.credentials.username + ":" + $scope.credentials.password);
             console.log("Cookie set: " + response.session.name + "=" + response.session.value);
             apiServerData.setIsLoggedIn(true);
             $scope.isLoggedIn = apiServerData.getIsLoggedIn();
-            Notification.success('Login successful!');
+            Notification.success("Login successful!");
             if (DEBUG) {
                 console.log("User " + $scope.credentials.username + " is now logged in!");
             }
@@ -116,29 +116,29 @@ application.controller('loginController', function ($scope, Base64, $http, apiSe
      * Log out by simply removing the cookie header and setting FE logged in status to false.
      */
     $scope.logout = function () {
-        //console.log("Before: " + $http.defaults.headers.common['Authorization']);
-        //$http.defaults.headers.common['Authorization'] = '';
-        //console.log("After: " + $http.defaults.headers.common['Authorization']);
-        //$scope.apiServer = apiServerData.getApiServer('jira');
+        //console.log("Before: " + $http.defaults.headers.common["Authorization"]);
+        //$http.defaults.headers.common["Authorization"] = "";
+        //console.log("After: " + $http.defaults.headers.common["Authorization"]);
+        //$scope.apiServer = apiServerData.getApiServer("jira");
         //if(DEBUG){console.log("Attempting to log out...");}
         //var logout = $http({
-        //    method: 'GET',
+        //    method: "GET",
         //    url: $scope.apiServer
         //});
         //logout.success(function () {
-        //    Notification.error('Logout failed, please try again.');
+        //    Notification.error("Logout failed, please try again.");
         //    if(DEBUG){console.log("Logout failed.");}
         //});
         //logout.error(function () {
         //    apiServerData.setIsLoggedIn(false);
         //    $scope.isLoggedIn = apiServerData.getIsLoggedIn();
-        //    Notification.primary('You have been logged out.');
+        //    Notification.primary("You have been logged out.");
         //    if(DEBUG){console.log("User " + $scope.credentials.username + " has logged out.");}
         //});
-        //$http.defaults.headers.common['Cookie'] = '';
+        //$http.defaults.headers.common["Cookie"] = "";
         apiServerData.setIsLoggedIn(false);
         $scope.isLoggedIn = apiServerData.getIsLoggedIn(); // synchronous
-        Notification.primary('You have been logged out.');
+        Notification.primary("You have been logged out.");
         if (DEBUG) {
             console.log("User " + $scope.credentials.username + " has logged out.");
         }
