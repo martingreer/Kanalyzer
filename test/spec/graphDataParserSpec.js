@@ -108,6 +108,7 @@ describe("Column Distribution Graph", function () {
     let oneNotDoneIssue = oneParsedNotDoneIssue;
     let twoIssuesDoneAndNotDone = twoParsedIssuesOneDoneAndOneNotDone;
     let oneDoneReopenedIssueFromNewKANProject = oneParsedDoneReopenedIssueFromNewKANProject;
+    let oneInProgressReopenedIssueFromNewKANProject = oneParsedInProgressReopenedIssueFromNewKANProject;
     let boardDesignNewKANProject = boardDesignFromNewKANProject;
     let boardDesign = boardDesignForColDistGraph;
 
@@ -205,7 +206,7 @@ describe("Column Distribution Graph", function () {
             expect(Math.round(totalPercent)).toBe(100);
         });
 
-        it("percentages should add upp to roughly 100 for an issue that was done, reopened then done again", function () {
+        it("percentages should add upp to exactly 100 for an issue that was done, reopened then done again", function () {
             let timeSpentInColumn = 0;
             let totalPercent = 0;
 
@@ -218,7 +219,23 @@ describe("Column Distribution Graph", function () {
                 totalPercent += convertTimeToPercent(timeSpentInColumn, _oneDoneReopenedIssueFromNewKANProject.cycleTime,
                     column.category, _oneDoneReopenedIssueFromNewKANProject.wasReopened);
             });
-            expect(Math.round(totalPercent)).toBe(100);
+            expect(totalPercent).toBe(100);
+        });
+
+        it("percentage should be exactly 0 for an issue that was done, reopened and currently in progress", function () {
+            let timeSpentInColumn = 0;
+            let totalPercent = 0;
+
+            // Mock what happens in ColDistValuesArray constructor because issue was reopened.
+            let _oneInProgressReopenedIssueFromNewKANProject = _.cloneDeep(oneInProgressReopenedIssueFromNewKANProject);
+            _oneInProgressReopenedIssueFromNewKANProject.columnHistory.pop();
+
+            _.forEach(boardDesignNewKANProject.columns, function (column) {
+                timeSpentInColumn = getTimeSpentInColumn(_oneInProgressReopenedIssueFromNewKANProject, column.name);
+                totalPercent += convertTimeToPercent(timeSpentInColumn, _oneInProgressReopenedIssueFromNewKANProject.cycleTime,
+                    column.category, _oneInProgressReopenedIssueFromNewKANProject.wasReopened);
+            });
+            expect(totalPercent).toBe(0);
         });
     });
 

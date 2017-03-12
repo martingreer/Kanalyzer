@@ -328,7 +328,7 @@ function Issue(apiIssue, boardDesign, time) {
      * @returns {boolean} true if column has been reopened, false otherwise.
      */
     function issueWasReopened () {
-        function historyContainsMultipleDoneColumns() {
+        function wasInDoneColumn() {
             let numberOfInstances = 0;
             let columnHistory = _.cloneDeep(self.columnHistory);
 
@@ -337,10 +337,10 @@ function Issue(apiIssue, boardDesign, time) {
                     numberOfInstances++;
                 }
             });
-            return numberOfInstances > 1;
+            return self.isDone ? numberOfInstances > 1 : numberOfInstances > 0;
         }
 
-        return historyContainsMultipleDoneColumns();
+        return wasInDoneColumn();
     }
 
     /**
@@ -456,5 +456,6 @@ function Issue(apiIssue, boardDesign, time) {
     self.executionTime = getExecutionTime();
     self.delayTime = getDelayTime();
     self.processEfficiency = getProcessEfficiency(self.executionTime, self.cycleTime);
+    if (self.key === "KAN-40") { console.log(JSON.stringify(self)) }
     return self;
 }

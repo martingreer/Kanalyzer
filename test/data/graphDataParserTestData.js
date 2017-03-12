@@ -50,6 +50,8 @@ const oneParsedDoneIssue =
                 "exitTime": "2015-10-22T15:56:07"
             }
         ],
+        "isDone": true,
+        "wasReopened": false,
         "cycleTime": 12966000,
         "executionTime": 2610000,
         "delayTime": 10356000,
@@ -104,6 +106,8 @@ const fourParsedDoneIssues =
                     "exitTime": "2015-10-22T15:56:07"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 12966000,
             "executionTime": 2610000,
             "delayTime": 10356000,
@@ -150,6 +154,8 @@ const fourParsedDoneIssues =
                     "exitTime": "2015-10-23T15:56:07"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 4502000,
             "executionTime": 1858000,
             "delayTime": 2644000,
@@ -206,6 +212,8 @@ const fourParsedDoneIssues =
                     "exitTime": "2015-10-27T13:34:00"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 38753000,
             "executionTime": 20631000,
             "delayTime": 18122000,
@@ -242,6 +250,8 @@ const fourParsedDoneIssues =
                     "exitTime": "2015-10-27T13:34:00"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 3148000,
             "executionTime": 2014000,
             "delayTime": 1134000,
@@ -276,6 +286,8 @@ const oneParsedNotDoneIssue =
                 "exitTime": "2016-03-06T20:03:58"
             }
         ],
+        "isDone": false,
+        "wasReopened": false,
         "cycleTime": null,
         "executionTime": 174161000,
         "delayTime": 246423000,
@@ -344,6 +356,8 @@ const oneParsedDoneIssueForColDistGraph =
                 "exitTime": "2016-03-06T21:30:02"
             }
         ],
+        "isDone": true,
+        "wasReopened": false,
         "cycleTime": 9952222000,
         "executionTime": 9653471000,
         "delayTime": 298751000,
@@ -413,6 +427,8 @@ const fourParsedDoneIssuesForColDistGraph =
                     "exitTime": "2016-03-06T21:30:02"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 9952222000,
             "executionTime": 9653471000,
             "delayTime": 298751000,
@@ -464,6 +480,8 @@ const fourParsedDoneIssuesForColDistGraph =
                     "exitTime": "2016-03-06T21:30:02"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 700551000,
             "executionTime": 677850000,
             "delayTime": 22701000,
@@ -510,6 +528,8 @@ const fourParsedDoneIssuesForColDistGraph =
                     "exitTime": "2016-03-06T21:30:02"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 32338000,
             "executionTime": 20935000,
             "delayTime": 11403000,
@@ -556,6 +576,8 @@ const fourParsedDoneIssuesForColDistGraph =
                     "exitTime": "2016-03-06T21:30:02"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 11479000,
             "executionTime": 9094000,
             "delayTime": 2385000,
@@ -632,6 +654,8 @@ const twoParsedIssuesOneDoneAndOneNotDone =
                     "exitTime": "2016-03-06T20:03:58"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 177220000,
             "executionTime": 174170000,
             "delayTime": 3050000,
@@ -671,11 +695,39 @@ let oneParsedDoneReopenedIssueFromNewKANProject = {
         "exitTime": "2017-03-11T16:00:19"
     }
     ],
-    "wasReopened" : true,
+    "isDone": true,
+    "wasReopened": true,
     "cycleTime": 21347458000,
     "executionTime": 233101000,
     "delayTime": 21347458000,
     "processEfficiency": 0.010919379721932233
+};
+
+let oneParsedInProgressReopenedIssueFromNewKANProject = {
+    "id": "10013",
+    "key": "KAN-14",
+    "summary": "Fix Load Data authentication to work with new greenhopper REST API.",
+    "created": "2016-07-06T23:20:13",
+    "currentStatus": {"id": "3", "name": "In Progress"},
+    "columnHistory": [{
+        "columnName": "In Progress",
+        "enterTime": "2016-07-06T23:29:45",
+        "exitTime": "2016-07-08T23:12:58"
+    }, {
+        "columnName": "Ready for Test",
+        "enterTime": "2016-07-08T23:12:58",
+        "exitTime": "2016-07-08T23:13:12"
+    }, {
+        "columnName": "Done",
+        "enterTime": "2016-07-10T14:29:37",
+        "exitTime": "2017-03-12T13:05:50"
+    }, {"columnName": "In Progress", "enterTime": "2017-03-12T13:05:50", "exitTime": "2017-03-12T13:17:52"}],
+    "isDone": false,
+    "wasReopened": true,
+    "cycleTime": null,
+    "executionTime": 172515000,
+    "delayTime": 21335502000,
+    "processEfficiency": 0
 };
 
 let boardDesignFromNewKANProject = {

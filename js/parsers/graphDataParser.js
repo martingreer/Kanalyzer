@@ -1,9 +1,6 @@
 /*jslint bitwise: true, plusplus: true, white: true, sub: true, nomen: true*/
 /*global timeUtil, console, self:true, _, parseHistory*/
 
-const STATUS_DONE = "Done"; // Needs improvement to be fail-safe. Jira status configs might not be default.
-const STATUS_CLOSED = "Closed"; // Needs improvement to be fail-safe. Jira status configs might not be default.
-
 /*********************************************************
  * Below is the parsing for the Execution vs Delay view. *
  *********************************************************/
@@ -167,11 +164,11 @@ function ColDistValuesArray(_issues, columnName, columnCategory) {
     issues.reverse(); // Reverse array in order to show oldest->newest issues from left to right in graph
 
     _.forEach(issues, function (issue) {
-        if (issue.wasReopened) {
-            issue.columnHistory.pop(); // Don't calculate time spent in the last Done column.
-        }
         if (issue.columnHistory.length > 1) {
-            if (issue.currentStatus.name === STATUS_DONE || issue.currentStatus.name === STATUS_CLOSED) {
+            if (issue.isDone) {
+                if (issue.wasReopened) {
+                    issue.columnHistory.pop(); // Don't calculate time spent in the last Done column.
+                }
                 timeSpentInColumn = getTimeSpentInColumn(issue, columnName);
                 percentInColumn = convertTimeToPercent(timeSpentInColumn, issue.cycleTime, columnCategory, issue.wasReopened);
                 valuesItem = new ColDistValuesItem(issue.key, percentInColumn);
