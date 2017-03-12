@@ -62,7 +62,7 @@ function BoardDesign(apiColumnsData, boardName) {
     self.createColumnCategories = function () {
         let hasCategories;
 
-        hasCategories = _.first(self.columns).hasOwnProperty('category');
+        hasCategories = _.first(self.columns).hasOwnProperty("category");
 
         if (!hasCategories) {
             _.forEach(self.columns, function (column) {
@@ -77,7 +77,7 @@ function BoardDesign(apiColumnsData, boardName) {
                 }
             });
 
-            _.first(self.columns).category = CATEGORY_IGNORE;
+            _.first(self.columns).category = CATEGORY_DELAY;
             _.last(self.columns).category = CATEGORY_DONE;
         }
 

@@ -144,7 +144,7 @@ describe("Issue", function () {
         });
 
         it("should calculate the cycle time for the issue", function () {
-            expect(issueIsDone.cycleTime).toBe(64873000);
+            expect(issueIsDone.cycleTime).toBe(65237000);
         });
 
         it("should not have cycle time if not done", function () {
@@ -172,7 +172,7 @@ describe("Issue", function () {
         });
 
         it("should calculate delay time for an issue that is done", function () {
-            expect(timeUtil.convertMsToDHM(issueIsDone.delayTime)).toBe("18 hours, 1 minute.");
+            expect(timeUtil.convertMsToDHM(issueIsDone.delayTime)).toBe("18 hours, 7 minutes.");
         });
 
         it("should count time spent in done column anytime before the last time as delay time", function () {
@@ -186,7 +186,7 @@ describe("Issue", function () {
         });
 
         it("should calculate process efficiency for an issue that is done", function () {
-            expect(issueIsDone.processEfficiency).toBe(0.0004624420020655743);
+            expect(issueIsDone.processEfficiency).toBe(0.00045986173490503856);
         });
     });
 
