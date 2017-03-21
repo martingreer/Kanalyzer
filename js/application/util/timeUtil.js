@@ -43,8 +43,6 @@ function TimeUtil() {
         if (minute === 60) {
             hour++;
             minute = 0;
-        } else if (minute === 0) {
-            minute = 1;
         }
 
         if (hour === 24) {
@@ -79,7 +77,11 @@ function TimeUtil() {
         }
 
         if (minute === 0) {
-            minutes = "";
+            if (day === 0 && hour === 0) {
+                minutes = "Less than 1 minute."
+            } else {
+                minutes = "";
+            }
         } else if (minute === 1) {
             minutes = minute + " minute.";
         }
