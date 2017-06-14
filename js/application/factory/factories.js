@@ -1,18 +1,18 @@
 /**
  * Base64 encoding + decoding for use in http requests.
  */
-application.factory('Base64', function () {
+application.factory("Base64", function () {
     "use strict";
     /*jslint regexp: true*/
 
-    var keyStr = 'ABCDEFGHIJKLMNOP' +
-        'QRSTUVWXYZabcdef' +
-        'ghijklmnopqrstuv' +
-        'wxyz0123456789+/' +
-        '=';
+    const keyStr = "ABCDEFGHIJKLMNOP" +
+        "QRSTUVWXYZabcdef" +
+        "ghijklmnopqrstuv" +
+        "wxyz0123456789+/" +
+        "=";
     return {
         encode: function (input) {
-            var output = "",
+            let output = "",
                 chr1, chr2, chr3 = "",
                 enc1, enc2, enc3, enc4 = "",
                 i = 0;
@@ -45,12 +45,12 @@ application.factory('Base64', function () {
         },
 
         decode: function (input) {
-            var output = "",
+            let output = "",
                 chr1, chr2, chr3 = "",
                 enc1, enc2, enc3, enc4 = "",
                 i = 0,
                 base64test = /[^A-Za-z0-9\+\/\=]/g,
-                alert;
+                alert = "";
 
             if (base64test.exec(input)) {
                 alert("There were invalid base64 characters in the input text.\n" +
@@ -90,12 +90,12 @@ application.factory('Base64', function () {
 
 /**
  * Session storage for API info and "logged in" status.
- * These variables are not meant to be used while logged out, so they don't need to be in local storage.
+ * These variables are not meant to be used while logged out, so they don"t need to be in local storage.
  */
-application.factory('apiServerData', function () {
-    var data = {
-        apiRoot: '',
-        apiProject: '',
+application.factory("apiServerData", function () {
+    const data = {
+        apiRoot: "",
+        apiProject: "",
         isLoggedIn: false
     };
 
@@ -106,17 +106,11 @@ application.factory('apiServerData', function () {
         setApiRoot: function (apiRoot) {
             data.apiRoot = apiRoot;
         },
-        getApiProject: function () {
-            return data.apiProject;
-        },
-        setApiProject: function (apiProject) {
-            data.apiProject = apiProject;
-        },
         getApiServer: function (apiType) {
-            if (apiType === 'jira') {
-                return data.apiRoot + 'rest/api/2/issue/createmeta';
+            if (apiType === "jira") {
+                return data.apiRoot + "rest/api/2/issue/createmeta";
             } else {
-                return '';
+                return "";
             }
         },
         getIsLoggedIn: function () {
@@ -131,10 +125,10 @@ application.factory('apiServerData', function () {
 /**
  * Local storage helper for remembering a users previous login username and URL.
  */
-application.factory('previousLogin', function () {
+application.factory("previousLogin", function () {
     return {
         getPreviousLogin: function (callback) {
-            chrome.storage.local.get(['url', 'userName'], callback);
+            chrome.storage.local.get(["url", "userName"], callback);
         },
         setPreviousLogin: function (urlToSet, userNameToSet) {
             chrome.storage.local.set({url: urlToSet, userName: userNameToSet});
@@ -145,10 +139,10 @@ application.factory('previousLogin', function () {
 /**
  * Local storage helper for remembering a users previous Load Data choices.
  */
-application.factory('previousLoadData', function () {
+application.factory("previousLoadData", function () {
     return {
         getPreviousLoadData: function (callback) {
-            chrome.storage.local.get(['boardId', 'projectKey', 'maxResults'], callback)
+            chrome.storage.local.get(["boardId", "projectKey", "maxResults"], callback)
         },
         setPreviousLoadData: function (boardIdToSet, projectKeyToSet, maxResultsToSet) {
             chrome.storage.local.set({boardId: boardIdToSet, projectKey: projectKeyToSet, maxResults: maxResultsToSet});
@@ -159,69 +153,70 @@ application.factory('previousLoadData', function () {
 /**
  * Local storage helper for board design, issues and configs.
  */
-application.factory('localStorageHandler', function () {
+application.factory("localStorageHandler", function () {
     return {
         clearIssueAndBoardDesignData: function () {
-            chrome.storage.local.remove('boardDesign');
-            chrome.storage.local.remove('issues');
-            chrome.storage.local.remove('loadedProject');
-            chrome.storage.local.remove('cfdData');
-            chrome.storage.local.remove('colDistData');
+            chrome.storage.local.remove("boardDesign");
+            chrome.storage.local.remove("issues");
+            chrome.storage.local.remove("loadedProject");
+            chrome.storage.local.remove("loadedConfig");
+            chrome.storage.local.remove("cfdData");
+            chrome.storage.local.remove("colDistData");
         },
         getBoardDesign: function (callback) {
-            chrome.storage.local.get('boardDesign', callback);
+            chrome.storage.local.get("boardDesign", callback);
         },
         setBoardDesign: function (boardDesignToSet) {
             chrome.storage.local.set({boardDesign: boardDesignToSet});
         },
-        removeBoardDesign: function () {
-            chrome.storage.local.remove('boardDesign');
-        },
         getLoadedProject: function (callback) {
-            chrome.storage.local.get('loadedProject', callback);
+            chrome.storage.local.get("loadedProject", callback);
         },
         setLoadedProject: function (loadedProjectToSet) {
             chrome.storage.local.set({loadedProject: loadedProjectToSet});
         },
         getIssues: function (callback) {
-            chrome.storage.local.get('issues', callback);
+            chrome.storage.local.get("issues", callback);
         },
         setIssues: function (issuesToSet) {
             chrome.storage.local.set({issues: issuesToSet});
         },
-        removeIssues: function () {
-            chrome.storage.local.remove('issues');
-        },
         getConfigs: function (callback) {
-            chrome.storage.local.get('userConfigs', callback);
+            chrome.storage.local.get("userConfigs", callback);
         },
         setConfigs: function (userConfigsToSet) {
             chrome.storage.local.set({userConfigs: userConfigsToSet});
         },
         removeConfig: function (userConfigToRemove, userConfigs) {
-            userConfigs = userConfigs.filter(element=>element.name !== userConfigToRemove);
+            userConfigs = userConfigs.filter(element => element.name !== userConfigToRemove);
             chrome.storage.local.set({userConfigs: userConfigs});
         },
         removeConfigs: function () {
-            chrome.storage.local.remove('userConfigs');
+            chrome.storage.local.remove("userConfigs");
+        },
+        getLoadedConfig: function (callback) {
+            chrome.storage.local.get("loadedConfig", callback);
+        },
+        setLoadedConfig: function (config) {
+            chrome.storage.local.set({loadedConfig: config});
         },
         getCfdData: function (callback) {
-            chrome.storage.local.get('cfdData', callback);
+            chrome.storage.local.get("cfdData", callback);
         },
         setCfdData: function (cfdDataToSet, startDateToSet, endDateToSet) {
             chrome.storage.local.set({cfdData: {cfdData: cfdDataToSet, startDate: startDateToSet, endDate: endDateToSet}});
         },
         removeCfdData: function () {
-            chrome.storage.local.remove('cfdData');
+            chrome.storage.local.remove("cfdData");
         },
         getColDistData: function (callback) {
-            chrome.storage.local.get('colDistData', callback);
+            chrome.storage.local.get("colDistData", callback);
         },
         setColDistData: function (colDistDataToSet) {
             chrome.storage.local.set({colDistData: colDistDataToSet});
         },
         removeColDistData: function () {
-            chrome.storage.local.remove('colDistData');
+            chrome.storage.local.remove("colDistData");
         }
     }
 });

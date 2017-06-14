@@ -1,5 +1,5 @@
 /**
- * Tests for apiParser.js
+ * Tests for jiraParser.js
  */
 
 /*global describe, it, expect, beforeEach, beforeAll, module, inject, BoardDesign, approveIt, Issue*/
@@ -8,8 +8,8 @@
 describe("BoardDesign", function () {
     "use strict";
 
-    var boardDesign,
-        columnCategories;
+    let boardDesign;
+    let columnCategories;
 
     beforeEach(function () {
         boardDesign = createBoardDesign(columnsData);
@@ -17,7 +17,9 @@ describe("BoardDesign", function () {
     });
 
     it("should have columns", function () {
-        expect(boardDesign.getColumnNames()).toEqual(['Ready to Refine', 'Refine Backlog', 'Ready to Analyze', 'Analyze', 'Ready for Development', 'In Progress', 'Under Review', 'Ready for Test', 'Under Test', 'Ready to Accept', 'Accept', 'Ready for Release']);
+        expect(boardDesign.getColumnNames()).toEqual(["Ready to Refine", "Refine Backlog", "Ready to Analyze",
+            "Analyze", "Ready for Development", "In Progress", "Under Review", "Ready for Test", "Under Test",
+            "Ready to Accept", "Accept", "Ready for Release"]);
     });
 
     it("should return column name when status id is matching", function () {
@@ -44,14 +46,16 @@ describe("BoardDesign", function () {
 describe("Issue", function () {
     "use strict";
 
-    var ktdBoardDesign = createBoardDesign(columnsData);
-    var coachAppBoardDesign = createBoardDesign(coachAppColumnsData);
+    const ktdBoardDesign = createBoardDesign(columnsData);
+    const coachAppBoardDesign = createBoardDesign(coachAppColumnsData);
+    const kanBoardDesign = createBoardDesign(columnsDataLocalKANProject);
 
-    var issueWithoutHistory = new Issue(apiIssueWithoutHistory, ktdBoardDesign);
-    var issueWithHistoryAndNotDone = new Issue(apiIssueWithHistoryAndNotDone, ktdBoardDesign, "2015-09-10T00:00:00");
-    var issueIsDone = new Issue(apiIssueIsDone, ktdBoardDesign);
-    var twoIssues = parseMultipleApiIssues(apiTwoIssues);
-    var issueWithHistoryButNoStatusChange = new Issue(apiIssueWithHistoryButNoStatusChange, coachAppBoardDesign);
+    const issueWithoutHistory = new Issue(apiIssueWithoutHistory, ktdBoardDesign);
+    const issueWithHistoryAndNotDone = new Issue(apiIssueWithHistoryAndNotDone, ktdBoardDesign, "2015-09-10T00:00:00");
+    const issueIsDone = new Issue(apiIssueIsDone, ktdBoardDesign);
+    const issueReopenedDone = new Issue(jiraIssueThatWasReopenedThenDoneAgain, kanBoardDesign);
+    const twoIssues = parseMultipleApiIssues(apiTwoIssues);
+    const issueWithHistoryButNoStatusChange = new Issue(apiIssueWithHistoryButNoStatusChange, coachAppBoardDesign);
 
     describe("With history", function () {
         it("should have id", function () {
@@ -75,7 +79,7 @@ describe("Issue", function () {
         });
 
         it("should be done", function () {
-            expect(issueIsDone.isDone()).toBe(true);
+            expect(issueIsDone.isDone).toBe(true);
         });
 
         approveIt("should parse raw api data to array of only the issues", function (approvals) {
@@ -83,17 +87,17 @@ describe("Issue", function () {
         });
 
         it("should create first separate issue object from issues array", function () {
-            var firstIssue = new Issue(twoIssues[0], createBoardDesign(columnsData));
+            const firstIssue = new Issue(twoIssues[0], createBoardDesign(columnsData));
             expect(firstIssue.id).toBe("10409");
         });
 
         it("should create second separate issue object from issues array", function () {
-            var secondIssue = new Issue(twoIssues[1], createBoardDesign(columnsData));
+            const secondIssue = new Issue(twoIssues[1], createBoardDesign(columnsData));
             expect(secondIssue.id).toBe("10408");
         });
 
         describe("History parser", function () {
-            var columnHistory;
+            let columnHistory;
 
             beforeEach(function () {
                 columnHistory = issueWithHistoryAndNotDone.columnHistory;
@@ -114,7 +118,7 @@ describe("Issue", function () {
     });
 
     describe("Without history", function () {
-        var columnHistory;
+        let columnHistory;
 
         beforeEach(function () {
             columnHistory = issueWithoutHistory.columnHistory;
@@ -131,7 +135,7 @@ describe("Issue", function () {
 
     describe("With history but no status change", function () {
         it("should have a first column", function () {
-            var firstColumn = issueWithHistoryButNoStatusChange.columnHistory[0].columnName;
+            const firstColumn = issueWithHistoryButNoStatusChange.columnHistory[0].columnName;
             expect(firstColumn).toBe("To Do");
         });
     });
@@ -142,7 +146,7 @@ describe("Issue", function () {
         });
 
         it("should calculate the cycle time for the issue", function () {
-            expect(issueIsDone.cycleTime).toBe(64873000);
+            expect(issueIsDone.cycleTime).toBe(65237000);
         });
 
         it("should not have cycle time if not done", function () {
@@ -170,7 +174,11 @@ describe("Issue", function () {
         });
 
         it("should calculate delay time for an issue that is done", function () {
-            expect(timeUtil.convertMsToDHM(issueIsDone.delayTime)).toBe("18 hours, 1 minute.");
+            expect(timeUtil.convertMsToDHM(issueIsDone.delayTime)).toBe("18 hours, 7 minutes.");
+        });
+
+        it("should count time spent in done column anytime before the last time as delay time", function () {
+            expect(timeUtil.convertMsToDHM(issueReopenedDone.delayTime)).toBe("247 days, 1 hour, 51 minutes.");
         });
     });
 
@@ -180,7 +188,7 @@ describe("Issue", function () {
         });
 
         it("should calculate process efficiency for an issue that is done", function () {
-            expect(issueIsDone.processEfficiency).toBe(0.0004624420020655743);
+            expect(issueIsDone.processEfficiency).toBe(0.00045986173490503856);
         });
     });
 
@@ -194,15 +202,15 @@ describe("Issue", function () {
         });
 
         it("should return true if the issue was in the column at the given time", function () {
-            var date = new Date("2015-09-15"),
+            const date = new Date("2015-09-15"),
                 readyToAnalyzeColumn = issueIsDone.columnHistory[2];
-            expect(issueIsDone.wasInColumn(date, readyToAnalyzeColumn)).toBeTruthy();
+            expect(issueIsDone.wasInColumnAtTimeStamp(date, readyToAnalyzeColumn)).toBeTruthy();
         });
 
         it("should return false if the issue was not in the column at the given time", function () {
-            var date = new Date("2015-09-14"),
+            const date = new Date("2015-09-14"),
                 readyToAnalyzeColumn = issueIsDone.columnHistory[2];
-            expect(issueIsDone.wasInColumn(date, readyToAnalyzeColumn)).toBeFalsy();
+            expect(issueIsDone.wasInColumnAtTimeStamp(date, readyToAnalyzeColumn)).toBeFalsy();
         });
     });
 });

@@ -4,20 +4,19 @@
 /**
  * Controller for the Process Efficiency tab.
  */
-application.controller('peController', function ($scope, localStorageHandler) {
-    var DEBUG = true;
+application.controller("peController", function ($scope, localStorageHandler) {
 
-    var cumulativeProcessEfficiency = 0,
-        amountOfProcessEfficiencies = 0,
-        cumulativeCycleTime = 0,
-        amountOfCycleTimes = 0,
-        cumulativeExecutionTime = 0,
-        amountOfExecutionTimes = 0,
-        cumulativeDelayTime = 0,
-        amountOfDelayTimes = 0,
-        allIssues = [],
-        issues,
-        issuesNotDoneOrBadlyTracked;
+    let cumulativeProcessEfficiency = 0;
+    let amountOfProcessEfficiencies = 0;
+    let cumulativeCycleTime = 0;
+    let amountOfCycleTimes = 0;
+    let cumulativeExecutionTime = 0;
+    let amountOfExecutionTimes = 0;
+    let cumulativeDelayTime = 0;
+    let amountOfDelayTimes = 0;
+    let allIssues = [];
+    let issues;
+    let issuesNotDoneOrBadlyTracked;
 
     localStorageHandler.getIssues(function (issuesCallback) {
         allIssues = issuesCallback.issues;
@@ -35,19 +34,19 @@ application.controller('peController', function ($scope, localStorageHandler) {
          */
         _.forEach(issues, function (issue) {
             if (issue.processEfficiency > 0) {
-                var processEfficiency = convertToPercent(issue.processEfficiency);
-                var type;
+                const processEfficiency = convertToPercent(issue.processEfficiency);
+                let type;
 
                 issue.processEfficiencyConverted = processEfficiency + "%";
                 cumulativeProcessEfficiency += processEfficiency;
                 amountOfProcessEfficiencies++;
 
                 if (processEfficiency < 15) {
-                    type = 'danger';
+                    type = "danger";
                 } else if (processEfficiency < 25) {
-                    type = 'warning';
+                    type = "warning";
                 } else {
-                    type = 'success';
+                    type = "success";
                 }
 
                 issue.barDynamic = processEfficiency;
@@ -72,7 +71,7 @@ application.controller('peController', function ($scope, localStorageHandler) {
             issue.processEfficiencyConverted = "Not done or badly tracked";
         });
 
-        issues = _.sortByOrder(issues, ['processEfficiency', 'cycleTime'], ['asc', 'desc']);
+        issues = _.sortByOrder(issues, ["processEfficiency", "cycleTime"], ["asc", "desc"]);
 
         _.forEach(issuesNotDoneOrBadlyTracked, function (issue) {
             issues.push(issue);
@@ -93,15 +92,15 @@ application.controller('peController', function ($scope, localStorageHandler) {
     }
 
     function averageProcessEfficiencyBar() {
-        var barValue = Math.round(cumulativeProcessEfficiency / amountOfProcessEfficiencies);
-        var barType;
+        const barValue = Math.round(cumulativeProcessEfficiency / amountOfProcessEfficiencies);
+        let barType;
 
         if (barValue < 15) {
-            barType = 'danger';
+            barType = "danger";
         } else if (barValue < 25) {
-            barType = 'warning';
+            barType = "warning";
         } else {
-            barType = 'success';
+            barType = "success";
         }
 
         $scope.avgPeBarValue = barValue;

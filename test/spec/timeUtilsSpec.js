@@ -1,8 +1,8 @@
 /**
- * Tests for utils.js
+ * Tests for timeUtil.js
  */
 
-describe("Utils", function () {
+describe("Time Util", function () {
     "use strict";
 
     var timeUtilTest,
@@ -35,7 +35,8 @@ describe("Utils", function () {
         });
 
         it("should return an array of dates in the interval", function () {
-            expect(timeUtil.getDatesInInterval(1445292000000, 1445464800000)).toEqual([1445292000000, 1445378400000, 1445464800000]);
+            expect(timeUtil.getDatesInInterval(1445292000000, 1445464800000)).toEqual([1445292000000, 1445378400000,
+                1445464800000]);
         });
     });
 });

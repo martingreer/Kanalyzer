@@ -1,4 +1,4 @@
-var oneParsedDoneIssue =
+const oneParsedDoneIssue =
     {
         "id": "11932",
         "key": "KTD-60",
@@ -50,13 +50,15 @@ var oneParsedDoneIssue =
                 "exitTime": "2015-10-22T15:56:07"
             }
         ],
+        "isDone": true,
+        "wasReopened": false,
         "cycleTime": 12966000,
         "executionTime": 2610000,
         "delayTime": 10356000,
         "processEfficiency": 0.2012956964368348
     };
 
-var fourParsedDoneIssues =
+const fourParsedDoneIssues =
     [
         {
             "id": "11932",
@@ -104,6 +106,8 @@ var fourParsedDoneIssues =
                     "exitTime": "2015-10-22T15:56:07"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 12966000,
             "executionTime": 2610000,
             "delayTime": 10356000,
@@ -150,6 +154,8 @@ var fourParsedDoneIssues =
                     "exitTime": "2015-10-23T15:56:07"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 4502000,
             "executionTime": 1858000,
             "delayTime": 2644000,
@@ -206,6 +212,8 @@ var fourParsedDoneIssues =
                     "exitTime": "2015-10-27T13:34:00"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 38753000,
             "executionTime": 20631000,
             "delayTime": 18122000,
@@ -242,6 +250,8 @@ var fourParsedDoneIssues =
                     "exitTime": "2015-10-27T13:34:00"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 3148000,
             "executionTime": 2014000,
             "delayTime": 1134000,
@@ -249,40 +259,42 @@ var fourParsedDoneIssues =
         }
     ];
 
-var oneParsedNotDoneIssue =
-{
-    "id": "12406",
-    "key": "KTD-114",
-    "summary": "Add visual indicator that data is currently loading/parsing.",
-    "created": "2016-03-01T23:14:02",
-    "currentStatus": {
-        "id": "10212",
-        "name": "Ready for Development"
-    },
-    "columnHistory": [
-        {
-            "columnName": "Ready to Refine",
-            "enterTime": "2016-03-01T23:14:02",
-            "exitTime": "2016-03-01T23:14:14"
+const oneParsedNotDoneIssue =
+    {
+        "id": "12406",
+        "key": "KTD-114",
+        "summary": "Add visual indicator that data is currently loading/parsing.",
+        "created": "2016-03-01T23:14:02",
+        "currentStatus": {
+            "id": "10212",
+            "name": "Ready for Development"
         },
-        {
-            "columnName": "Analyze",
-            "enterTime": "2016-03-01T23:14:14",
-            "exitTime": "2016-03-03T23:36:55"
-        },
-        {
-            "columnName": "Ready for Development",
-            "enterTime": "2016-03-03T23:36:55",
-            "exitTime": "2016-03-06T20:03:58"
-        }
-    ],
-    "cycleTime": null,
-    "executionTime": 174161000,
-    "delayTime": 246423000,
-    "processEfficiency": 0
-};
+        "columnHistory": [
+            {
+                "columnName": "Ready to Refine",
+                "enterTime": "2016-03-01T23:14:02",
+                "exitTime": "2016-03-01T23:14:14"
+            },
+            {
+                "columnName": "Analyze",
+                "enterTime": "2016-03-01T23:14:14",
+                "exitTime": "2016-03-03T23:36:55"
+            },
+            {
+                "columnName": "Ready for Development",
+                "enterTime": "2016-03-03T23:36:55",
+                "exitTime": "2016-03-06T20:03:58"
+            }
+        ],
+        "isDone": false,
+        "wasReopened": false,
+        "cycleTime": null,
+        "executionTime": 174161000,
+        "delayTime": 246423000,
+        "processEfficiency": 0
+    };
 
-var oneParsedDoneIssueForColDistGraph =
+const oneParsedDoneIssueForColDistGraph =
     {
         "id": "12133",
         "key": "KTD-102",
@@ -344,13 +356,15 @@ var oneParsedDoneIssueForColDistGraph =
                 "exitTime": "2016-03-06T21:30:02"
             }
         ],
+        "isDone": true,
+        "wasReopened": false,
         "cycleTime": 9952222000,
         "executionTime": 9653471000,
         "delayTime": 298751000,
         "processEfficiency": 0.9699814775032148
     };
 
-var fourParsedDoneIssuesForColDistGraph =
+const fourParsedDoneIssuesForColDistGraph =
     [
         {
             "id": "12133",
@@ -413,6 +427,8 @@ var fourParsedDoneIssuesForColDistGraph =
                     "exitTime": "2016-03-06T21:30:02"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 9952222000,
             "executionTime": 9653471000,
             "delayTime": 298751000,
@@ -464,6 +480,8 @@ var fourParsedDoneIssuesForColDistGraph =
                     "exitTime": "2016-03-06T21:30:02"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 700551000,
             "executionTime": 677850000,
             "delayTime": 22701000,
@@ -510,6 +528,8 @@ var fourParsedDoneIssuesForColDistGraph =
                     "exitTime": "2016-03-06T21:30:02"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 32338000,
             "executionTime": 20935000,
             "delayTime": 11403000,
@@ -556,6 +576,8 @@ var fourParsedDoneIssuesForColDistGraph =
                     "exitTime": "2016-03-06T21:30:02"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 11479000,
             "executionTime": 9094000,
             "delayTime": 2385000,
@@ -563,7 +585,7 @@ var fourParsedDoneIssuesForColDistGraph =
         }
     ];
 
-var twoParsedIssuesOneDoneAndOneNotDone =
+const twoParsedIssuesOneDoneAndOneNotDone =
     [
         {
             "id": "12406",
@@ -632,6 +654,8 @@ var twoParsedIssuesOneDoneAndOneNotDone =
                     "exitTime": "2016-03-06T20:03:58"
                 }
             ],
+            "isDone": true,
+            "wasReopened": false,
             "cycleTime": 177220000,
             "executionTime": 174170000,
             "delayTime": 3050000,
@@ -639,7 +663,109 @@ var twoParsedIssuesOneDoneAndOneNotDone =
         }
     ];
 
-var boardDesignForColDistGraph =
+let oneParsedDoneReopenedIssueFromNewKANProject = {
+    "id": "10004",
+    "key": "KAN-5",
+    "summary": "Setup MultiBar options.",
+    "created": "2016-07-06T23:17:39",
+    "currentStatus": {"id": "10001", "name": "Done"},
+    "columnHistory": [{
+        "columnName": "Analyzing",
+        "enterTime": "2016-07-06T23:28:46",
+        "exitTime": "2016-07-09T16:05:08"
+    }, {
+        "columnName": "Ready for Development",
+        "enterTime": "2016-07-09T16:05:08",
+        "exitTime": "2016-07-10T14:29:55"
+    }, {
+        "columnName": "Ready for Test",
+        "enterTime": "2016-07-10T14:29:55",
+        "exitTime": "2016-07-12T23:11:30"
+    }, {
+        "columnName": "Done",
+        "enterTime": "2016-07-12T23:11:30",
+        "exitTime": "2017-03-11T01:11:05"
+    }, {
+        "columnName": "Testing",
+        "enterTime": "2017-03-11T01:11:05",
+        "exitTime": "2017-03-11T01:19:44"
+    }, {
+        "columnName": "Done",
+        "enterTime": "2017-03-11T01:19:44",
+        "exitTime": "2017-03-11T16:00:19"
+    }
+    ],
+    "isDone": true,
+    "wasReopened": true,
+    "cycleTime": 21347458000,
+    "executionTime": 233101000,
+    "delayTime": 21347458000,
+    "processEfficiency": 0.010919379721932233
+};
+
+let oneParsedInProgressReopenedIssueFromNewKANProject = {
+    "id": "10013",
+    "key": "KAN-14",
+    "summary": "Fix Load Data authentication to work with new greenhopper REST API.",
+    "created": "2016-07-06T23:20:13",
+    "currentStatus": {"id": "3", "name": "In Progress"},
+    "columnHistory": [{
+        "columnName": "In Progress",
+        "enterTime": "2016-07-06T23:29:45",
+        "exitTime": "2016-07-08T23:12:58"
+    }, {
+        "columnName": "Ready for Test",
+        "enterTime": "2016-07-08T23:12:58",
+        "exitTime": "2016-07-08T23:13:12"
+    }, {
+        "columnName": "Done",
+        "enterTime": "2016-07-10T14:29:37",
+        "exitTime": "2017-03-12T13:05:50"
+    }, {"columnName": "In Progress", "enterTime": "2017-03-12T13:05:50", "exitTime": "2017-03-12T13:17:52"}],
+    "isDone": false,
+    "wasReopened": true,
+    "cycleTime": null,
+    "executionTime": 172515000,
+    "delayTime": 21335502000,
+    "processEfficiency": 0
+};
+
+let boardDesignFromNewKANProject = {
+    "columns": [{
+        "name": "Ready to Analyze",
+        "statuses": [{"id": "10004", "self": "http://localhost:8080/rest/api/2/status/10004"}],
+        "category": "Ignore"
+    }, {
+        "name": "Analyzing",
+        "statuses": [{"id": "10012", "self": "http://localhost:8080/rest/api/2/status/10012"}],
+        "max": 3,
+        "category": "Execution"
+    }, {
+        "name": "Ready for Development",
+        "statuses": [{"id": "10006", "self": "http://localhost:8080/rest/api/2/status/10006"}],
+        "category": "Delay"
+    }, {
+        "name": "In Progress",
+        "statuses": [{"id": "3", "self": "http://localhost:8080/rest/api/2/status/3"}],
+        "max": 4,
+        "category": "Execution"
+    }, {
+        "name": "Ready for Test",
+        "statuses": [{"id": "10007", "self": "http://localhost:8080/rest/api/2/status/10007"}],
+        "category": "Delay"
+    }, {
+        "name": "Testing",
+        "statuses": [{"id": "10008", "self": "http://localhost:8080/rest/api/2/status/10008"}],
+        "max": 4,
+        "category": "Execution"
+    }, {
+        "name": "Done",
+        "statuses": [{"id": "10001", "self": "http://localhost:8080/rest/api/2/status/10001"}],
+        "category": "Done"
+    }], "name": "Kanalyzer Team Board"
+};
+
+const boardDesignForColDistGraph =
     {
         "columns": [
             {
@@ -647,7 +773,7 @@ var boardDesignForColDistGraph =
                 "statuses": [
                     {
                         "id": "10000",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10000"
+                        "self": "https://someurl.atlassian.net/rest/api/2/status/10000"
                     }
                 ],
                 "category": "Ignore"
@@ -657,7 +783,7 @@ var boardDesignForColDistGraph =
                 "statuses": [
                     {
                         "id": "10213",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10213"
+                        "self": "https://someurl.atlassian.net/rest/api/2/status/10213"
                     }
                 ],
                 "min": 2,
@@ -669,7 +795,7 @@ var boardDesignForColDistGraph =
                 "statuses": [
                     {
                         "id": "10204",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10204"
+                        "self": "https://someurl.atlassian.net/rest/api/2/status/10204"
                     }
                 ],
                 "category": "Delay"
@@ -679,7 +805,7 @@ var boardDesignForColDistGraph =
                 "statuses": [
                     {
                         "id": "10205",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10205"
+                        "self": "https://someurl.atlassian.net/rest/api/2/status/10205"
                     }
                 ],
                 "category": "Execution"
@@ -689,7 +815,7 @@ var boardDesignForColDistGraph =
                 "statuses": [
                     {
                         "id": "10212",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10212"
+                        "self": "https://someurl.atlassian.net/rest/api/2/status/10212"
                     }
                 ],
                 "category": "Delay"
@@ -699,11 +825,11 @@ var boardDesignForColDistGraph =
                 "statuses": [
                     {
                         "id": "3",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/3"
+                        "self": "https://someurl.atlassian.net/rest/api/2/status/3"
                     },
                     {
                         "id": "10203",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10203"
+                        "self": "https://someurl.atlassian.net/rest/api/2/status/10203"
                     }
                 ],
                 "category": "Execution"
@@ -713,7 +839,7 @@ var boardDesignForColDistGraph =
                 "statuses": [
                     {
                         "id": "10211",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10211"
+                        "self": "https://someurl.atlassian.net/rest/api/2/status/10211"
                     }
                 ],
                 "category": "Execution"
@@ -723,7 +849,7 @@ var boardDesignForColDistGraph =
                 "statuses": [
                     {
                         "id": "10206",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10206"
+                        "self": "https://someurl.atlassian.net/rest/api/2/status/10206"
                     }
                 ],
                 "category": "Delay"
@@ -733,7 +859,7 @@ var boardDesignForColDistGraph =
                 "statuses": [
                     {
                         "id": "10207",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10207"
+                        "self": "https://someurl.atlassian.net/rest/api/2/status/10207"
                     }
                 ],
                 "category": "Execution"
@@ -743,7 +869,7 @@ var boardDesignForColDistGraph =
                 "statuses": [
                     {
                         "id": "10208",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10208"
+                        "self": "https://someurl.atlassian.net/rest/api/2/status/10208"
                     }
                 ],
                 "category": "Delay"
@@ -753,7 +879,7 @@ var boardDesignForColDistGraph =
                 "statuses": [
                     {
                         "id": "10209",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10209"
+                        "self": "https://someurl.atlassian.net/rest/api/2/status/10209"
                     }
                 ],
                 "category": "Execution"
@@ -763,7 +889,7 @@ var boardDesignForColDistGraph =
                 "statuses": [
                     {
                         "id": "10001",
-                        "self": "https://softhousegbg.atlassian.net/rest/api/2/status/10001"
+                        "self": "https://someurl.atlassian.net/rest/api/2/status/10001"
                     }
                 ],
                 "category": "Done"

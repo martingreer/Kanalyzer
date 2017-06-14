@@ -1,9 +1,12 @@
+/*jslint bitwise: true, plusplus: true, white: true, sub: true, nomen: true*/
+/*global timeUtil, console, self:true, _, parseHistory*/
+
 /*********************************************************
  * Below is the parsing for the Execution vs Delay view. *
  *********************************************************/
 
 function EtDtGraphData(key) {
-    var self = this;
+    let self = this;
 
     self.key = key;
     self.values = [];
@@ -12,7 +15,7 @@ function EtDtGraphData(key) {
 }
 
 function EtDtValueItem(issueKey, delayTime, executionTime, cycleTime) {
-    var self = this;
+    let self = this;
 
     self.key = issueKey;
     self.x = timeUtil.msToHours(delayTime);
@@ -23,7 +26,7 @@ function EtDtValueItem(issueKey, delayTime, executionTime, cycleTime) {
 }
 
 function createEtDtData(key, issues) {
-    var graphArray = [],
+    let graphArray = [],
         graphData = new EtDtGraphData(key);
 
     _.forEach(issues, function (issue) {
@@ -41,7 +44,7 @@ function createEtDtData(key, issues) {
  ******************************************/
 
 function getLastHistoryDate(issues) {
-    var allExitTimes = [];
+    let allExitTimes = [];
 
     _.forEach(issues, function (issue) {
         allExitTimes.push(timeUtil.convertDateToEpochMidnight(_.last(issue.columnHistory).exitTime));
@@ -51,7 +54,7 @@ function getLastHistoryDate(issues) {
 }
 
 function getFirstHistoryDate(issues) {
-    var allEnterTimes = [];
+    let allEnterTimes = [];
 
     _.forEach(issues, function (issue) {
         allEnterTimes.push(timeUtil.convertDateToEpochMidnight(_.first(issue.columnHistory).enterTime));
@@ -61,7 +64,7 @@ function getFirstHistoryDate(issues) {
 }
 
 function getDates(issues) {
-    var startDate = getFirstHistoryDate(issues),
+    let startDate = getFirstHistoryDate(issues),
         endDate = getLastHistoryDate(issues);
 
     return timeUtil.getDatesInInterval(startDate, endDate);
@@ -72,7 +75,7 @@ function isInArray(value, array) {
 }
 
 function CfdColumnItem(columnName) {
-    var self = this;
+    let self = this;
 
     self.key = columnName;
     self.values = [];
@@ -85,7 +88,7 @@ function CfdColumnItem(columnName) {
  * Column name is the key in CFD data array.
  */
 function CfdColumnValuesArray(dates, issues, boardDesign, columnName) {
-    var valuesArray = [],
+    let valuesArray = [],
         amountOfIssues,
         _boardDesign = createBoardDesign(boardDesign),
         _issues = createIssuesFromArray(issues, _boardDesign);
@@ -94,7 +97,7 @@ function CfdColumnValuesArray(dates, issues, boardDesign, columnName) {
         amountOfIssues = 0;
         _.forEach(_issues, function (issue) {
             _.forEach(issue.columnHistory, function (historyItem) {
-                if (issue.wasInColumn(date, historyItem) && historyItem.columnName === columnName) {
+                if (issue.wasInColumnAtTimeStamp(date, historyItem) && historyItem.columnName === columnName) {
                     //console.log(issue.key + " was in column " + historyItem.columnName + " at the time: " + date);
                     amountOfIssues++;
                 }
@@ -107,7 +110,7 @@ function CfdColumnValuesArray(dates, issues, boardDesign, columnName) {
 }
 
 function CfdColumnValuesItem(x, y) {
-    var self = this;
+    let self = this;
 
     self.x = x;
     self.y = y;
@@ -118,7 +121,7 @@ function CfdColumnValuesItem(x, y) {
 // Example:   [{"key":"Ready to Refine", "values":[{"x":1444428000000,"y":5},{"x":1444514400000,"y":3}]},
 //             {"key":"Refine Backlog", "values":[{"x":1444428000000,"y":2},{"x":1444514400000,"y":2}]}]
 function createCfdData(issues, boardDesign) {
-    var graphArray = [],
+    let graphArray = [],
         columnData,
         dates = getDates(issues);
 
@@ -140,7 +143,7 @@ function createCfdData(issues, boardDesign) {
  * One entry of this in the graph array for each column in board design.
  */
 function ColDistItem(columnName) {
-    var self = this;
+    let self = this;
 
     self.key = columnName;
     self.values = [];
@@ -152,19 +155,22 @@ function ColDistItem(columnName) {
  * Contained in the values property in a ColDistItem.
  */
 function ColDistValuesArray(_issues, columnName, columnCategory) {
-    var valuesArray = [];
-    var valuesItem = {};
-    var timeSpentInColumn = 0;
-    var percentInColumn = 0;
-    var issues = _.cloneDeep(_issues);
+    let valuesArray = [];
+    let valuesItem = {};
+    let timeSpentInColumn = 0;
+    let percentInColumn = 0;
+    let issues = _.cloneDeep(_issues);
 
     issues.reverse(); // Reverse array in order to show oldest->newest issues from left to right in graph
 
     _.forEach(issues, function (issue) {
         if (issue.columnHistory.length > 1) {
-            if (issue.currentStatus.name === "Done" || issue.currentStatus.name === "Closed") {
+            if (issue.isDone) {
+                if (issue.wasReopened) {
+                    issue.columnHistory.pop(); // Don't calculate time spent in the last Done column.
+                }
                 timeSpentInColumn = getTimeSpentInColumn(issue, columnName);
-                percentInColumn = convertTimeToPercent(timeSpentInColumn, issue.cycleTime, columnCategory);
+                percentInColumn = convertTimeToPercent(timeSpentInColumn, issue.cycleTime, columnCategory, issue.wasReopened);
                 valuesItem = new ColDistValuesItem(issue.key, percentInColumn);
                 valuesArray.push(valuesItem);
             }
@@ -178,7 +184,7 @@ function ColDistValuesArray(_issues, columnName, columnCategory) {
  * One instance for each issue contained in ColDistValuesArray
  */
 function ColDistValuesItem(x, y) {
-    var self = this;
+    let self = this;
 
     self.x = x; // Issue key
     self.y = y; // Percent of max value for issue in column
@@ -190,11 +196,11 @@ function ColDistValuesItem(x, y) {
  * Converts the time spent in a column to a percentage of the total time
  * an issue spent on the board excluding ignored and done columns.
  */
-function convertTimeToPercent(timeSpentInColumn, cycleTime, columnCategory) {
-    var percent = 0;
+function convertTimeToPercent(timeSpentInColumn, cycleTime, columnCategory, issueWasReopened) {
+    let percent = 0;
     // Only consider columns that are not defined as ignored or done, since an issue's cycleTime also don't include these.
     // Also don't try to divide by null or zero :))
-    if (columnCategory !== "Ignore" && columnCategory !== "Done" && cycleTime !== 0 && cycleTime !== null) {
+    if (columnCategory !== CATEGORY_IGNORE && (columnCategory !== CATEGORY_DONE || issueWasReopened) && cycleTime !== 0 && cycleTime !== null) {
         percent = ((timeSpentInColumn / cycleTime) * 100);
         return Math.round(percent * 100) / 100; // Round to two decimals
     } else {
@@ -206,7 +212,7 @@ function convertTimeToPercent(timeSpentInColumn, cycleTime, columnCategory) {
  * Iterate through an issue's column history and return total time spent in the given column.
  */
 function getTimeSpentInColumn(issue, columnName) {
-    var time = 0;
+    let time = 0;
 
     _.forEach(issue.columnHistory, function (columnHistoryItem) {
         if (columnHistoryItem.columnName === columnName) {
@@ -225,12 +231,12 @@ function getTimeSpentInColumn(issue, columnName) {
 //      {"key": "In Test",         "values": [{"x": "KTD-1", "y": 20}, {"x": "KTD-2", "y": 10}, {"x": "KTD-3", "y": 60}]}
 //  ];
 function createColDistData(issues, boardDesign) {
-    var graphArray = [],
+    let graphArray = [],
         columnData;
 
     if (issues && boardDesign) {
         _.forEach(boardDesign.columns, function (column) {
-            if (column.category !== "Done" && column.category !== "Ignore") {
+            if (column.category !== CATEGORY_IGNORE) {
                 columnData = new ColDistItem(column.name);
                 columnData.values = ColDistValuesArray(issues, column.name, column.category);
                 graphArray.push(columnData);

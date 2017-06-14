@@ -1,14 +1,19 @@
 /*jslint bitwise: true, plusplus: true, white: true, sub: true, nomen: true*/
 /*global timeUtil, console, self:true, _, parseHistory*/
 
-var DEBUG_COLUMNHISTORY = false;
+const DEBUG_COLUMNHISTORY = false;
+
+const CATEGORY_DELAY = "Delay";
+const CATEGORY_IGNORE = "Ignore";
+const CATEGORY_EXECUTION = "Execution";
+const CATEGORY_DONE = "Done";
 
 /**
  * Create a new instance of a board design object.
  * Will detect whether the incoming board design is raw data from API or has already been parsed.
  */
 function createBoardDesign(boardDesignToParse) {
-    var boardDesign;
+    let boardDesign;
 
     if (boardDesignToParse.columnConfig) {
         // Incoming board design is raw data from API and contains the "columnConfig" property.
@@ -28,10 +33,10 @@ function createBoardDesign(boardDesignToParse) {
 function BoardDesign(apiColumnsData, boardName) {
     "use strict";
 
-    var self = _.cloneDeep(apiColumnsData);
+    let self = _.cloneDeep(apiColumnsData);
 
     self.getColumnNames = function () {
-        var columnNames = [];
+        let columnNames = [];
         _.forEach(self.columns, function (column) {
             columnNames.push(column.name);
         });
@@ -39,7 +44,7 @@ function BoardDesign(apiColumnsData, boardName) {
     };
 
     self.getColumnMatchingStatus = function (status) {
-        var columnName = null;
+        let columnName = null;
         _.forEach(self.columns, function (column) {
             _.forEach(column.statuses, function (columnStatus) {
                 if (columnStatus.id === status) {
@@ -55,32 +60,32 @@ function BoardDesign(apiColumnsData, boardName) {
      * Try to guess initial values of the column categories based on the column name.
      */
     self.createColumnCategories = function () {
-        var hasCategories;
+        let hasCategories;
 
-        hasCategories = _.first(self.columns).hasOwnProperty('category');
+        hasCategories = _.first(self.columns).hasOwnProperty("category");
 
         if (!hasCategories) {
             _.forEach(self.columns, function (column) {
                 if (column.name.toLowerCase().indexOf("ready") >= 0) {
-                    column.category = "Delay";
+                    column.category = CATEGORY_DELAY;
                 } else if (column.name.toLowerCase().indexOf("backlog") >= 0) {
-                    column.category = "Ignore";
+                    column.category = CATEGORY_IGNORE;
                 } else if (column.name.toLowerCase().trim().indexOf("todo") >= 0) {
-                    column.category = "Ignore";
+                    column.category = CATEGORY_IGNORE;
                 } else {
-                    column.category = "Execution";
+                    column.category = CATEGORY_EXECUTION;
                 }
             });
 
-            _.first(self.columns).category = "Ignore";
-            _.last(self.columns).category = "Done";
+            _.first(self.columns).category = CATEGORY_DELAY;
+            _.last(self.columns).category = CATEGORY_DONE;
         }
 
         return self.columns;
     };
 
     self.getColumnCategory = function (columnName) {
-        var category = "";
+        let category = "";
         _.forEach(self.columns, function (column) {
             if (column.name === columnName) {
                 category = column.category;
@@ -91,7 +96,7 @@ function BoardDesign(apiColumnsData, boardName) {
     };
 
     self.isIncludedInBoardDesign = function (columnName) {
-        var result = false;
+        let result = false;
         _.forEach(self.columns, function (column) {
             if (column.name === columnName) {
                 result = true;
@@ -102,21 +107,21 @@ function BoardDesign(apiColumnsData, boardName) {
     };
 
     self.isIgnoreColumn = function (columnName) {
-        return self.getColumnCategory(columnName) === "Ignore";
+        return self.getColumnCategory(columnName) === CATEGORY_IGNORE;
     };
 
     self.isExecutionColumn = function (columnName) {
-        return self.getColumnCategory(columnName) === "Execution";
+        return self.getColumnCategory(columnName) === CATEGORY_EXECUTION;
     };
 
     self.isDelayColumn = function (columnName) {
-        return self.getColumnCategory(columnName) === "Delay";
+        return self.getColumnCategory(columnName) === CATEGORY_DELAY;
     };
 
     self.isDoneColumn = function (columnName) {
-        var result = false;
+        let result = false;
         if (columnName) {
-            result = self.getColumnCategory(columnName) === "Done";
+            result = self.getColumnCategory(columnName) === CATEGORY_DONE;
         }
         return result;
     };
@@ -130,13 +135,13 @@ function BoardDesign(apiColumnsData, boardName) {
 function Moves(histories, boardDesign) {
     "use strict";
 
-    var moves = [];
+    let moves = [];
 
     _.forEach(histories, function (event) {
-        var moveTime = event.created.substr(0, event.created.indexOf('.'));
+        let moveTime = event.created.substr(0, event.created.indexOf("."));
         _.forEach(event.items, function (eventItem) {
             if (eventItem.field === "status") {
-                var fromColumn = boardDesign.getColumnMatchingStatus(eventItem.from),
+                let fromColumn = boardDesign.getColumnMatchingStatus(eventItem.from),
                     toColumn = boardDesign.getColumnMatchingStatus(eventItem.to);
                 moves.push(new MoveItem(fromColumn, toColumn, moveTime));
             }
@@ -149,7 +154,7 @@ function Moves(histories, boardDesign) {
 function MoveItem(fromColumn, toColumn, moveTime) {
     "use strict";
 
-    var self = this;
+    let self = this;
     self.fromColumn = fromColumn;
     self.toColumn = toColumn;
     self.moveTime = moveTime;
@@ -159,7 +164,7 @@ function MoveItem(fromColumn, toColumn, moveTime) {
 function ColumnHistoryItem(columnName, enterTime, exitTime) {
     "use strict";
 
-    var self = this;
+    let self = this;
     self.columnName = columnName;
     self.enterTime = enterTime;
     self.exitTime = exitTime;
@@ -184,10 +189,10 @@ function parseMultipleApiIssues(apiIssuesRaw) {
  * Constructs new issues from an array of issue data.
  */
 function createIssuesFromArray(apiIssues, boardDesign) {
-    var issues = [];
+    let issues = [];
 
     _.forEach(apiIssues, function (issue) {
-        var parsedIssue = new Issue(issue, boardDesign);
+        let parsedIssue = new Issue(issue, boardDesign);
         if (parsedIssue.columnHistory.length > 0) {
             issues.push(parsedIssue);
         }
@@ -202,7 +207,7 @@ function createIssuesFromArray(apiIssues, boardDesign) {
 function Issue(apiIssue, boardDesign, time) {
     "use strict";
 
-    var self = {},
+    let self = {},
         isAlreadyParsed = apiIssue.changelog == null;
 
     if (!time) {
@@ -210,7 +215,7 @@ function Issue(apiIssue, boardDesign, time) {
     }
 
     function parseCurrentStatus(currentStatus) {
-        var status = {};
+        let status = {};
         status.id = currentStatus.id;
         status.name = currentStatus.name;
         return status;
@@ -225,7 +230,7 @@ function Issue(apiIssue, boardDesign, time) {
     }
 
     function createColumnHistoryAlreadyParsed(parsedIssue) {
-        var columnHistory = [];
+        let columnHistory = [];
 
         _.forEach(parsedIssue.columnHistory, function (item) {
             columnHistory.push(new ColumnHistoryItem(item.columnName, item.enterTime, item.exitTime));
@@ -235,7 +240,7 @@ function Issue(apiIssue, boardDesign, time) {
     }
 
     function createColumnHistory(apiIssue) {
-        var columnHistory = [],
+        let columnHistory = [],
             issueHasHistory = !(apiIssue.changelog.histories.length === 0),
             issueHasStatusChangeInHistory = false;
 
@@ -251,7 +256,7 @@ function Issue(apiIssue, boardDesign, time) {
 
         if (!issueHasHistory || !issueHasStatusChangeInHistory) {
             //console.log(apiIssue.key + " ||| History: " + issueHasHistory + " | StatusChange: " + issueHasStatusChangeInHistory + " | FirstColumn: " + boardDesign.getColumnMatchingStatus(apiIssue.fields.status.id));
-            var startColumn = getStartColumn(apiIssue);
+            let startColumn = getStartColumn(apiIssue);
             if (isIncludedInBoardDesign(startColumn.columnName)) {
                 columnHistory.push(startColumn);
             }
@@ -267,8 +272,8 @@ function Issue(apiIssue, boardDesign, time) {
      * Example: [{"columnName":"Ready to Refine", "enterTime":"2015-09-01T14:42:01", "exitTime":"2015-09-01T14:42:23"}]
      */
     function parseMoves(columnHistory) {
-        var i,
-            createdTime = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.')),
+        let i,
+            createdTime = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf(".")),
             columnsWithEnterExit = [];
 
         // First item is a special case because we need to set the time which the issue was created as enter time.
@@ -301,7 +306,7 @@ function Issue(apiIssue, boardDesign, time) {
     }
 
     function isIncludedInBoardDesign(columnName) {
-        var result = false;
+        let result = false;
         if (columnName) {
             result = boardDesign.isIncludedInBoardDesign(columnName);
         }
@@ -317,16 +322,38 @@ function Issue(apiIssue, boardDesign, time) {
     }
 
     /**
+     * Checks if issue was done and then reopened again. These issues need to be handled differently, as the time spent
+     * in the Done column is effectively delay time.
+     *
+     * @returns {boolean} true if column has been reopened, false otherwise.
+     */
+    function issueWasReopened () {
+        function wasInDoneColumn() {
+            let numberOfInstances = 0;
+            let columnHistory = _.cloneDeep(self.columnHistory);
+
+            _.forEach(columnHistory, function (columnHistoryItem) {
+                if (boardDesign.isDoneColumn(columnHistoryItem.columnName)) {
+                    numberOfInstances++;
+                }
+            });
+            return self.isDone ? numberOfInstances > 1 : numberOfInstances > 0;
+        }
+
+        return wasInDoneColumn();
+    }
+
+    /**
      * Check if issue is in a column which is Done category.
      */
-    self.isDone = function () {
-        var result = false;
+    function issueIsDone () {
+        let result = false;
         if (self.columnHistory.length > 0) {
-            var columnName = _.last(self.columnHistory).columnName;
+            let columnName = _.last(self.columnHistory).columnName;
             result = boardDesign.isDoneColumn(columnName);
         }
         return result;
-    };
+    }
 
     /**
      * Check if issue is in a column which should be ignored in calculations.
@@ -339,11 +366,11 @@ function Issue(apiIssue, boardDesign, time) {
      * Calculate Cycle Time for the issue.
      */
     function getCycleTime() {
-        var cycleTime = 0,
+        let cycleTime = 0,
             columnHistory = _.cloneDeep(self.columnHistory);
 
-        if (self.isDone()) {
-            columnHistory.pop(); // Remove done column from calculation
+        if (self.isDone) {
+            columnHistory.pop(); // Remove the last Done column from calculation
             _.forEach(columnHistory, function (item) {
                 if (!self.isIgnored(item.columnName)) {
                     cycleTime += item.timeSpentInColumn();
@@ -356,10 +383,10 @@ function Issue(apiIssue, boardDesign, time) {
     }
 
     function getExecutionTime() {
-        var executionTime = 0,
+        let executionTime = 0,
             columnHistory = _.cloneDeep(self.columnHistory);
 
-        if (self.isDone()) {
+        if (self.isDone) {
             columnHistory.pop(); // Remove done column from calculation
         }
 
@@ -373,15 +400,16 @@ function Issue(apiIssue, boardDesign, time) {
     }
 
     function getDelayTime() {
-        var delayTime = 0,
+        let delayTime = 0,
             columnHistory = _.cloneDeep(self.columnHistory);
 
-        if (self.isDone()) {
+        if (self.isDone) {
             columnHistory.pop();
         }
 
         _.forEach(columnHistory, function (item) {
-            if (isDelayColumn(item.columnName)) {
+            if (isDelayColumn(item.columnName) || self.wasReopened) {
+                // When issue has been reopened, all Done columns should also count as delay time.
                 delayTime += item.timeSpentInColumn();
             }
         });
@@ -405,7 +433,7 @@ function Issue(apiIssue, boardDesign, time) {
 
     if (!isAlreadyParsed) {
         self.summary = apiIssue.fields.summary;
-        self.created = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf('.'));
+        self.created = apiIssue.fields.created.substr(0, apiIssue.fields.created.indexOf("."));
         self.currentStatus = parseCurrentStatus(apiIssue.fields.status);
         self.columnHistory = createColumnHistory(apiIssue);
     } else {
@@ -418,10 +446,12 @@ function Issue(apiIssue, boardDesign, time) {
     /**
      * Checks which column this issue was in at a given time.
      */
-    self.wasInColumn = function (time, column) {
+    self.wasInColumnAtTimeStamp = function (time, column) {
         return self.isInBetween(time, Date.parse(column.enterTime), Date.parse(column.exitTime));
     };
 
+    self.isDone = issueIsDone();
+    self.wasReopened = issueWasReopened();
     self.cycleTime = getCycleTime();
     self.executionTime = getExecutionTime();
     self.delayTime = getDelayTime();

@@ -4,16 +4,16 @@
 /**
  * Controller for the Load Data view.
  */
-application.controller('ldController', function ($scope, $http, $q, apiServerData, localStorageHandler, previousLoadData, previousLogin, Notification) {
+application.controller("ldController", function ($scope, $http, $q, apiServerData, localStorageHandler, previousLoadData, previousLogin, Notification) {
     "use strict";
 
-    var DEBUG = true;
+    const DEBUG = true;
 
     // Synchronization variable to make sure http requests are done in the correct order.
-    var getBoardDesignBeforeIssues = $q.defer();
+    let getBoardDesignBeforeIssues = $q.defer();
 
     // Variables that need to be visible in the entire controller.
-    var boardColumnsDesign,
+    let boardColumnsDesign,
         apiIssuesMinimal,
         issues;
 
@@ -23,7 +23,13 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     $scope.isLoggedIn = apiServerData.getIsLoggedIn();
 
     // The config that is currently selected.
-    $scope.loadedConfig = '';
+    $scope.loadedConfigName = "";
+    localStorageHandler.getLoadedConfig(function (response) {
+        if (response.loadedConfig) {
+            $scope.loadedConfigName = response.loadedConfig.name;
+            $scope.loadConfig(response.loadedConfig.name, true);
+        }
+    });
 
     function setPreviousLoadDataOnScope(previousLoadData) {
         if (previousLoadData.projectKey) {
@@ -48,14 +54,14 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     }
 
     function toggleMaxResultsForApiCall(maxResults) {
-        if (!maxResults || maxResults === '' || maxResults.toLowerCase() === 'all') {
-            $scope.maxResults = '-1';
+        if (!maxResults || maxResults === "" || maxResults.toLowerCase() === "all") {
+            $scope.maxResults = "-1";
         }
     }
 
     function setMaxResultsForUserInterface(maxResults) {
-        if (!maxResults || maxResults === '-1' || maxResults.toLowerCase() === 'all') {
-            $scope.maxResults = '';
+        if (!maxResults || maxResults === "-1" || maxResults.toLowerCase() === "all") {
+            $scope.maxResults = "";
         }
     }
 
@@ -75,7 +81,6 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
     localStorageHandler.getConfigs(function (configs) {
         // Assign user configs to scope if local storage already exists.
-        console.log(configs);
         $scope.userConfigs = configs.userConfigs;
     });
 
@@ -87,7 +92,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         previousLoadData.setPreviousLoadData($scope.boardId, $scope.apiProject, $scope.maxResults);
 
         if (!$scope.isLoggedIn) {
-            Notification.error('You are not logged in!');
+            Notification.error("You are not logged in!");
         } else {
             boardColumnsDesign = {};
             apiIssuesMinimal = {};
@@ -95,7 +100,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
             getBoardDesignBeforeIssues = $q.defer();
 
-            Notification.primary('Attempting to get data from server...');
+            Notification.primary("Attempting to get data from server...");
             if (DEBUG) {
                 console.log("Attempting to get board design for board with ID: " + $scope.boardId + "...");
             }
@@ -105,7 +110,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
              method: "GET",
              url: $scope.apiRoot + "rest/greenhopper/1.0/xboard/work/allData.json?rapidViewId=" + $scope.boardId + "&selectedProjectKey=" + $scope.apiProject
              });*/
-            var requestBoardDesign = $http({
+            const requestBoardDesign = $http({
                 method: "GET",
                 url: $scope.apiRoot + "rest/agile/1.0/board/" + $scope.boardId + "/configuration"
             });
@@ -125,7 +130,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                         console.log("Parse board design SUCCESS!");
                     }
                 } catch (error) {
-                    Notification.error('Something went wrong when parsing the board data. Check your board configuration for abnormalities.');
+                    Notification.error("Something went wrong when parsing the board data. Check your board configuration for abnormalities.");
                     if (DEBUG) {
                         console.log("Parsing of board data ERROR: " + error);
                     }
@@ -134,7 +139,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
             requestBoardDesign.error(function (data) {
                 getBoardDesignBeforeIssues.reject();
-                Notification.error('Failed to load board data from source.');
+                Notification.error("Failed to load board data from source.");
                 if (DEBUG) {
                     console.log("Get board design from API: ERROR.");
                 }
@@ -145,7 +150,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     console.log("Attempting to get issues for project " + $scope.apiProject + " from server " + $scope.apiRoot + "...");
                 }
                 toggleMaxResultsForApiCall($scope.maxResults);
-                var requestIssues = $http({
+                const requestIssues = $http({
                     method: "GET",
                     url: $scope.apiRoot + "rest/api/2/search?jql=project=" + $scope.apiProject + "&expand=changelog" + "&maxResults=" + $scope.maxResults
                 });
@@ -165,12 +170,12 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                         localStorageHandler.setIssues(issues);
                         localStorageHandler.removeCfdData(); // Previously parsed CFD data is likely irrelevant when new source data is loaded, so remove it
                         localStorageHandler.removeColDistData();
-                        Notification.success('Issue data successfully loaded!');
+                        Notification.success("Issue data successfully loaded!");
                         if (DEBUG) {
                             console.log("Parse issue data SUCCESS!");
                         }
                     } catch (error) {
-                        Notification.error('Something went wrong when parsing the issue data. Check your board configuration for abnormalities.');
+                        Notification.error("Something went wrong when parsing the issue data. Check your board configuration for abnormalities.");
                         if (DEBUG) {
                             console.log("Parsing of issues data ERROR: " + error);
                         }
@@ -178,7 +183,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                 });
 
                 requestIssues.error(function (data) {
-                    Notification.error('Failed to load issue data from source.');
+                    Notification.error("Failed to load issue data from source.");
                     if (DEBUG) {
                         console.log("Get issues from API: ERROR");
                     }
@@ -190,8 +195,8 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     /**
      * Update the column categories to the user defined values.
      */
-    $scope.updateColumnCategories = function (columnCategories) {
-        var oldBoardDesign = {},
+    $scope.updateColumnCategories = function (columnCategories, suppressSuccessNotification) {
+        let oldBoardDesign = {},
             oldIssues = [],
             updatedBoardDesign = {},
             updatedIssues = [];
@@ -216,11 +221,13 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     updatedIssues = createIssuesFromArray(oldIssues, updatedBoardDesign);
                     localStorageHandler.setIssues(updatedIssues);
                     localStorageHandler.removeColDistData();
-                    Notification.success('Column categories have been updated.');
+                    if (!suppressSuccessNotification) {
+                        Notification.success("Column categories have been updated.");
+                    }
                 });
             });
         } catch (error) {
-            Notification.error('Column categories update failed.');
+            Notification.error("Column categories update failed.");
             if (DEBUG) {
                 console.log("Updating columns ERROR: " + error);
             }
@@ -231,15 +238,15 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
      * Save the user choices for a set of columns for quick re-use.
      */
     $scope.saveConfig = function (name, columnCategories, updateExistingConfig) {
-        var userConfigs = [],
+        let userConfigs = [],
             nameIsUnique = true;
 
-        if (!$scope.loadedConfig && updateExistingConfig) {
-            Notification.error('There is currently no loaded config to update.');
+        if (!$scope.loadedConfigName && updateExistingConfig) {
+            Notification.error("There is currently no loaded config to update.");
             console.log("There is currently no loaded config to update.");
         } else {
-            if (name === '' || !name || !name.replace(/\s/g, '').length) {
-                Notification.error('Config was not saved. You must choose a name.');
+            if (name === "" || !name || !name.replace(/\s/g, "").length) {
+                Notification.error("Config was not saved. You must choose a name.");
                 console.log("Input name is empty. Not adding config.");
             } else {
                 console.log("Adding config.");
@@ -259,25 +266,25 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
 
                     if (updateExistingConfig) {
                         if (!nameIsUnique) {
-                            var config = {"name": name, "columnCategories": columnCategories};
-                            var userConfigsRemovedExisting = userConfigs.filter(element=>element.name !== name);
+                            const config = {"name": name, "columnCategories": columnCategories};
+                            const userConfigsRemovedExisting = userConfigs.filter(element => element.name !== name);
                             userConfigsRemovedExisting.push(config);
                             localStorageHandler.setConfigs(userConfigsRemovedExisting);
                             $scope.userConfigs = userConfigsRemovedExisting;
-                            Notification.success('Config saved!');
+                            Notification.success("Config [" + name + "] updated!");
                         } else {
-                            Notification.error('Currently loaded config could not be updated because it does not exist any more.');
+                            Notification.error("Config [" + name + "] could not be updated because it doesn\'t exist any more.");
                             console.log("Config could not be updated because it does not exist.");
                         }
                     } else {
                         if (nameIsUnique) {
-                            var newConfig = {"name": name, "columnCategories": columnCategories};
+                            const newConfig = {"name": name, "columnCategories": columnCategories};
                             userConfigs.push(newConfig);
                             localStorageHandler.setConfigs(userConfigs);
                             $scope.userConfigs = userConfigs;
-                            Notification.success('Config saved!');
+                            Notification.success("Config [" + name + "] saved!");
                         } else {
-                            Notification.error('Config was not saved. Please choose a unique name.');
+                            Notification.error("Config [" + name + "] was not saved. Please choose a unique name.");
                             console.log("Config was not saved (duplicate name).");
                         }
                     }
@@ -289,9 +296,9 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     /**
      * Finds the currently selected config.
      */
-    function getSelectedConfig(name, data) {
-        var configs = data;
-        var selectedConfig = {};
+    function getSelectedConfig(name, _configs) {
+        const configs = _configs;
+        let selectedConfig = {};
         if (configs) {
             _.forEach(configs, function (config) {
                 if (config.name === name) {
@@ -299,6 +306,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
                     return false;
                 }
             });
+            console.log("Selected config: " + JSON.stringify(selectedConfig.name));
             return selectedConfig;
         } else {
             return {};
@@ -328,7 +336,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
             return false;
         }
 
-        for (var i = 0; i < columnsToConfigurate.length; ++i) {
+        for (let i = 0; i < columnsToConfigurate.length; ++i) {
             if (columnsToConfigurate[i].name !== columns[i].name) {
                 if (DEBUG) {
                     console.log("Column names are not equal!");
@@ -343,23 +351,25 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     /**
      * Loads a chosen user config.
      */
-    $scope.loadConfig = function (name) {
-        var userConfigs = [];
-        var selectedConfig = {};
+    $scope.loadConfig = function (name, suppressSuccessNotification) {
+        let userConfigs = [];
+        let selectedConfig = {};
 
-        localStorageHandler.getConfigs(function (configsCallback) {
-            if (configsCallback.userConfigs) {
-                userConfigs = configsCallback.userConfigs;
+        localStorageHandler.getConfigs(function (result) {
+            if (result.userConfigs) {
+                userConfigs = result.userConfigs;
             }
 
             selectedConfig = getSelectedConfig(name, userConfigs);
+            localStorageHandler.setLoadedConfig(selectedConfig);
 
             if (haveSameColumnStructure($scope.columns, selectedConfig.columnCategories)) {
-                $scope.loadedConfig = selectedConfig.name; // FIXME: in old code, this was fetched from local storage
+                $scope.loadedConfigName = selectedConfig.name;
                 $scope.columns = selectedConfig.columnCategories;
-                $scope.updateColumnCategories(selectedConfig.columnCategories); // Apply changes when config is loaded
+                // The below row applies changes when config is loaded
+                $scope.updateColumnCategories(selectedConfig.columnCategories, suppressSuccessNotification);
                 if (DEBUG) {
-                    console.log("Config was successfully loaded.");
+                    console.log("Config was successfully loaded: " + selectedConfig.name);
                 }
             } else {
                 Notification.error("The selected config is not compatible with the current board.");
@@ -378,7 +388,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
         localStorageHandler.clearIssueAndBoardDesignData();
         $scope.columns = [];
         $scope.loadedBoardName = "";
-        Notification.primary('All issue and board design data removed from local storage.');
+        Notification.primary("All issue and board design data removed from local storage.");
         console.log("All issue and board design data removed from local storage.");
     };
 
@@ -388,10 +398,10 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     $scope.deleteConfig = function (configName) {
         localStorageHandler.removeConfig(configName, $scope.userConfigs);
 
-        $scope.userConfigs = $scope.userConfigs.filter(element=>element.name !== configName);
+        $scope.userConfigs = $scope.userConfigs.filter(element => element.name !== configName);
 
-        if (configName === $scope.loadedConfig) {
-            $scope.loadedConfig = "";
+        if (configName === $scope.loadedConfigName) {
+            $scope.loadedConfigName = "";
         }
     };
 
@@ -401,7 +411,7 @@ application.controller('ldController', function ($scope, $http, $q, apiServerDat
     $scope.clearConfigs = function () {
         localStorageHandler.removeConfigs();
         $scope.userConfigs = [];
-        Notification.primary('All configs removed.');
+        Notification.primary("All configs removed.");
         console.log("All configs removed.");
     };
 });

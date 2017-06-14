@@ -5,16 +5,16 @@
 function TimeUtil() {
     "use strict";
 
-    var self = this;
+    let self = this;
 
     self.msToHours = function (ms) {
-        var hours;
+        let hours;
         hours = +(((ms / 1000) / 60) / 60).toFixed(2);
         return hours;
     };
 
     self.getTimestamp = function (millisecondsSinceEpoch) {
-        var today;
+        let today;
 
         if (millisecondsSinceEpoch) {
             today = new Date(millisecondsSinceEpoch);
@@ -27,13 +27,13 @@ function TimeUtil() {
     };
 
     self.convertMsToDHM = function (ms) {
-        var dayFactor = 24 * 60 * 60 * 1000,
+        let dayFactor = 24 * 60 * 60 * 1000,
             hourFactor = 60 * 60 * 1000,
             day = Math.floor(ms / dayFactor),
             hour = Math.floor((ms - day * dayFactor) / hourFactor),
             minute = Math.round((ms - day * dayFactor - hour * hourFactor) / 60000),
             pad = function (n) {
-                return n < 10 ? '0' + n : n;
+                return n < 10 ? "0" + n : n;
             },
             days,
             hours,
@@ -77,7 +77,11 @@ function TimeUtil() {
         }
 
         if (minute === 0) {
-            minutes = "";
+            if (day === 0 && hour === 0) {
+                minutes = "Less than 1 minute."
+            } else {
+                minutes = "";
+            }
         } else if (minute === 1) {
             minutes = minute + " minute.";
         }
@@ -85,11 +89,11 @@ function TimeUtil() {
         answer = days + hours + minutes;
         //answer = day + " days, " + pad(hour) + " hours, " + pad(minute) + " minutes.";
         return answer;
-        //return [day, pad(hour), pad(minute)].join(':');
+        //return [day, pad(hour), pad(minute)].join(":");
     };
 
     self.convertDateToEpochMidnight = function (timeString) {
-        var date = new Date(timeString.substring(0, timeString.indexOf('T'))),
+        let date = new Date(timeString.substring(0, timeString.indexOf("T"))),
             offsetInMs = date.getTimezoneOffset() * 60000;
         return Date.parse(date) + offsetInMs;
     };
@@ -98,7 +102,7 @@ function TimeUtil() {
      * Needs Epoch dates as input.
      */
     self.getDatesInInterval = function (startDate, stopDate) {
-        var dateArray = [],
+        let dateArray = [],
             currentDate = new Date(startDate),
             endDate = new Date(stopDate);
         while (currentDate <= endDate) {
@@ -112,4 +116,4 @@ function TimeUtil() {
 }
 
 // Global variable for use in entire application.
-var timeUtil = new TimeUtil();
+const timeUtil = new TimeUtil();
